@@ -11,13 +11,30 @@ import java.net.Socket;
  */
 public class Client {
 
-    Socket clientsocket;
-    DataOutputStream outToServer;
-    BufferedReader inFromServer;
-    private InetAddress ip;
-    private int portNr;
-
-
+   Socket clientsocket;
+   DataOutputStream outToServer;
+   BufferedReader inFromServer;
+   private InetAddress ip;
+   private int portNr;
+    
+   public void connectServer(String ip, int port){}
+   
+   public void connectChat(String userID){}
+           
+   public void disconnectServer(){}
+   
+   public void disconnectChat(){}
+   
+   public String[] getOnlineList(){return null;}
+   
+   public boolean regNewUser(String uname, String passord){return false;}
+   
+   public void login(String uname, String passord){}
+   
+   public void sendMsg(){}
+   
+   public void getMsg(){}
+    
     
 
 
