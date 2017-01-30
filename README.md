@@ -17,7 +17,7 @@ First mandatory assignment in DATS 2410 - Network and cloud computing
 ##SMessage Protocol (SMP)
 Hver kommando starter med TYPE NUM
 
-NUM definerer om det er en melding fra klient (1) eller en kommdano (0)
+NUM definerer om det er en melding fra klient (1) eller en kommando (0)
 
 Eks:
 	
@@ -37,6 +37,7 @@ Kommandoer server skal tolke:
 - LOGIN
 - CHANGESTATUS
 - LOGOF
+
 Kommandoer klient skal tolke
 - CONNECT
 - DISCONNECT
