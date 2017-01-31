@@ -73,10 +73,10 @@ public class Client {
     }
 
     public void sendMsg(String reveiverID, String msg) throws IOException {
-	executeCommand("TYPE 1", reveiverID, msg);
+	sendCommandToServer("TYPE 1", reveiverID, msg);
     }
 
-    private void executeCommand(String... lines) throws IOException {
+    private void sendCommandToServer(String... lines) throws IOException {
 
 	for (int i = 0; i < lines.length - 1; i++) {
 	    outToServer.write(lines[i]);
@@ -91,6 +91,6 @@ public class Client {
 	newCommand[0] = type;
 	newCommand[1] = command.toString();
 	System.arraycopy(lines, 0, newCommand, 2, lines.length);
-	executeCommand(newCommand);
+	sendCommandToServer(newCommand);
     }
 }
