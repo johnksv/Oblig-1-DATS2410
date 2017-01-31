@@ -50,30 +50,30 @@ public class Client {
     }
 
     public void connectChat(String userID) throws IOException {
-	executeCommand("TYPE 0", Command.CONNECT, userID);
+	sendCommandToServer("TYPE 0", Command.CONNECT, userID);
     }
 
     public void disconnectServer() {
     }
 
     public void disconnectChat(String userID) throws IOException {
-	executeCommand("TYPE 0", Command.DISCONNECT, userID);
+	sendCommandToServer("TYPE 0", Command.DISCONNECT, userID);
     }
 
     public void getOnlineList() throws IOException {
-	executeCommand("TYPE 0", Command.GETUSERS);
+	sendCommandToServer("TYPE 0", Command.GETUSERS);
     }
 
     public void regNewUser(String uname, String passord) throws IOException {
-	executeCommand("TYPE 0", Command.REGUSER, uname, new String(Base64.getEncoder().encode(passord.getBytes())));
+	sendCommandToServer("TYPE 0", Command.REGUSER, uname, new String(Base64.getEncoder().encode(passord.getBytes())));
     }
 
     public void login(String uname, String passord) throws IOException {
-	executeCommand("TYPE 0", Command.LOGIN, uname, new String(Base64.getEncoder().encode(passord.getBytes())));
+	sendCommandToServer("TYPE 0", Command.LOGIN, uname, new String(Base64.getEncoder().encode(passord.getBytes())));
     }
 
-    public void sendMsg(String reveiverID, String msg) throws IOException {
-	sendCommandToServer("TYPE 1", reveiverID, msg);
+    public void sendMsg(String receiverID, String msg) throws IOException {
+	sendCommandToServer("TYPE 1", receiverID, msg);
     }
 
     private void sendCommandToServer(String... lines) throws IOException {
@@ -86,7 +86,7 @@ public class Client {
 	outToServer.flush();
     }
 
-    private void executeCommand(String type, Command command, String... lines) throws IOException {
+    private void sendCommandToServer(String type, Command command, String... lines) throws IOException {
 	String[] newCommand = new String[lines.length + 2];
 	newCommand[0] = type;
 	newCommand[1] = command.toString();

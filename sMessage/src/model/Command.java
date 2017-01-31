@@ -8,5 +8,6 @@ public enum Command {
     DISCONNECT,
     GETUSERS,
     REGUSER,
-    LOGIN
+    LOGIN,
+    ERROR
 }
