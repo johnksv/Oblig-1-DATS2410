@@ -1,5 +1,7 @@
 package model;
 
+import controller.ServerController;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,13 +24,16 @@ public class Server {
     private ArrayList<SocketInstanse> onlineClients = new ArrayList<>();
     ServerSocket server;
     private boolean running = true;
+	private ServerController serverController;
 
-    public Server() throws IOException {
-	server = new ServerSocket();
+	public Server(ServerController serverController) throws IOException {
+		this.serverController = serverController;
+		server = new ServerSocket();
     }
 
-    public Server(int port) throws IOException {
-	server = new ServerSocket(port);
+    public Server(ServerController serverController, int port) throws IOException {
+		this.serverController = serverController;
+		server = new ServerSocket(port);
     }
 
     private boolean regNewUser(String uname, String passord) {
@@ -151,24 +157,78 @@ public class Server {
 	    sendCommandFromServer(newCommand);
 	}
 
-    }
+		private void parseCommand(String s) throws IOException {
+			String[] sub = s.split("\n");
+			if (sub[0].equals("TYPE 0")) {
+				switch(sub[1]){
+					case "REGUSER":
+						regNewUser(sub);
+						break;
+					case "LOGIN":
+						try {
+							LogIn(sub);
+						} catch (LoginException e) {
+							sendCommandFromServer("TYPE 1", Command.LOGINFAIL, "");
+						}
+						break;
+					case "LOGOF":
+						logOff();
+						break;
+					case "CONNECT":
+						connectTo(sub[3]);
+						break;
 
-    private void parseCommand(String s) {
-	String[] sub = s.split("\n");
-	if (sub[0].equals("TYPE 0")) {
+						default: throw new IllegalArgumentException("Bad protocol");
+				}
+			} else if (sub[0].equals("TYPE 1")) {
+				//TODO open
+				for (SocketInstanse partner : onlineClients) {
+					if (partner.uname.equals(sub[1])) {
+						StringBuilder msg = new StringBuilder();
+						for (int i = 2; i < sub.length; i++){
+							msg.append(sub[i]);
+						}
+						try {
+							partner.sendMsg(uname, sub.toString());
+						} catch (IOException e) {
+							serverController.printWarning(uname + " could not send message to " + partner.uname);
+						}
+						break;
+					}
 
-	} else if (sub[0].equals("TYPE 1")) {
-	    //TODO open
-	    for (SocketInstanse partner : onlineClients) {
-		if (partner.uname.equals(sub[1])) {
-		    //TODO: Send rest of message
+				}
 
+			} else {
+				throw new IllegalArgumentException("Bad protocol");
+			}
 		}
 
-	    }
+		private void connectTo(String s) {
+			// TODO
+		}
 
-	} else {
-	    throw new IllegalArgumentException("Bad protocol");
+		private void logOff() {
+			for(User u : userList){
+				if(u.getUname().equals(uname)) {
+					u.logOff();
+				}
+			}
+		}
+
+		private void LogIn(String[] sub) throws LoginException {
+			for(User u : userList){
+                if(u.getUname().equals(sub[2])) {
+                        u.login(new String(Base64.getDecoder().decode(sub[3])));
+                }
+            }
+		}
+
+		private void regNewUser(String[] sub) {
+			uname = sub[2];
+			userList.add(new User(sub[2], new String(Base64.getDecoder().decode(sub[3]))));
+		}
+
 	}
-    }
+
+
 }

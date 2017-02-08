@@ -9,5 +9,7 @@ public enum Command {
     GETUSERS,
     REGUSER,
     LOGIN,
+    LOGINFAIL,
+    LOGINSUCCESS,
     ERROR
 }
