@@ -27,4 +27,7 @@ public class ServerController implements Initializable {
 	// TODO
     }
 
+    public void printWarning(String s) {
+
+    }
 }

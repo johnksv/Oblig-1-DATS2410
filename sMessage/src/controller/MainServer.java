@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Base64;
+
 /**
  *
  * @author s305046, s305080, s305084, s305089
@@ -26,7 +28,7 @@ public class MainServer extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-	launch(args);
+	    launch(args);
     }
     
 }
