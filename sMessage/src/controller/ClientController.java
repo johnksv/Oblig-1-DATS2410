@@ -6,9 +6,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.collections.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import model.Client;
 
@@ -22,10 +24,16 @@ public class ClientController implements Initializable {
     @FXML
     private TableView tvUsers;
     @FXML
-    private TableColumn<String, String> tabelUsername;
+    private TableColumn<String, String> tableUsername;
     @FXML
     private Label labelLeftStatus;
+    @FXML
+    private Button btnSend;
+    @FXML
+    private Button btnKick;
+
     private final ObservableList<String> userList = FXCollections.observableList(new ArrayList<>());
+    private String activeChat;
 
     private final Client client = new Client(this);
 
@@ -38,10 +46,15 @@ public class ClientController implements Initializable {
 	userList.add("StanBoy96");
 	userList.add("Truls");
 	userList.add("JohnKasper");
-	tabelUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
-					    -> new SimpleObjectProperty<>(param.getValue()));
+	tableUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
+		-> new SimpleObjectProperty<>(param.getValue()));
 
 	tvUsers.setItems(userList);
+
+	tvUsers.setOnMouseClicked((MouseEvent event) -> {
+	    System.out.println(event.getPickResult().toString());
+	    //Set active user
+	});
     }
 
     public void printWaring(String warningMsg) {
