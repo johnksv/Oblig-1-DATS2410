@@ -135,8 +135,13 @@ public class Server {
 	}
 
 	public void getUsers() throws IOException {
-	    //TODO	    
-	    //sendCommandFromServer("TYPE 0", Command.GETUSERS);
+		StringBuilder users = new StringBuilder();
+
+		for(SocketInstanse connections : openConnections){
+			users.append("+" + connections.uname + "\n");
+		}
+
+	    sendCommandFromServer("TYPE 0", Command.USERLIST, users.toString());
 	}
 
 	private void sendCommandFromServer(String... lines) throws IOException {
@@ -164,11 +169,15 @@ public class Server {
 					case "REGUSER":
 						regNewUser(sub);
 						break;
+					case "GETUSERS":
+						getUsers();
+						break;
 					case "LOGIN":
 						try {
 							LogIn(sub);
+							sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
 						} catch (LoginException e) {
-							sendCommandFromServer("TYPE 1", Command.LOGINFAIL, "");
+							sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
 						}
 						break;
 					case "LOGOF":
@@ -182,7 +191,7 @@ public class Server {
 				}
 			} else if (sub[0].equals("TYPE 1")) {
 				//TODO open
-				for (SocketInstanse partner : onlineClients) {
+				for (SocketInstanse partner : openConnections) {
 					if (partner.uname.equals(sub[1])) {
 						StringBuilder msg = new StringBuilder();
 						for (int i = 2; i < sub.length; i++){
@@ -211,6 +220,14 @@ public class Server {
 			for(User u : userList){
 				if(u.getUname().equals(uname)) {
 					u.logOff();
+					for(SocketInstanse connection : openConnections){
+						for (int i = 0; i < connection.openConnections.size(); i++) {
+							if(connection.openConnections.get(i).uname.equals(uname)){
+								connection.openConnections.remove(i);
+								break;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -219,6 +236,7 @@ public class Server {
 			for(User u : userList){
                 if(u.getUname().equals(sub[2])) {
                         u.login(new String(Base64.getDecoder().decode(sub[3])));
+                        uname = u.getUname();
                 }
             }
 		}
@@ -229,6 +247,4 @@ public class Server {
 		}
 
 	}
-
-
 }
