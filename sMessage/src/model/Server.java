@@ -12,8 +12,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author s305046, s305080, s305084, s305089
@@ -174,7 +172,7 @@ public class Server {
 						break;
 					case "LOGIN":
 						try {
-							LogIn(sub);
+							logIn(sub);
 							sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
 						} catch (LoginException e) {
 							sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
@@ -232,7 +230,7 @@ public class Server {
 			}
 		}
 
-		private void LogIn(String[] sub) throws LoginException {
+		private void logIn(String[] sub) throws LoginException {
 			for(User u : userList){
                 if(u.getUname().equals(sub[2])) {
                         u.login(new String(Base64.getDecoder().decode(sub[3])));
