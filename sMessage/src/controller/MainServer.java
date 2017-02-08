@@ -10,7 +10,7 @@ import javafx.stage.Stage;
  *
  * @author s305046, s305080, s305084, s305089
  */
-public class MainController extends Application {
+public class MainServer extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
