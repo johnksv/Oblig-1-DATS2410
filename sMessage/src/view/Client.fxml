@@ -19,7 +19,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -41,9 +41,9 @@
          <left>
             <ScrollPane BorderPane.alignment="CENTER">
                <content>
-                  <TableView fx:id="tvFriends" prefHeight="551.0" prefWidth="200.0">
+                  <TableView fx:id="tvUsers" prefHeight="551.0" prefWidth="200.0">
                     <columns>
-                      <TableColumn fx:id="columnUsername" prefWidth="75.0" text="Username" />
+                      <TableColumn fx:id="tabelUsername" prefWidth="75.0" text="Username" />
                       <TableColumn fx:id="tabelCommand" prefWidth="75.0" />
                     </columns>
                   </TableView>

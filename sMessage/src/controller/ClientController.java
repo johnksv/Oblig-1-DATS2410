@@ -24,8 +24,6 @@ public class ClientController implements Initializable {
     @FXML
     private TableColumn<String, String> tabelUsername;
     @FXML
-    private TableColumn<String, Button> tabelCommand;
-    @FXML
     private Label labelLeftStatus;
     private final ObservableList<String> userList = FXCollections.observableList(new ArrayList<>());
 
@@ -39,25 +37,11 @@ public class ClientController implements Initializable {
 
 	userList.add("StanBoy96");
 	userList.add("Truls");
-	userList.add("JohnKasper");	
-	tabelUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param) -> new SimpleObjectProperty<>(param.getValue()));
+	userList.add("JohnKasper");
+	tabelUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
+					    -> new SimpleObjectProperty<>(param.getValue()));
+
 	tvUsers.setItems(userList);
-
-	tabelUsername = new TableColumn<String,String>("User Name");
-	tabelUsername.setCellValueFactory(new PropertyValueFactory("firstName"));
-	
-	 tvUsers.getColumns().setAll(tabelUsername);
-
-
-
-	
-
-//	lastNameCol.setCellValueFactory(new Callback<CellDataFeatures<String, String>, ObservableValue<String>>() {
-	//	    public ObservableValue<String> call(CellDataFeatures<String, String> p) {
-	//		return p.toString();
-	//	    }
-	//	});
-
     }
 
     public void printWaring(String warningMsg) {
