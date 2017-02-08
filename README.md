@@ -42,3 +42,17 @@ Kommandoer klient skal tolke
 - CONNECT
 - DISCONNECT
 
+#Plan
+Uke 6
+- GUI
+	
+uke 7
+- Dokumentasjon
+- Ekstra
+	
+uke 8
+- Se over program og dokumentasjon
+- Ekstra
+
+Intern deadline: 22. februar
+Innlevering: Mandag uke 9
