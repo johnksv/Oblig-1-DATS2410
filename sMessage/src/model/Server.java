@@ -182,6 +182,7 @@ public class Server {
                         logOff();
                         break;
                     case "CONNECT":
+                        //Burde være sub[2] basert på github, men vet ikke om det er oppdatert
                         connectTo(sub[3]);
                         break;
 
@@ -197,7 +198,7 @@ public class Server {
                             msg.append(sub[i]);
                         }
                         try {
-                            partner.sendMsg(uname, sub.toString());
+                            partner.sendMsg(uname, msg.toString());
                         } catch (IOException e) {
                             serverController.printWarning(uname + " could not send message to " + partner.uname);
                         }
@@ -214,7 +215,9 @@ public class Server {
         private void connectTo(String s) {
             // TODO
         }
-
+        //Stian: hmm tror kanksje dette ble tull, og vi har en online variabel, men den trengs nok ikke
+        //Tror kanskje at vi må fjærne socketen fra onlineClients og så sende en disconnect til alle vi snakker med 
+        //og etter det fjærne de fra listen openConnections om jeg tror skal være de denne clienten snakker med nå
         private void logOff() {
             for (User u : userList) {
                 if (u.getUname().equals(uname)) {
@@ -230,7 +233,7 @@ public class Server {
                 }
             }
         }
-
+        //Må legge denne socketen inn i onlineClients listen
         private void logIn(String[] sub) throws LoginException {
             for (User u : userList) {
                 if (u.getUname().equals(sub[2])) {
@@ -239,7 +242,9 @@ public class Server {
                 }
             }
         }
-
+        
+        //Stian: Kan vi ikke bare lagre den "kryptere" hashen? Da kan vi også finne en mer avansert enkrypter
+        //Og vi har allerede denne metoden laget i Server så må fikse litt eller kanskje ikke idk
         private void regNewUser(String[] sub) {
             uname = sub[2];
             userList.add(new User(sub[2], new String(Base64.getDecoder().decode(sub[3]))));
