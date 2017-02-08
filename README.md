@@ -33,14 +33,18 @@ Eks:
 Første melding til server er versjon av klient
 
 Kommandoer server skal tolke:
-- REGISTRER
+- REGUSER
 - LOGIN
-- CHANGESTATUS
 - LOGOF
+- CONNECT
+- GETUSERS
 
 Kommandoer klient skal tolke
 - CONNECT
 - DISCONNECT
+- USERLIST
+- LOGINFAIL
+- LOGINSUCCESS
 
 #Plan
 Uke 6
