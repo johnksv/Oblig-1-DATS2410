@@ -36,3 +36,5 @@ Thumbs.db
 *.iml
 out/*
 /sMessage/nbproject/private/
+sMessage/dist/
+sMessage/build/
