@@ -182,7 +182,7 @@ public class Server {
                         logOff();
                         break;
                     case "CONNECT":
-                        //Burde være sub[2] basert på github, men vet ikke om det er oppdatert
+                        //Stian: Burde være sub[2] basert på github, men vet ikke om det er oppdatert
                         connectTo(sub[3]);
                         break;
 
@@ -233,7 +233,7 @@ public class Server {
                 }
             }
         }
-        //Må legge denne socketen inn i onlineClients listen
+        //Stian: Må legge denne socketen inn i onlineClients listen
         private void logIn(String[] sub) throws LoginException {
             for (User u : userList) {
                 if (u.getUname().equals(sub[2])) {
