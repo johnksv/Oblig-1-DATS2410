@@ -28,6 +28,8 @@ public class ClientController implements Initializable {
     @FXML
     private Label labelLeftStatus;
     @FXML
+    private Label labelTalkingWIth;
+    @FXML
     private Button btnSend;
     @FXML
     private Button btnKick;
@@ -52,9 +54,12 @@ public class ClientController implements Initializable {
 	tvUsers.setItems(userList);
 
 	tvUsers.setOnMouseClicked((MouseEvent event) -> {
-	    System.out.println(event.getPickResult().toString());
+	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
+	labelTalkingWIth.setText("Talking with: " + userList.get(idx));
 	    //Set active user
 	});
+
+	
     }
 
     public void printWaring(String warningMsg) {

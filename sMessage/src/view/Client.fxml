@@ -42,7 +42,7 @@
                <content>
                   <TableView fx:id="tvUsers" prefHeight="551.0" prefWidth="200.0">
                     <columns>
-                      <TableColumn fx:id="tabelUsername" prefWidth="194.0" text="Username" />
+                      <TableColumn fx:id="tableUsername" prefWidth="194.0" text="Username" />
                     </columns>
                   </TableView>
                </content>
@@ -73,7 +73,10 @@
                <center>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <content>
-                        <VBox prefHeight="345.0" prefWidth="667.0" />
+                        <VBox prefHeight="345.0" prefWidth="667.0">
+                           <children>
+                              <Label fx:id="labelTalkingWIth" text="Talking with:" />
+                           </children></VBox>
                      </content>
                   </ScrollPane>
                </center>
