@@ -43,8 +43,8 @@
                <content>
                   <TableView fx:id="tvFriends" prefHeight="551.0" prefWidth="200.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
+                      <TableColumn fx:id="columnUsername" prefWidth="75.0" text="Username" />
+                      <TableColumn fx:id="tabelCommand" prefWidth="75.0" />
                     </columns>
                   </TableView>
                </content>
@@ -79,7 +79,7 @@
       </BorderPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+        <Label fx:id="labelLeftStatus" maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
           <font>
             <Font size="11.0" fx:id="x3" />
           </font>

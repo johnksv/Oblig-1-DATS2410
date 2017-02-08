@@ -60,7 +60,7 @@ public class Client {
 	sendCommandToServer("TYPE 0", Command.DISCONNECT, userID);
     }
 
-    public void getOnlineList() throws IOException {
+    public void getUserList() throws IOException {
 	sendCommandToServer("TYPE 0", Command.GETUSERS);
     }
 
