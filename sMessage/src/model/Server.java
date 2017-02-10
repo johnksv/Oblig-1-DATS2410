@@ -34,7 +34,7 @@ public class Server {
         server = new ServerSocket(port);
     }
 
-    private boolean regNewUser(String uname, String passord) {
+    public boolean regNewUser(String uname, String passord) {
         for (User u : userList) {
             if (u.getUname().equals(uname)) {
                 return false;
@@ -154,7 +154,7 @@ public class Server {
             if (sub[0].equals("TYPE 0")) {
                 switch (sub[1]) {
                     case "REGUSER":
-                        regNewUser(sub);
+                        regNewUser(sub[2], sub[3]);
                         break;
                     case "GETUSERS":
                         getUsers();
@@ -232,13 +232,6 @@ public class Server {
                 }
             }
             throw new LoginException("Wrong username or password.");
-        }
-        
-        //Stian: Kan vi ikke bare lagre den "kryptere" hashen? Da kan vi også finne en mer avansert enkrypter
-        //Og vi har allerede denne metoden laget i Server så må fikse litt eller kanskje ikke idk
-        private void regNewUser(String[] sub) {
-            uname = sub[2];
-            userList.add(new User(sub[2], new String(Base64.getDecoder().decode(sub[3]))));
         }
 
     }
