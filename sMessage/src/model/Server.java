@@ -11,15 +11,14 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import jdk.nashorn.internal.parser.TokenType;
 
 /**
  * @author s305046, s305080, s305084, s305089
  */
 public class Server {
 
-    private ArrayList<User> userList = new ArrayList<>();
-    private ArrayList<SocketInstanse> onlineClients = new ArrayList<>();
+    private final ArrayList<User> userList = new ArrayList<>();
+    private final ArrayList<SocketInstanse> onlineClients = new ArrayList<>();
     ServerSocket server;
     private boolean running = true;
     private ServerController serverController;
@@ -98,6 +97,8 @@ public class Server {
                 }
                 System.out.println("Done! Closing socket");
                 socket.close();
+                onlineClients.remove(this);
+
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
@@ -145,6 +146,21 @@ public class Server {
             sendCommandFromServer(newCommand);
         }
 
+        private void sendUpdateToAll(String type, Command command, String... lines) throws IOException {
+            String[] newCommand = new String[lines.length + 2];
+            newCommand[0] = type;
+            newCommand[1] = command.toString();
+            System.arraycopy(lines, 0, newCommand, 2, lines.length);
+            for (SocketInstanse user : onlineClients) {
+                for (int i = 0; i < lines.length - 1; i++) {
+                    user.out.write(lines[i]);
+                    user.out.newLine();
+                }
+                user.out.write(lines[lines.length - 1]);
+                user.out.flush();
+            }
+        }
+
         private void parseCommand(String s) throws IOException {
             String[] sub = s.split("\n");
             if (sub[0].equals("TYPE 0")) {
@@ -164,18 +180,19 @@ public class Server {
                         try {
                             logIn(sub);
                             sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
+                            sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, "uname", "+");
                         } catch (LoginException e) {
                             sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
                         }
                         break;
-                    case "LOGOF":
+                    case "LOGOFF":
+                        sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, "uname", "0");
                         logOff();
                         break;
                     case "CONNECT":
-                        //Stian: Burde være sub[2] basert på github, men vet ikke om det er oppdatert
-                        connectTo(sub[3]);
+                        connectTo(sub[2]);
                         break;
-
+                    
                     default:
                         throw new IllegalArgumentException("Bad protocol");
                 }
@@ -224,7 +241,6 @@ public class Server {
             }
         }
 
-        //Stian: Må legge denne socketen inn i onlineClients listen
         private void logIn(String[] sub) throws LoginException {
             for (User u : userList) {
                 if (u.getUname().equals(sub[2])) {
