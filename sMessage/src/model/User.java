@@ -7,10 +7,12 @@ public class User {
 
     private final String uname, pswd;
     private boolean status;
+    private boolean busy;
 
-    public User(String uname, String pswd) {
+    public User(String uname, String pswd, boolean status) {
 	this.uname = uname;
 	this.pswd = pswd;
+	this.status = status;
     }
 
     public String getUname() {
@@ -19,10 +21,18 @@ public class User {
 
     public void logOff() {
 	status = false;
+        busy = false;
     }
 
     public boolean isOnline() {
 	return status;
+    }
+    public void setBusy(boolean busy) {
+        this.busy = busy;
+    }
+
+    public boolean isBusy() {
+	return busy;
     }
 
     public void login(String pswd) throws LoginException {

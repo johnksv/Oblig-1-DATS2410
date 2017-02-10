@@ -5,14 +5,15 @@ package model;
  */
 public enum Command {
     CONNECT,        // , userID
-    REQUEST,        // , userID
     RESPONSE,       // , "yes"/"no", userID
     DISCONNECT,     // , userID
+    STATUSUPDATE,   // , userID, +/-/0
     GETUSERS,       // ,
-    USERLIST,       //TODO
+    USERLIST,       //  TODO
     REGUSER,        // , uname, encryptedPassWord
     LOGIN,          // , uname, encryptedPassWord
     LOGINFAIL,      // ,
     LOGINSUCCESS,   // ,
+    LOGOFF,         //
     ERROR           //
 }
