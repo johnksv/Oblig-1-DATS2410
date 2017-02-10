@@ -45,17 +45,6 @@ public class Server {
         return true;
     }
 
-    private boolean setUserOnline(String uname, String passord) throws LoginException {
-
-        for (User u : userList) {
-            if (u.getUname().equals(uname)) {
-                u.login(passord);
-                return true;
-            }
-        }
-        throw new LoginException("Wrong username or password.");
-    }
-
     private void setUserOffline(String uname) {
         for (User u : userList) {
             if (u.getUname().equals(uname)) {
@@ -94,7 +83,7 @@ public class Server {
         private final BufferedWriter out;
         private boolean online = false;
         private String uname;
-        private ArrayList<SocketInstanse> openConnections;
+		private  ArrayList<SocketInstanse> openConnections;
 
         public SocketInstanse(Socket s) throws IOException {
             socket = s;
@@ -136,7 +125,7 @@ public class Server {
             StringBuilder users = new StringBuilder();
 
             for (SocketInstanse connections : openConnections) {
-                users.append("+" + connections.uname + "\n");
+                users.append("+").append(connections.uname).append("\n");
             }
 
             sendCommandFromServer("TYPE 0", Command.USERLIST, users.toString());
@@ -237,10 +226,12 @@ public class Server {
         private void logIn(String[] sub) throws LoginException {
             for (User u : userList) {
                 if (u.getUname().equals(sub[2])) {
-                    u.login(new String(Base64.getDecoder().decode(sub[3])));
-                    uname = u.getUname();
+                    u.login(sub[3]);
+                    uname = sub[2];
+                    return;
                 }
             }
+            throw new LoginException("Wrong username or password.");
         }
         
         //Stian: Kan vi ikke bare lagre den "kryptere" hashen? Da kan vi også finne en mer avansert enkrypter
