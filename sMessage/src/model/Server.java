@@ -11,7 +11,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Base64;
 
 /**
  * @author s305046, s305080, s305084, s305089
@@ -41,17 +40,8 @@ public class Server {
             }
         }
 
-        userList.add(new User(uname, passord));
+        userList.add(new User(uname, passord, true));
         return true;
-    }
-
-    private void setUserOffline(String uname) {
-        for (User u : userList) {
-            if (u.getUname().equals(uname)) {
-                u.logOff();
-                return;
-            }
-        }
     }
 
     public boolean kickUser(String uname) {
@@ -121,11 +111,11 @@ public class Server {
             sendCommandFromServer("TYPE 0", Command.DISCONNECT, uname);
         }
 
-        public void getUsers() throws IOException {
+        public void sendUsers() throws IOException {
             StringBuilder users = new StringBuilder();
 
-            for (SocketInstanse connections : openConnections) {
-                users.append("+").append(connections.uname).append("\n");
+            for (SocketInstanse client : onlineClients) {
+                users.append("+").append(client.uname).append("\n");
             }
 
             sendCommandFromServer("TYPE 0", Command.USERLIST, users.toString());
@@ -154,10 +144,15 @@ public class Server {
             if (sub[0].equals("TYPE 0")) {
                 switch (sub[1]) {
                     case "REGUSER":
-                        regNewUser(sub[2], sub[3]);
+                        if(regNewUser(sub[2], sub[3])) {
+                            uname = sub[2];
+                        }
+                        else
+                            sendCommandFromServer("TYPE 0", Command.ERROR, "Could not create user");
+
                         break;
                     case "GETUSERS":
-                        getUsers();
+                        sendUsers();
                         break;
                     case "LOGIN":
                         try {

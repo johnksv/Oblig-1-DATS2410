@@ -8,9 +8,10 @@ public class User {
     private final String uname, pswd;
     private boolean status;
 
-    public User(String uname, String pswd) {
+    public User(String uname, String pswd, boolean status) {
 	this.uname = uname;
 	this.pswd = pswd;
+	this.status = status;
     }
 
     public String getUname() {
