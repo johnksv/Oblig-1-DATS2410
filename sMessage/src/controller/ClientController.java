@@ -118,6 +118,18 @@ public class ClientController implements Initializable {
 	loadAlert.close();
     }
 
+    /**
+     * 
+     * @param username
+     * @param password
+     * @param IP
+     * @param port
+     * @param login true for login, false for reg
+     */
+    public void setLoginInformation(String username, String password, String IP, String port, boolean login) {
+	//TODO create/login user and connect to server
+    }
+
     public void addMessageToConversation(String userName, Message msg) {
 	for (Conversation cnv : friendList) {
 	    if (cnv.getTalkingWithUsername().equals(userName)) {
