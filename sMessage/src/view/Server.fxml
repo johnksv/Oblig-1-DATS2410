@@ -1,55 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerController">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="File">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-          <items>
-            <MenuItem mnemonicParsing="false" text="About" />
-          </items>
-        </Menu>
-      </menus>
-    </MenuBar>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+            <HBox prefHeight="25.0" prefWidth="186.0" spacing="5.0">
+               <children>
+                  <Label text="Port:">
+                     <HBox.margin>
+                        <Insets top="3.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="txtFieldPortManual" disable="true" prefHeight="25.0" prefWidth="62.0" />
+                  <CheckBox fx:id="chboxPortAutomatic" mnemonicParsing="false" selected="true" text="Automatic">
+                     <HBox.margin>
+                        <Insets top="3.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+            <Separator orientation="VERTICAL" />
+          <Button fx:id="btnToogleServerStatus" mnemonicParsing="false" onAction="#handleToogleServerStatus" text="Turn on server" />
+            <Separator orientation="VERTICAL" />
+            <HBox prefWidth="133.0" spacing="5.0">
+               <children>
+                  <Canvas fx:id="canvasServerStatus" height="16.0" width="16.0">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </Canvas>
+                  <Label fx:id="labelServerStatus" text="Server is stopped" />
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </HBox>
+            <Separator orientation="VERTICAL" />
+            <Region prefHeight="27.0" prefWidth="183.0" />
+            <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="200.0">
+               <children>
+                  <Label text="IP:">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" text="Help" />
+        </items>
+      </ToolBar>
       <BorderPane VBox.vgrow="ALWAYS">
          <left>
             <ScrollPane BorderPane.alignment="CENTER">
                <content>
-                  <ListView fx:id="listViewClients" prefHeight="543.0" prefWidth="222.0" />
+                  <TableView fx:id="tableViewUsers" prefHeight="510.0" prefWidth="210.0">
+                    <columns>
+                      <TableColumn fx:id="tableColumnUsername" prefWidth="139.0" text="Username" />
+                      <TableColumn fx:id="tableColumnStatus" prefWidth="63.0" text="Status" />
+                    </columns>
+                  </TableView>
                </content>
             </ScrollPane>
          </left>
          <center>
       <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" BorderPane.alignment="CENTER">
                <children>
-                  <AreaChart fx:id="chartArea" layoutX="32.0" layoutY="34.0" prefHeight="211.0" prefWidth="619.0">
+                  <AreaChart fx:id="chartArea" layoutX="32.0" layoutY="52.0" prefHeight="211.0" prefWidth="619.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -57,7 +97,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </AreaChart>
-                  <LineChart fx:id="chartLine" layoutX="32.0" layoutY="245.0" prefHeight="253.0" prefWidth="634.0">
+                  <LineChart fx:id="chartLine" layoutX="32.0" layoutY="258.0" prefHeight="253.0" prefWidth="634.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
