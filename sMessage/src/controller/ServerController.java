@@ -1,8 +1,11 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import model.Server;
 
 /**
  *
@@ -38,6 +42,7 @@ public class ServerController implements Initializable {
     @FXML
     private TableColumn<String, String> tableColumnStatus;
 
+    private Server server;
     private boolean serverRunning = false;
 
     @Override
@@ -55,7 +60,7 @@ public class ServerController implements Initializable {
 	    }
 	    return null;
 	});
-	
+
 	txtFieldPortManual.setTextFormatter(formater);
 
     }
@@ -79,11 +84,28 @@ public class ServerController implements Initializable {
 	    serverRunning = false;
 	    labelServerStatus.setText("Server is stopped");
 	    btnToogleServerStatus.setText("Turn on server");
+	    server = null;
 
 	} else {
 	    serverRunning = true;
 	    labelServerStatus.setText("Server is running");
 	    btnToogleServerStatus.setText("Turn off server");
+	    try {
+		if (chboxPortAutomatic.isSelected()) {
+
+		    server = new Server(this);
+		} else {
+		    server = new Server(this, Integer.parseInt(txtFieldPortManual.getText()));
+		}
+	    } catch (IOException ex) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error occurred");
+		alert.setHeaderText("An IOException occurred");
+
+		TextArea txtArea = new TextArea(ex.toString());
+		alert.getDialogPane().setExpandableContent(txtArea);
+	    }
+
 	}
 	chboxPortAutomatic.setDisable(serverRunning);
 	if (!chboxPortAutomatic.isSelected()) {
