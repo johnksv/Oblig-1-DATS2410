@@ -48,13 +48,21 @@ Kommandoer klient skal tolke
 - LOGINSUCCESS
 - STATUSUPDATE
 
-statustypes: 0(offline) -(busy) +(online)
-GetUsers lister alle brukere og statusen deres der - er busy + er online og 0 er frakoblet.
 
-STATUSUPDATE:
-TYPE 0
-UNAME
-0 or + or -
+Status codes:
+- Offline: 0
+- Busy: -
+- Online: +
+
+
+GetUsers: Each username is followed with a status code, like in the following syntax example.
+
+Syntax for commando STATUSUPDATE:
+
+	TYPE 0
+	STATUSUPDATE
+	UNAME
+	0 or + or -
 
 #Plan
 Uke 6
