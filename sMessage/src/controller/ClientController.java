@@ -52,10 +52,14 @@ public class ClientController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-	//initClient();
+
+	initClient();
 
 	forTesting();
 	initTabel();
+	String time = "" + System.currentTimeMillis();
+	System.out.println(time);
+	setLoginInformation("NewName" + time.substring(11), "passw", activeChat, activeChat, false);
     }
 
     private void initTabel() {
@@ -105,7 +109,7 @@ public class ClientController implements Initializable {
 	loadAlert.setContentText("Username: " + "\n" + ", ip: " + ":");
 	loadAlert.show();
 	try {
-	    client = new Client(this, "192.168.0.1", 15);
+	    client = new Client(this, "127.0.0.1", 4567);
 	} catch (IOException ex) {
 	    loadAlert.close();
 	    Alert alert = new Alert(AlertType.ERROR);
@@ -119,7 +123,7 @@ public class ClientController implements Initializable {
     }
 
     /**
-     * 
+     *
      * @param username
      * @param password
      * @param IP
@@ -127,7 +131,12 @@ public class ClientController implements Initializable {
      * @param login true for login, false for reg
      */
     public void setLoginInformation(String username, String password, String IP, String port, boolean login) {
-	//TODO create/login user and connect to server
+	try {
+	    //TODO create/login user and connect to server
+	    client.regNewUser(username, password);
+	} catch (IOException ex) {
+	    Logger.getLogger(ClientController.class.getName()).log(Level.SEVERE, null, ex);
+	}
     }
 
     public void addMessageToConversation(String userName, Message msg) {
