@@ -7,6 +7,7 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,8 +57,9 @@ public class LoginClientController implements Initializable {
 	btnLogin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
 	    try {
 		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
-		//TODO Encode as Base64 or SHA256
-		client.login(uname.getText(), passw.getText());
+
+		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
+		client.login(uname.getText(), base64Pass);
 
 		cController.setClient(client);
 		startClient();
@@ -71,9 +73,10 @@ public class LoginClientController implements Initializable {
 	btnRegister.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
 	    try {
 		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
-		//TODO Encode as Base64 or SHA256
-		client.regNewUser(uname.getText(), passw.getText());
-		
+
+		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
+		client.regNewUser(uname.getText(), base64Pass);
+
 		cController.setClient(client);
 		startClient();
 		closeThisStage();
