@@ -78,9 +78,10 @@ public class Client {
 
 	for (int i = 0; i < lines.length - 1; i++) {
 	    outToServer.write(lines[i]);
-	    outToServer.newLine();
+	    outToServer.write(";");
 	}
 	outToServer.write(lines[lines.length - 1]);
+	outToServer.newLine();
 	outToServer.flush();
     }
 
