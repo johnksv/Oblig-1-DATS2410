@@ -35,16 +35,34 @@ Første melding til server er versjon av klient
 Kommandoer server skal tolke:
 - REGUSER
 - LOGIN
-- LOGOF
+- LOGOFF
 - CONNECT
 - GETUSERS
 
 Kommandoer klient skal tolke
 - CONNECT
+- RESPONSE
 - DISCONNECT
 - USERLIST
 - LOGINFAIL
 - LOGINSUCCESS
+- STATUSUPDATE
+
+
+Status codes:
+- Offline: 0
+- Busy: -
+- Online: +
+
+
+GetUsers: Each username is followed with a status code, like in the following syntax example.
+
+Syntax for commando STATUSUPDATE:
+
+	TYPE 0
+	STATUSUPDATE
+	UNAME
+	0 or + or -
 
 #Plan
 Uke 6

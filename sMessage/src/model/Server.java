@@ -11,15 +11,14 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Base64;
 
 /**
  * @author s305046, s305080, s305084, s305089
  */
 public class Server {
 
-    private ArrayList<User> userList = new ArrayList<>();
-    private ArrayList<SocketInstanse> onlineClients = new ArrayList<>();
+    private final ArrayList<User> userList = new ArrayList<>();
+    private final ArrayList<SocketInstanse> onlineClients = new ArrayList<>();
     ServerSocket server;
     private boolean running = true;
     private ServerController serverController;
@@ -41,17 +40,8 @@ public class Server {
             }
         }
 
-        userList.add(new User(uname, passord));
+        userList.add(new User(uname, passord, true));
         return true;
-    }
-
-    private void setUserOffline(String uname) {
-        for (User u : userList) {
-            if (u.getUname().equals(uname)) {
-                u.logOff();
-                return;
-            }
-        }
     }
 
     public boolean kickUser(String uname) {
@@ -81,9 +71,8 @@ public class Server {
 
         private final Socket socket;
         private final BufferedWriter out;
-        private boolean online = false;
         private String uname;
-		private  ArrayList<SocketInstanse> openConnections;
+        private ArrayList<SocketInstanse> openConnections;
 
         public SocketInstanse(Socket s) throws IOException {
             socket = s;
@@ -108,6 +97,8 @@ public class Server {
                 }
                 System.out.println("Done! Closing socket");
                 socket.close();
+                onlineClients.remove(this);
+
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
@@ -121,11 +112,17 @@ public class Server {
             sendCommandFromServer("TYPE 0", Command.DISCONNECT, uname);
         }
 
-        public void getUsers() throws IOException {
+        public void sendUsers() throws IOException {
             StringBuilder users = new StringBuilder();
 
-            for (SocketInstanse connections : openConnections) {
-                users.append("+").append(connections.uname).append("\n");
+            for (User u : userList) {
+                if (!u.isOnline()) {
+                    users.append("0").append(u.getUname()).append("\n");
+                } else if (u.isBusy()) {
+                    users.append("-").append(u.getUname()).append("\n");
+                } else {
+                    users.append("+").append(u.getUname()).append("\n");
+                }
             }
 
             sendCommandFromServer("TYPE 0", Command.USERLIST, users.toString());
@@ -149,37 +146,57 @@ public class Server {
             sendCommandFromServer(newCommand);
         }
 
+        private void sendUpdateToAll(String type, Command command, String... lines) throws IOException {
+            String[] newCommand = new String[lines.length + 2];
+            newCommand[0] = type;
+            newCommand[1] = command.toString();
+            System.arraycopy(lines, 0, newCommand, 2, lines.length);
+            for (SocketInstanse user : onlineClients) {
+                for (int i = 0; i < lines.length - 1; i++) {
+                    user.out.write(lines[i]);
+                    user.out.newLine();
+                }
+                user.out.write(lines[lines.length - 1]);
+                user.out.flush();
+            }
+        }
+
         private void parseCommand(String s) throws IOException {
             String[] sub = s.split("\n");
             if (sub[0].equals("TYPE 0")) {
                 switch (sub[1]) {
                     case "REGUSER":
-                        regNewUser(sub[2], sub[3]);
+                        if (regNewUser(sub[2], sub[3])) {
+                            uname = sub[2];
+                        } else {
+                            sendCommandFromServer("TYPE 0", Command.ERROR, "Could not create user");
+                        }
+
                         break;
                     case "GETUSERS":
-                        getUsers();
+                        sendUsers();
                         break;
                     case "LOGIN":
                         try {
                             logIn(sub);
                             sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
+                            sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, "uname", "+");
                         } catch (LoginException e) {
                             sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
                         }
                         break;
-                    case "LOGOF":
+                    case "LOGOFF":
+                        sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, "uname", "0");
                         logOff();
                         break;
                     case "CONNECT":
-                        //Stian: Burde være sub[2] basert på github, men vet ikke om det er oppdatert
-                        connectTo(sub[3]);
+                        connectTo(sub[2]);
                         break;
-
+                    
                     default:
                         throw new IllegalArgumentException("Bad protocol");
                 }
             } else if (sub[0].equals("TYPE 1")) {
-                //TODO open
                 for (SocketInstanse partner : openConnections) {
                     if (partner.uname.equals(sub[1])) {
                         StringBuilder msg = new StringBuilder();
@@ -204,6 +221,7 @@ public class Server {
         private void connectTo(String s) {
             // TODO
         }
+
         //Stian: hmm tror kanksje dette ble tull, og vi har en online variabel, men den trengs nok ikke
         //Tror kanskje at vi må fjærne socketen fra onlineClients og så sende en disconnect til alle vi snakker med 
         //og etter det fjærne de fra listen openConnections om jeg tror skal være de denne clienten snakker med nå
@@ -222,7 +240,7 @@ public class Server {
                 }
             }
         }
-        //Stian: Må legge denne socketen inn i onlineClients listen
+
         private void logIn(String[] sub) throws LoginException {
             for (User u : userList) {
                 if (u.getUname().equals(sub[2])) {

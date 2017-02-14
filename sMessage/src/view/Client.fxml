@@ -12,6 +12,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -39,15 +40,45 @@
     </MenuBar>
       <BorderPane VBox.vgrow="ALWAYS">
          <left>
-            <ScrollPane BorderPane.alignment="CENTER">
-               <content>
-                  <TableView fx:id="tvUsers" prefHeight="551.0" prefWidth="200.0">
-                    <columns>
-                      <TableColumn fx:id="tableUsername" prefWidth="194.0" text="Username" />
-                    </columns>
-                  </TableView>
-               </content>
-            </ScrollPane>
+            <VBox BorderPane.alignment="CENTER">
+               <children>
+                  <ScrollPane>
+                     <content>
+                        <TableView fx:id="tvFriends" prefHeight="192.0" prefWidth="200.0">
+                          <columns>
+                            <TableColumn fx:id="columnFriends" prefWidth="184.0" text="Friends" />
+                          </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+                  <ScrollPane prefHeight="357.0" prefWidth="202.0">
+                     <content>
+                        <VBox>
+                           <children>
+                              <HBox prefHeight="31.0" prefWidth="200.0">
+                                 <children>
+                                    <TextField prefHeight="25.0" prefWidth="123.0" promptText="Search" />
+                                    <Button mnemonicParsing="false" text="Button">
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                                 <padding>
+                                    <Insets left="2.0" top="2.0" />
+                                 </padding>
+                              </HBox>
+                              <TableView fx:id="tvUsers" prefHeight="350.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="columnUsername" prefWidth="184.0" text="Online users" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
          </left>
          <center>
             <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">

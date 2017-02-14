@@ -1,18 +1,21 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.collections.*;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
 import model.Client;
+import model.client.Conversation;
+import model.client.Message;
 
 /**
  * FXML Controller class
@@ -22,9 +25,13 @@ import model.Client;
 public class ClientController implements Initializable {
 
     @FXML
+    private TableView tvFriends;
+    @FXML
     private TableView tvUsers;
     @FXML
-    private TableColumn<String, String> tableUsername;
+    private TableColumn<String, String> columnUsername;
+    @FXML
+    private TableColumn<Conversation, String> columnFriends;
     @FXML
     private Label labelLeftStatus;
     @FXML
@@ -34,36 +41,112 @@ public class ClientController implements Initializable {
     @FXML
     private Button btnKick;
 
+    private final ObservableList<Conversation> friendList = FXCollections.observableList(new ArrayList<>());
     private final ObservableList<String> userList = FXCollections.observableList(new ArrayList<>());
     private String activeChat;
 
-    private final Client client = new Client(this);
+    private Client client;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+	//initClient();
 
-	userList.add("StanBoy96");
-	userList.add("Truls");
-	userList.add("JohnKasper");
-	tableUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
+	forTesting();
+	initTabel();
+    }
+
+    private void initTabel() {
+	columnUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
 		-> new SimpleObjectProperty<>(param.getValue()));
+	columnFriends.setCellValueFactory((TableColumn.CellDataFeatures<Conversation, String> param)
+		-> new SimpleObjectProperty<>(param.getValue().getTalkingWithUsername()));
 
+	tvFriends.setItems(friendList);
 	tvUsers.setItems(userList);
 
-	tvUsers.setOnMouseClicked((MouseEvent event) -> {
+	tvFriends.setOnMouseClicked((MouseEvent event) -> {
 	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
-	labelTalkingWIth.setText("Talking with: " + userList.get(idx));
+	    labelTalkingWIth.setText("Talking with: " + userList.get(idx));
 	    //Set active user
 	});
 
-	
+	tvUsers.setOnMouseClicked((MouseEvent event) -> {
+	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
+	    String user = userList.get(idx);
+
+	    Alert alert = new Alert(AlertType.CONFIRMATION);
+	    alert.setTitle("Confirm Connection");
+	    alert.setHeaderText("Do you want to connect with " + user);
+	    alert.setContentText("We will alert you when your peer "
+		    + "has responded to the request.");
+
+	    Optional<ButtonType> answer = alert.showAndWait();
+	    if (answer.isPresent()) {
+		try {
+		    client.connectChat(user);
+		} catch (IOException ex) {
+		    Alert alertErr = new Alert(AlertType.ERROR);
+		    alertErr.setTitle("Error occurred");
+		    alertErr.setHeaderText("An IOException occurred");
+
+		    TextArea txtArea = new TextArea(ex.toString());
+		    alert.getDialogPane().setExpandableContent(txtArea);
+		}
+	    }
+	});
     }
 
-    public void printWaring(String warningMsg) {
-	labelLeftStatus.setText(warningMsg);
+    private void initClient() {
+	Alert loadAlert = new Alert(AlertType.INFORMATION);
+	loadAlert.setHeaderText("Connecting to server");
+	loadAlert.setContentText("Username: " + "\n" + ", ip: " + ":");
+	loadAlert.show();
+	try {
+	    client = new Client(this, "192.168.0.1", 15);
+	} catch (IOException ex) {
+	    loadAlert.close();
+	    Alert alert = new Alert(AlertType.ERROR);
+	    alert.setTitle("Error occurred");
+	    alert.setHeaderText("Could not connect to server.");
+	    alert.showAndWait();
+	    Platform.exit();
+	    System.exit(-1);
+	}
+	loadAlert.close();
+    }
+
+    /**
+     * 
+     * @param username
+     * @param password
+     * @param IP
+     * @param port
+     * @param login true for login, false for reg
+     */
+    public void setLoginInformation(String username, String password, String IP, String port, boolean login) {
+	//TODO create/login user and connect to server
+    }
+
+    public void addMessageToConversation(String userName, Message msg) {
+	for (Conversation cnv : friendList) {
+	    if (cnv.getTalkingWithUsername().equals(userName)) {
+		cnv.addMessage(msg);
+		return;
+	    }
+	}
+	Alert alert = new Alert(AlertType.ERROR);
+	alert.setTitle("Error occurred");
+
+	alert.setContentText("This should not happen. Server should have control over this.");
+	alert.showAndWait();
+
+    }
+
+    public void printMessageToView(String msg, boolean waring) {
+	labelLeftStatus.setText(msg);
     }
 
     public void displayList(String[] list) {
@@ -72,6 +155,12 @@ public class ClientController implements Initializable {
 	    userList.add(user.substring(1));
 	}
 
+    }
+
+    private void forTesting() {
+	userList.add("StanBoy96");
+	userList.add("Truls");
+	userList.add("JohnKasper");
     }
 
 }
