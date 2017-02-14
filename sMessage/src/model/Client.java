@@ -70,6 +70,10 @@ public class Client {
 	sendCommandToServer("TYPE 1", receiverID, msg);
     }
 
+    public void sendRespons(String username, String respons) throws IOException {
+	sendCommandToServer("TYPE 0", Command.RESPONSE, username, respons.toUpperCase());
+    }
+
     private void sendCommandToServer(String... lines) throws IOException {
 
 	for (int i = 0; i < lines.length - 1; i++) {
@@ -93,6 +97,9 @@ public class Client {
 	if (sub[0].equals("TYPE 0")) {
 	    switch (sub[1]) {
 		case "CONNECT":
+		    clientController.connectRequest(sub[2]);
+		    break;
+		case "RESPONSE":
 
 		    break;
 		case "DISCONNECT":
@@ -106,6 +113,9 @@ public class Client {
 		    break;
 		case "LOGINSUCCESS":
 
+		    break;
+
+		case "STATUSUPDATE":
 		    break;
 
 		default:

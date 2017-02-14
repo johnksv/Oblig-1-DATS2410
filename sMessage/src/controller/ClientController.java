@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import model.Client;
+import model.Command;
 import model.client.Conversation;
 import model.client.Message;
 
@@ -99,27 +100,21 @@ public class ClientController implements Initializable {
 	});
     }
 
-    private void initClient() {
-	Alert loadAlert = new Alert(AlertType.INFORMATION);
-	loadAlert.setHeaderText("Connecting to server");
-	loadAlert.setContentText("Username: " + "\n" + ", ip: " + ":");
-	loadAlert.show();
-	try {
-	    client = new Client(this, "192.168.0.1", 15);
-	} catch (IOException ex) {
-	    loadAlert.close();
-	    Alert alert = new Alert(AlertType.ERROR);
-	    alert.setTitle("Error occurred");
-	    alert.setHeaderText("Could not connect to server.");
-	    alert.showAndWait();
-	    Platform.exit();
-	    System.exit(-1);
-	}
-	loadAlert.close();
+    private void forTesting() {
+	userList.add("StanBoy96");
+	userList.add("Truls");
+	userList.add("JohnKasper");
+    }
+
+    private void showAlertBoxError(String title, String contentText) {
+	Alert alert = new Alert(AlertType.ERROR);
+	alert.setTitle(title);
+	alert.setContentText(contentText);
+	alert.showAndWait();
     }
 
     /**
-     * 
+     *
      * @param username
      * @param password
      * @param IP
@@ -137,12 +132,9 @@ public class ClientController implements Initializable {
 		return;
 	    }
 	}
-	Alert alert = new Alert(AlertType.ERROR);
-	alert.setTitle("Error occurred");
 
-	alert.setContentText("This should not happen. Server should have control over this.");
-	alert.showAndWait();
-
+	showAlertBoxError("Error occurred",
+		"This should not happen. Server should have control over this.");
     }
 
     public void printMessageToView(String msg, boolean waring) {
@@ -157,10 +149,32 @@ public class ClientController implements Initializable {
 
     }
 
-    private void forTesting() {
-	userList.add("StanBoy96");
-	userList.add("Truls");
-	userList.add("JohnKasper");
+    /**
+     * Reacts to an request from another client.
+     *
+     * @param username
+     */
+    public void connectRequest(String username) {
+	ButtonType accept = new ButtonType("Accept", ButtonBar.ButtonData.OK_DONE);
+	ButtonType reject = new ButtonType("Reject", ButtonBar.ButtonData.CANCEL_CLOSE);
+	Alert alert = new Alert(AlertType.CONFIRMATION, "", accept, reject);
+	alert.setTitle("Confirm Connection");
+	alert.setHeaderText(username + " wants to connect to you.");
+
+	Optional< ButtonType> answer = alert.showAndWait();
+	if (answer.isPresent()) {
+	    try {
+		String respons = answer.get() == accept ? "YES" : "NO";
+		client.sendRespons(username, respons);
+	    } catch (IOException ex) {
+		Alert alertErr = new Alert(AlertType.ERROR);
+		alertErr.setTitle("Error occurred");
+		alertErr.setHeaderText("An IOException occurred");
+
+		TextArea txtArea = new TextArea(ex.toString());
+		alert.getDialogPane().setExpandableContent(txtArea);
+	    }
+	}
     }
 
 }
