@@ -34,17 +34,13 @@ public class Client {
 	    String input;
 	    try {
 		while ((input = inFromServer.readLine()) != null) {
-		    parseInput(input);
+		    parseCommand(input);
 		}
 		System.out.println("Thread done");
 	    } catch (IOException e) {
 		e.printStackTrace();
 	    }
 	}).start();
-    }
-
-    private void parseInput(String input) {
-	System.out.println("From server: " + input);
     }
 
     public void connectChat(String userID) throws IOException {
@@ -93,7 +89,7 @@ public class Client {
     }
 
     private void parseCommand(String cmd) throws IOException {
-	String[] sub = cmd.split("\n");
+	String[] sub = cmd.split(";");
 	if (sub[0].equals("TYPE 0")) {
 	    switch (sub[1]) {
 		case "CONNECT":
