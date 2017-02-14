@@ -70,6 +70,10 @@ public class Client {
 	sendCommandToServer("TYPE 1", receiverID, msg);
     }
 
+    public void sendRespons(String username, String respons) throws IOException {
+	sendCommandToServer("TYPE 0", Command.RESPONSE, username, respons.toUpperCase());
+    }
+
     private void sendCommandToServer(String... lines) throws IOException {
 
 	for (int i = 0; i < lines.length - 1; i++) {
@@ -93,13 +97,16 @@ public class Client {
 	if (sub[0].equals("TYPE 0")) {
 	    switch (sub[1]) {
 		case "CONNECT":
+		    clientController.connectRequest(sub[2]);
+		    break;
+		case "RESPONSE":
 
 		    break;
 		case "DISCONNECT":
 
 		    break;
 		case "USERLIST":
-
+		    clientController.updateUserList(restOfArray(sub, 2).toString());
 		    break;
 		case "LOGINFAIL":
 
@@ -108,18 +115,16 @@ public class Client {
 
 		    break;
 
+		case "STATUSUPDATE":
+		    clientController.updateStatus(sub[2]);
+		    break;
+
 		default:
 		    throw new IllegalArgumentException("Bad protocol");
 	    }
 	} else if (sub[0].equals("TYPE 1")) {
 	    String from = sub[1];
-	    StringBuilder sb = new StringBuilder();
-	    for (int i = 2; i < sub.length; i++) {
-		sb.append(sub[i]);
-		if (i != sub.length - 1) {
-		    sb.append("\n");
-		}
-	    }
+	    StringBuilder sb = restOfArray(sub, 2);
 
 	    Message msg = new Message(from, sb.toString());
 	    clientController.addMessageToConversation(from, msg);
@@ -127,5 +132,16 @@ public class Client {
 	} else {
 	    throw new IllegalArgumentException("Bad protocol");
 	}
+    }
+
+    private StringBuilder restOfArray(String[] sub, int from) {
+	StringBuilder sb = new StringBuilder();
+	for (int i = from; i < sub.length; i++) {
+	    sb.append(sub[i]);
+	    if (i != sub.length - 1) {
+		sb.append(";");
+	    }
+	}
+	return sb;
     }
 }
