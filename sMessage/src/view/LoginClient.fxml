@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginClientController">
+  <children>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="350.0" prefWidth="432.0" VBox.vgrow="ALWAYS">
+      <children>
+        <Label alignment="CENTER" layoutX="64.0" layoutY="58.0" prefHeight="27.0" prefWidth="304.0" style="&#10;" text="Login/ Register" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false">
+          <font>
+            <Font size="18.0" />
+          </font>
+        </Label>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="229.0" layoutX="86.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="259.0" />
+            <Label alignment="CENTER" layoutX="71.0" layoutY="14.0" prefHeight="27.0" prefWidth="304.0" style="&#10;" text="SMessage  " textAlignment="CENTER" wrapText="false">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Label>
+            <VBox layoutX="141.0" layoutY="116.0" prefHeight="200.0" prefWidth="150.0" spacing="5.0">
+               <children>
+                  <TextField id="uname" fx:id="uname" promptText="Username" />
+                  <TextField id="passw" fx:id="passw" promptText="Password" />
+                  <TextField id="serverIP" fx:id="serverIP" promptText="Server IP" />
+                  <TextField id="portNumber" fx:id="portNumber" promptText="PortNumber" />
+                  <HBox prefHeight="86.0" prefWidth="150.0" spacing="20.0">
+                     <children>
+                        <Button mnemonicParsing="false" text="Login" onAction="print"  />
+                        <Button mnemonicParsing="false" text="Register">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+      </children>
+    </AnchorPane>
+  </children>
+</VBox>
