@@ -37,6 +37,7 @@ Kommandoer server skal tolke:
 - LOGIN
 - LOGOFF
 - CONNECT
+- RESPONSE
 - GETUSERS
 
 Kommandoer klient skal tolke
