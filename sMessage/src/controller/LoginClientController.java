@@ -31,13 +31,13 @@ public class LoginClientController implements Initializable
     @FXML
     private Button btnRegister;
     @FXML
-    private TextField fieldUname;
+    private TextField uname;
     @FXML
-    private TextField fieldPassw;
+    private TextField passw;
     @FXML
-    private TextField fieldServerIP;
+    private TextField serverIP;
     @FXML
-    private TextField fieldPortNumber;
+    private TextField portNumber;
 
     ClientController cController = new ClientController();
 
@@ -48,7 +48,7 @@ public class LoginClientController implements Initializable
         {            
             try
             {
-                Client client = new Client(cController, fieldServerIP.getText(), Integer.parseInt(fieldPortNumber.getText()));
+                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
             } catch (IOException ex)
             {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
