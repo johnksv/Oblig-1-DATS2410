@@ -113,20 +113,34 @@ public class Server {
             }
         }
 
+        /**
+         * Sends a text message to the user connected to this socket instanse
+         * @param uname The sender of the message
+         * @param msg The message
+         * @throws IOException If the user could not be reached, possibly due to network issues
+         */
         public void sendMsg(String uname, String msg) throws IOException {
             sendCommandFromServer("TYPE 1", uname, msg);
         }
 
-        public void disconnectUser(String uname) throws IOException {
-            sendCommandFromServer("TYPE 0", Command.DISCONNECT, uname);
-        }
-        private void disconnectFromUser(String s) throws IOException {
+        /**
+         * Sends a DISCONNECT command to the user with the username "userName"
+         * @param userName The username of the user to be disconnected from
+         * @throws IOException If the user could not be reached, possibly due to network issues
+         */
+        private void disconnectMe(String userName) throws IOException {
             for (SocketInstanse i : openConnections) {
-                if(i.uname.equals(s))
+                if(i.uname.equals(userName)) {
                     i.sendCommandFromServer("TYPE 0", Command.DISCONNECT, uname);
+                    break;
+                }
             }
         }
 
+        /**
+         * Sends a complete list off all the users to the user of this socketInstance
+         * @throws IOException If the user could not be reached, possibly due to network issues
+         */
         public void sendUsers() throws IOException {
             StringBuilder users = new StringBuilder();
 
@@ -143,6 +157,11 @@ public class Server {
             sendCommandFromServer("TYPE 0", Command.USERLIST, users.toString());
         }
 
+        /**
+         *
+         * @param lines
+         * @throws IOException
+         */
         private void sendCommandFromServer(String... lines) throws IOException {
 
             for (int i = 0; i < lines.length - 1; i++) {
@@ -211,7 +230,7 @@ public class Server {
                         sendResponse(sub[2], sub[3]);
                         break;
                     case "DISCONNECT":
-                        disconnectFromUser(sub[2]);
+                        disconnectMe(sub[2]);
                         break;
                     default:
                         throw new IllegalArgumentException("Bad protocol");
