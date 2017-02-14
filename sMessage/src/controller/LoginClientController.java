@@ -8,14 +8,19 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import model.Client;
 
 /**
@@ -23,8 +28,7 @@ import model.Client;
  *
  * @author Benjamin
  */
-public class LoginClientController implements Initializable
-{
+public class LoginClientController implements Initializable {
 
     @FXML
     private Button btnLogin;
@@ -39,26 +43,77 @@ public class LoginClientController implements Initializable
     @FXML
     private TextField portNumber;
 
-    ClientController cController = new ClientController();
+    private ClientController cController;
+    private Stage clientStage = new Stage();
+    private FXMLLoader loader;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
-        btnLogin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) ->
-        {            
-            try
-            {
-                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
-            } catch (IOException ex)
-            {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error occurred");
-                alert.setHeaderText("Could not connect to server.");
-                alert.showAndWait();
-                Platform.exit();
-                System.exit(-1);
-            }
-        });
+    public void initialize(URL url, ResourceBundle rb) {
+
+	loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
+	cController = loader.getController();
+
+	btnLogin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+	    try {
+		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+		//TODO Encode as Base64 or SHA256
+		client.login(uname.getText(), passw.getText());
+
+		cController.setClient(client);
+		startClient();
+		closeThisStage();
+
+	    } catch (IOException ex) {
+		showFatalError();
+	    }
+	});
+
+	btnRegister.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+	    try {
+		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+		//TODO Encode as Base64 or SHA256
+		client.regNewUser(uname.getText(), passw.getText());
+		
+		cController.setClient(client);
+		startClient();
+		closeThisStage();
+
+	    } catch (IOException ex) {
+		showFatalError();
+	    }
+	});
+    }
+
+    private void showFatalError() {
+	Alert alert = new Alert(Alert.AlertType.ERROR);
+	alert.setTitle("Error occurred");
+	alert.setHeaderText("Could not connect to server.");
+	alert.showAndWait();
+	Platform.exit();
+	System.exit(-1);
+    }
+
+    private void startClient() {
+	try {
+
+	    Scene scene = new Scene(loader.load());
+	    clientStage.setScene(scene);
+	    clientStage.setResizable(true);
+	    clientStage.setMinWidth(850);
+	    clientStage.setMinHeight(650);
+	    clientStage.show();
+
+	} catch (IOException ex) {
+	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+	    Platform.exit();
+	    System.exit(1);
+	}
+    }
+
+    private void closeThisStage() {
+	//Grab a random element on the FXML-view so we get the Stage
+	//then close.
+	((Stage) btnLogin.getScene().getWindow()).close();
     }
 
 }
