@@ -106,7 +106,7 @@ public class Client {
 
 		    break;
 		case "USERLIST":
-
+		    clientController.updateUserList(restOfArray(sub, 2).toString());
 		    break;
 		case "LOGINFAIL":
 
@@ -116,6 +116,7 @@ public class Client {
 		    break;
 
 		case "STATUSUPDATE":
+		    clientController.updateStatus(sub[2]);
 		    break;
 
 		default:
@@ -123,13 +124,7 @@ public class Client {
 	    }
 	} else if (sub[0].equals("TYPE 1")) {
 	    String from = sub[1];
-	    StringBuilder sb = new StringBuilder();
-	    for (int i = 2; i < sub.length; i++) {
-		sb.append(sub[i]);
-		if (i != sub.length - 1) {
-		    sb.append("\n");
-		}
-	    }
+	    StringBuilder sb = restOfArray(sub, 2);
 
 	    Message msg = new Message(from, sb.toString());
 	    clientController.addMessageToConversation(from, msg);
@@ -137,5 +132,16 @@ public class Client {
 	} else {
 	    throw new IllegalArgumentException("Bad protocol");
 	}
+    }
+
+    private StringBuilder restOfArray(String[] sub, int from) {
+	StringBuilder sb = new StringBuilder();
+	for (int i = from; i < sub.length; i++) {
+	    sb.append(sub[i]);
+	    if (i != sub.length - 1) {
+		sb.append(";");
+	    }
+	}
+	return sb;
     }
 }

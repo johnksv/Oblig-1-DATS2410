@@ -59,6 +59,23 @@ public class ClientController implements Initializable {
 	initTabel();
     }
 
+    public void updateUserList(String restOfArray) {
+	String[] users = restOfArray.split(";");
+	for (String user : users) {
+	    userList.add(user);
+	}
+    }
+
+    public void updateStatus(String username) {
+	if (username.charAt(0) == '+') {
+	    //TODO go through friendlist and userlist
+	} else if (username.charAt(0) == '-') {
+
+	} else if (username.charAt(0) == '0') {
+
+	}
+    }
+
     private void initTabel() {
 	columnUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
 		-> new SimpleObjectProperty<>(param.getValue()));
