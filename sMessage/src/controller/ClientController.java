@@ -177,4 +177,8 @@ public class ClientController implements Initializable {
 	}
     }
 
+    public void setClient(Client client) {
+	this.client = client;
+    }
+
 }
