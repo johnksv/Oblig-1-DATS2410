@@ -26,11 +26,13 @@ public class Server {
     public Server(ServerController serverController) throws IOException {
         this.serverController = serverController;
         server = new ServerSocket();
+        start();
     }
 
     public Server(ServerController serverController, int port) throws IOException {
         this.serverController = serverController;
         server = new ServerSocket(port);
+        start();
     }
 
     public boolean regNewUser(String uname, String passord) {
@@ -51,14 +53,21 @@ public class Server {
     public void banIP(String uname) {
     }
 
-    public void start() throws IOException {
+    public void start(){
 
-        while (running) {
-            SocketInstanse socketIn = new SocketInstanse(server.accept());
-            socketIn.start();
-            onlineClients.add(socketIn);
-        }
+        new Thread(() -> {
+            while (running) {
+                try {
+                   SocketInstanse socketIn = new SocketInstanse(server.accept());
+                    socketIn.start();
+                    onlineClients.add(socketIn);
+                }catch (IOException e) {
+                    // TODO si ifra til serverController at den er disconnecta
+                    serverController.printWarning("An IOException appeared, check your internet connection and try again");
 
+                }
+            }
+        }).start();
     }
 
     public void stop() throws IOException {
@@ -104,37 +113,62 @@ public class Server {
             }
         }
 
+        /**
+         * Sends a text message to the user connected to this socket instanse
+         * @param uname The sender of the message
+         * @param msg The message
+         * @throws IOException If the user could not be reached, possibly due to network issues
+         */
         public void sendMsg(String uname, String msg) throws IOException {
             sendCommandFromServer("TYPE 1", uname, msg);
         }
 
-        public void disconnectUser(String uname) throws IOException {
-            sendCommandFromServer("TYPE 0", Command.DISCONNECT, uname);
+        /**
+         * Sends a DISCONNECT command to the user with the username "userName"
+         * @param userName The username of the user to be disconnected from
+         * @throws IOException If the user could not be reached, possibly due to network issues
+         */
+        private void disconnectMe(String userName) throws IOException {
+            for (SocketInstanse i : openConnections) {
+                if(i.uname.equals(userName)) {
+                    i.sendCommandFromServer("TYPE 0", Command.DISCONNECT, uname);
+                    break;
+                }
+            }
         }
 
+        /**
+         * Sends a complete list off all the users to the user of this socketInstance
+         * @throws IOException If the user could not be reached, possibly due to network issues
+         */
         public void sendUsers() throws IOException {
             StringBuilder users = new StringBuilder();
 
             for (User u : userList) {
                 if (!u.isOnline()) {
-                    users.append("0").append(u.getUname()).append("\n");
+                    users.append("0").append(u.getUname()).append(";");
                 } else if (u.isBusy()) {
-                    users.append("-").append(u.getUname()).append("\n");
+                    users.append("-").append(u.getUname()).append(";");
                 } else {
-                    users.append("+").append(u.getUname()).append("\n");
+                    users.append("+").append(u.getUname()).append(";");
                 }
             }
 
             sendCommandFromServer("TYPE 0", Command.USERLIST, users.toString());
         }
 
+        /**
+         *
+         * @param lines
+         * @throws IOException
+         */
         private void sendCommandFromServer(String... lines) throws IOException {
 
             for (int i = 0; i < lines.length - 1; i++) {
-                out.write(lines[i]);
-                out.newLine();
+                out.write(lines[i]+";");
             }
             out.write(lines[lines.length - 1]);
+            out.newLine();
             out.flush();
         }
 
@@ -153,16 +187,16 @@ public class Server {
             System.arraycopy(lines, 0, newCommand, 2, lines.length);
             for (SocketInstanse user : onlineClients) {
                 for (int i = 0; i < lines.length - 1; i++) {
-                    user.out.write(lines[i]);
-                    user.out.newLine();
+                    user.out.write(lines[i] + ";");
                 }
                 user.out.write(lines[lines.length - 1]);
+                user.out.newLine();
                 user.out.flush();
             }
         }
 
         private void parseCommand(String s) throws IOException {
-            String[] sub = s.split("\n");
+            String[] sub = s.split(";");
             if (sub[0].equals("TYPE 0")) {
                 switch (sub[1]) {
                     case "REGUSER":
@@ -192,7 +226,12 @@ public class Server {
                     case "CONNECT":
                         connectTo(sub[2]);
                         break;
-                    
+                    case "RESPONSE":
+                        sendResponse(sub[2], sub[3]);
+                        break;
+                    case "DISCONNECT":
+                        disconnectMe(sub[2]);
+                        break;
                     default:
                         throw new IllegalArgumentException("Bad protocol");
                 }
@@ -218,8 +257,20 @@ public class Server {
             }
         }
 
-        private void connectTo(String s) {
-            // TODO
+
+        private void connectTo(String s) throws IOException {
+            for(SocketInstanse i : onlineClients){
+                if(i.uname.equals(s))
+                    try {
+                        i.sendCommandFromServer("TYPE 0", Command.CONNECT, uname);
+                    } catch (IOException e) {
+                        sendCommandFromServer("TYPE 0", Command.ERROR, "Could not connect to user");
+                    }
+            }
+        }
+
+        private void sendResponse(String s, String s1) throws IOException {
+            sendCommandFromServer("TYPE 0", Command.RESPONSE, s, s1);
         }
 
         //Stian: hmm tror kanksje dette ble tull, og vi har en online variabel, men den trengs nok ikke

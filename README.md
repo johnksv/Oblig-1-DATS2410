@@ -62,8 +62,8 @@ Syntax for commando STATUSUPDATE:
 
 	TYPE 0
 	STATUSUPDATE
-	UNAME
-	0 or + or -
+	[+/-/0]UNAME
+	
 
 #Plan
 Uke 6
