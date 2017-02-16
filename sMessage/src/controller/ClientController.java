@@ -190,6 +190,7 @@ public class ClientController implements Initializable {
 
 	tryAgain.setOnAction(event -> {
 	    try {
+		client.disconnectServer();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginClient.fxml"));
 		Stage stage = (Stage) vboxContainer.getScene().getWindow();
 		Scene scene = new Scene(loader.load());
@@ -245,5 +246,4 @@ public class ClientController implements Initializable {
     public void setClient(Client client) {
 	this.client = client;
     }
-
 }

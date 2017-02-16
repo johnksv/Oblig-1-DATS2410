@@ -79,7 +79,7 @@ public class LoginClientController implements Initializable {
 		client.login(uname.getText(), base64Pass);
 
 		cController.setClient(client);
-		startClient();
+		clientStage.show();
 		closeThisStage();
 	    } else {
 		showError("Uname can only contain letters and numbers");
@@ -99,7 +99,7 @@ public class LoginClientController implements Initializable {
 		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
 		client.regNewUser(uname.getText(), base64Pass);
 		cController.setClient(client);
-		startClient();
+		clientStage.show();
 		closeThisStage();
 	    } else {
 		showError("Uname can only contain letters and numbers");
@@ -125,10 +125,6 @@ public class LoginClientController implements Initializable {
 	alert.showAndWait();
 	//Platform.exit();
 	//System.exit(-1);
-    }
-
-    private void startClient() {
-	clientStage.show();
     }
 
     private void closeThisStage() {

@@ -49,7 +49,10 @@ public class Client {
 	sendCommandToServer("TYPE 0", Command.CONNECT, userID);
     }
 
-    public void disconnectServer() {
+    public void disconnectServer() throws IOException {
+	sendCommandToServer("TYPE 0", Command.LOGOFF);
+	outToServer.close();
+	inFromServer.close();
     }
 
     public void disconnectChat(String userID) throws IOException {
