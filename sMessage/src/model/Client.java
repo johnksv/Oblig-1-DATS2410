@@ -109,10 +109,10 @@ public class Client {
 		    clientController.updateUserList(restOfArray(sub, 2).toString());
 		    break;
 		case "LOGINFAIL":
-
+		    clientController.loginFailed();
 		    break;
 		case "LOGINSUCCESS":
-
+		    clientController.loginSuccess();
 		    break;
 
 		case "STATUSUPDATE":

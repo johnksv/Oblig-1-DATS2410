@@ -3,18 +3,22 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.*;
 import javafx.collections.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import model.Client;
-import model.Command;
 import model.client.Conversation;
 import model.client.Message;
 
@@ -25,6 +29,10 @@ import model.client.Message;
  */
 public class ClientController implements Initializable {
 
+    @FXML
+    private StackPane root;
+    @FXML
+    private VBox vboxContainer;
     @FXML
     private TableView tvFriends;
     @FXML
@@ -45,6 +53,7 @@ public class ClientController implements Initializable {
     private final ObservableList<Conversation> friendList = FXCollections.observableList(new ArrayList<>());
     private final ObservableList<String> userList = FXCollections.observableList(new ArrayList<>());
     private String activeChat;
+    private VBox vBoxOverlay;
 
     private Client client;
 
@@ -53,27 +62,35 @@ public class ClientController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-	//initClient();
+	Timer t = new Timer();
+	TimerTask task = new TimerTask() {
+	    @Override
+	    public void run() {
+		Platform.runLater(() -> {
+		    loginFailed();
+		}
+		);
+	    }
+	};
 
-	forTesting();
+	t.schedule(task, 2000);
+
+	createOverlay();
 	initTabel();
+	forTesting();
     }
 
-    public void updateUserList(String restOfArray) {
-	String[] users = restOfArray.split(";");
-	for (String user : users) {
-	    userList.add(user);
-	}
-    }
+    private void createOverlay() {
+	Label label = new Label("Wating on respons from server");
+	label.setFont(Font.font(20));
+	ProgressIndicator progIndicator = new ProgressIndicator();
 
-    public void updateStatus(String username) {
-	if (username.charAt(0) == '+') {
-	    //TODO go through friendlist and userlist
-	} else if (username.charAt(0) == '-') {
-
-	} else if (username.charAt(0) == '0') {
-
-	}
+	vBoxOverlay = new VBox(label, progIndicator);
+	vBoxOverlay.setSpacing(10);
+	vBoxOverlay.setAlignment(Pos.CENTER);
+	//Disable all children of the vbox with content
+	vboxContainer.setDisable(true);
+	root.getChildren().add(vBoxOverlay);
     }
 
     private void initTabel() {
@@ -164,6 +181,67 @@ public class ClientController implements Initializable {
 	    userList.add(user.substring(1));
 	}
 
+    }
+
+    public void updateUserList(String restOfArray) {
+	String[] users = restOfArray.split(";");
+	for (String user : users) {
+	    userList.add(user);
+	}
+    }
+
+    public void updateStatus(String username) {
+	if (username.charAt(0) == '+') {
+	    //TODO go through friendlist and userlist
+	} else if (username.charAt(0) == '-') {
+
+	} else if (username.charAt(0) == '0') {
+
+	}
+    }
+
+    public void loginFailed() {
+	//This is a label as defined in the initilaizer
+	((Label) vBoxOverlay.getChildren().get(0)).setText("Login failed. Wrong username or password");
+	//Remove the progress indicator
+	vBoxOverlay.getChildren().remove(1);
+
+	Button tryAgain = new Button("Try again");
+	Button close = new Button("Close");
+	HBox hbox = new HBox(tryAgain, close);
+	hbox.setSpacing(5);
+	hbox.setAlignment(Pos.CENTER);
+	vBoxOverlay.getChildren().add(hbox);
+
+	tryAgain.setOnAction(event -> {
+	    try {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginClient.fxml"));
+		Stage clientStage = new Stage();
+		Scene scene = new Scene(loader.load());
+		clientStage.setScene(scene);
+		clientStage.setResizable(false);
+		clientStage.show();
+
+		//Close ths current stage
+		((Stage) vboxContainer.getScene().getWindow()).close();
+
+	    } catch (IOException ex) {
+		System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+		Platform.exit();
+		System.exit(1);
+	    }
+	});
+
+	close.setOnAction(event -> {
+	    Platform.exit();
+	    System.exit(-1);
+	});
+
+    }
+
+    public void loginSuccess() {
+	root.getChildren().remove(vBoxOverlay);
+	vboxContainer.setDisable(false);
     }
 
     /**
