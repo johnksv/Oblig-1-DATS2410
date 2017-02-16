@@ -104,16 +104,20 @@ public class Client {
 	if (sub[0].equals("TYPE 0")) {
 	    switch (sub[1]) {
 		case "CONNECT":
-		    clientController.connectRequest(sub[2]);
+		    clientController.connectRequest(restOfArray(sub, 2));
 		    break;
 		case "RESPONSE":
-
+		    if (sub[3].toUpperCase().equals("YES")) {
+			clientController.addFriend(sub[2]);
+		    } else {
+			clientController.negativeResponse(sub[2]);
+		    }
 		    break;
 		case "DISCONNECT":
-
+		    clientController.removeFriend(restOfArray(sub, 2));
 		    break;
 		case "USERLIST":
-		    clientController.updateUserList(restOfArray(sub, 2).toString());
+		    clientController.updateUserList(restOfArray(sub, 2));
 		    break;
 		case "LOGINFAIL":
 		    clientController.loginFailed();
@@ -131,9 +135,8 @@ public class Client {
 	    }
 	} else if (sub[0].equals("TYPE 1")) {
 	    String from = sub[1];
-	    StringBuilder sb = restOfArray(sub, 2);
 
-	    Message msg = new Message(from, sb.toString());
+	    Message msg = new Message(from, restOfArray(sub, 2));
 	    clientController.addMessageToConversation(from, msg);
 
 	} else {
@@ -141,7 +144,7 @@ public class Client {
 	}
     }
 
-    private StringBuilder restOfArray(String[] sub, int from) {
+    private String restOfArray(String[] sub, int from) {
 	StringBuilder sb = new StringBuilder();
 	for (int i = from; i < sub.length; i++) {
 	    sb.append(sub[i]);
@@ -149,6 +152,6 @@ public class Client {
 		sb.append(";");
 	    }
 	}
-	return sb;
+	return sb.toString();
     }
 }

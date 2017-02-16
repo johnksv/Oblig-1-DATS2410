@@ -62,7 +62,7 @@ public class ClientController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-	createOverlay();
+//	createOverlay();
 	initTabel();
 	forTesting();
     }
@@ -106,7 +106,7 @@ public class ClientController implements Initializable {
 		    + "has responded to the request.");
 
 	    Optional<ButtonType> answer = alert.showAndWait();
-	    if (answer.isPresent()) {
+	    if (answer.isPresent() && answer.get() == ButtonType.OK) {
 		try {
 		    client.connectChat(user);
 		} catch (IOException ex) {
@@ -241,6 +241,39 @@ public class ClientController implements Initializable {
 		alert.getDialogPane().setExpandableContent(txtArea);
 	    }
 	}
+    }
+
+    public void addFriend(String username) {
+	for (int i = 0; i < userList.size(); i++) {
+	    if (userList.get(i).equals(username)) {
+		friendList.remove(i);
+		Conversation conv = new Conversation(username);
+		friendList.add(conv);
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Accepted");
+		alert.setContentText(username + " is added to your friends list. You can chat now.");
+		return;
+	    }
+	}
+    }
+
+    public void negativeResponse(String username) {
+	Alert alert = new Alert(AlertType.INFORMATION);
+	alert.setTitle("Rejected");
+	alert.setContentText(username + " doesn't want to talk with you...");
+
+    }
+
+    public void removeFriend(String username) {
+	for (int i = 0; i < friendList.size(); i++) {
+	    if (friendList.get(i).getTalkingWithUsername().equals(username)) {
+		friendList.remove(i);
+		userList.add(username);
+		return;
+	    }
+	}
+
     }
 
     public void setClient(Client client) {

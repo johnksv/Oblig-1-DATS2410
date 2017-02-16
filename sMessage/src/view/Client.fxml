@@ -21,7 +21,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.71" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
    <children>
       <VBox fx:id="vboxContainer" prefHeight="600.0" prefWidth="900.0">
         <children>
@@ -106,15 +106,16 @@
                         </HBox>
                      </bottom>
                      <center>
-                        <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <content>
-                              <VBox prefHeight="345.0" prefWidth="667.0">
-                                 <children>
-                                    <Label fx:id="labelTalkingWIth" text="Talking with:" />
-                                 </children>
-                              </VBox>
-                           </content>
-                        </ScrollPane>
+                        <VBox BorderPane.alignment="CENTER">
+                           <children>
+                              <Label fx:id="labelTalkingWIth" text="Talking with:" />
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <VBox prefHeight="345.0" prefWidth="667.0" />
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
                      </center>
                   </BorderPane>
                </center>
@@ -136,11 +137,7 @@
               <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
             </padding>
           </HBox>
-            <ButtonBar prefHeight="40.0" prefWidth="200.0">
-              <buttons>
-                <Button mnemonicParsing="false" text="Button" />
-              </buttons>
-            </ButtonBar>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" />
         </children>
       </VBox>
    </children>
