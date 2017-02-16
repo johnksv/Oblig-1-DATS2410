@@ -62,7 +62,7 @@ public class ClientController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//	createOverlay();
+	createOverlay();
 	initTabel();
 	forTesting();
     }

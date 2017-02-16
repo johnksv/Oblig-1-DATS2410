@@ -85,9 +85,10 @@ public class Client {
 
 	for (int i = 0; i < lines.length - 1; i++) {
 	    outToServer.write(lines[i]);
-	    outToServer.newLine();
+	    outToServer.write(";");
 	}
 	outToServer.write(lines[lines.length - 1]);
+	outToServer.newLine();
 	outToServer.flush();
     }
 
@@ -101,6 +102,7 @@ public class Client {
 
     private void parseCommand(String cmd) throws IOException {
 	String[] sub = cmd.split(";");
+	System.out.println(cmd);
 	if (sub[0].equals("TYPE 0")) {
 	    switch (sub[1]) {
 		case "CONNECT":
