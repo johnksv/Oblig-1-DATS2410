@@ -5,8 +5,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
@@ -19,22 +24,50 @@
             <Font size="18.0" />
           </font>
         </Label>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="229.0" layoutX="86.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="259.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" height="229.0" layoutX="86.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="259.0">
+               <fill>
+                  <RadialGradient centerX="0.825" centerY="0.8761904761904762" focusAngle="-158.96" radius="1.0">
+                     <stops>
+                        <Stop color="#91fff4" />
+                        <Stop color="#91fff4" offset="0.007662835249042145" />
+                        <Stop color="#83b5d5" offset="0.6283524904214559" />
+                        <Stop color="#83b5d5" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill></Rectangle>
             <Label alignment="CENTER" layoutX="71.0" layoutY="14.0" prefHeight="27.0" prefWidth="304.0" style="&#10;" text="SMessage  " textAlignment="CENTER" wrapText="false">
                <font>
                   <Font size="35.0" />
                </font>
             </Label>
-            <VBox layoutX="141.0" layoutY="116.0" prefHeight="200.0" prefWidth="150.0" spacing="5.0">
+            <VBox layoutX="91.0" layoutY="109.0" prefHeight="200.0" prefWidth="250.0" spacing="5.0">
                <children>
-                  <TextField id="uname" fx:id="uname" promptText="Username" />
-                  <TextField id="passw" fx:id="passw" promptText="Password" />
-                  <TextField id="serverIP" fx:id="serverIP" promptText="Server IP" />
-                  <TextField id="portNumber" fx:id="portNumber" promptText="PortNumber" />
-                  <HBox prefHeight="86.0" prefWidth="150.0" spacing="20.0">
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="92.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="158.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" text="Login" fx:id="btnLogin"  />
-                        <Button mnemonicParsing="false" text="Register" fx:id= "btnRegister">
+                        <Label text="Username:" />
+                        <TextField id="uname" fx:id="uname" promptText="Username" GridPane.columnIndex="1" />
+                        <Label text="Password" GridPane.rowIndex="1" />
+                        <TextField id="passw" fx:id="passw" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Server IP:" GridPane.rowIndex="2" />
+                        <TextField id="serverIP" fx:id="serverIP" promptText="Server IP" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Portnumber" GridPane.rowIndex="3" />
+                        <TextField id="portNumber" fx:id="portNumber" promptText="PortNumber" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     </children>
+                  </GridPane>
+                  <HBox alignment="CENTER" prefHeight="47.0" prefWidth="250.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#handleLoginBtn" text="Login" />
+                        <Button fx:id="btnRegister" mnemonicParsing="false" onAction="#handleRegBtn" text="Register">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
