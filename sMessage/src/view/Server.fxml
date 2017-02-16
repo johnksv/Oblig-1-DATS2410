@@ -30,12 +30,12 @@
         <items>
             <HBox prefHeight="25.0" prefWidth="186.0" spacing="5.0">
                <children>
-                  <Label text="Port:">
+                  <Label text="Port:" prefWidth="40.0">
                      <HBox.margin>
                         <Insets top="3.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="txtFieldPortManual" disable="true" prefHeight="25.0" prefWidth="62.0" />
+                  <TextField fx:id="txtFieldPortManual" disable="true" prefHeight="25.0" prefWidth="70.0" />
                   <CheckBox fx:id="chboxPortAutomatic" mnemonicParsing="false" selected="true" text="Automatic">
                      <HBox.margin>
                         <Insets top="3.0" />
@@ -77,7 +77,7 @@
          <left>
             <ScrollPane BorderPane.alignment="CENTER">
                <content>
-                  <TableView fx:id="tableViewUsers" prefHeight="510.0" prefWidth="210.0">
+                  <TableView fx:id="tableViewUsers" prefHeight="510.0" prefWidth="310.0">
                     <columns>
                       <TableColumn fx:id="tableColumnUsername" prefWidth="139.0" text="Username" />
                       <TableColumn fx:id="tableColumnStatus" prefWidth="63.0" text="Status" />

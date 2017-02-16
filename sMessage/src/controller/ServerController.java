@@ -56,13 +56,16 @@ public class ServerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
 	drawServerStatus();
 	initTabel();
 
 	initFXMLNodes();
+
     }
 
     private void initTabel() {
+
 	tableColumnUsername.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
 		-> new SimpleObjectProperty<>(param.getValue()));
 	tableColumnStatus.setCellValueFactory((TableColumn.CellDataFeatures<String, String> param)
@@ -112,12 +115,17 @@ public class ServerController implements Initializable {
     public void update(Command command, User user) {
 	switch (command) {
 	    case REGUSER:
-		userList.add(user);
+			userList.add(user);
+			updateTable(user);
 		break;
 	}
     }
 
-    @FXML
+	private void updateTable(User user) {
+		tableColumnUsername.setText(user.getUname());
+	}
+
+	@FXML
     private void handleToogleServerStatus() {
 	if (serverRunning) {
 	    serverRunning = false;
@@ -133,8 +141,10 @@ public class ServerController implements Initializable {
 		if (chboxPortAutomatic.isSelected()) {
 		    //TODO: Use stop or start instead
 		    server = new Server(this);
+
 		} else {
 		    server = new Server(this, Integer.parseInt(txtFieldPortManual.getText()));
+
 		}
 	    } catch (IOException ex) {
 		Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -144,6 +154,7 @@ public class ServerController implements Initializable {
 		TextArea txtArea = new TextArea(ex.toString());
 		alert.getDialogPane().setExpandableContent(txtArea);
 	    }
+
 	}
 	chboxPortAutomatic.setDisable(serverRunning);
 	if (!chboxPortAutomatic.isSelected()) {
