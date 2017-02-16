@@ -89,13 +89,13 @@ public class ClientController implements Initializable {
 	tvFriends.setItems(friendList);
 	tvUsers.setItems(userList);
 
-	tvFriends.setOnMouseClicked((MouseEvent event) -> {
+	tvFriends.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
 	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
 	    labelTalkingWIth.setText("Talking with: " + userList.get(idx));
-	    //Set active user
+	    //TODO: Set active user and update messages
 	});
 
-	tvUsers.setOnMouseClicked((MouseEvent event) -> {
+	tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
 	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
 	    String user = userList.get(idx);
 
