@@ -33,8 +33,8 @@
                   <TextField id="portNumber" fx:id="portNumber" promptText="PortNumber" />
                   <HBox prefHeight="86.0" prefWidth="150.0" spacing="20.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Login" fx:id="btnLogin"  />
-                        <Button mnemonicParsing="false" text="Register" fx:id= "btnRegister">
+                        <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#handleLoginBtn" text="Login" />
+                        <Button fx:id="btnRegister" mnemonicParsing="false" onAction="#handleRegBtn" text="Register">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
