@@ -10,10 +10,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginClientController">
+<VBox prefHeight="400.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginClientController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="350.0" prefWidth="432.0" VBox.vgrow="ALWAYS">
       <children>
@@ -22,7 +24,17 @@
             <Font size="18.0" />
           </font>
         </Label>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="229.0" layoutX="86.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="259.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" height="229.0" layoutX="86.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="259.0">
+               <fill>
+                  <RadialGradient centerX="0.825" centerY="0.8761904761904762" focusAngle="-158.96" radius="1.0">
+                     <stops>
+                        <Stop color="#91fff4" />
+                        <Stop color="#91fff4" offset="0.007662835249042145" />
+                        <Stop color="#83b5d5" offset="0.6283524904214559" />
+                        <Stop color="#83b5d5" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill></Rectangle>
             <Label alignment="CENTER" layoutX="71.0" layoutY="14.0" prefHeight="27.0" prefWidth="304.0" style="&#10;" text="SMessage  " textAlignment="CENTER" wrapText="false">
                <font>
                   <Font size="35.0" />
@@ -54,8 +66,8 @@
                   </GridPane>
                   <HBox alignment="CENTER" prefHeight="47.0" prefWidth="250.0" spacing="20.0">
                      <children>
-                        <Button fx:id="btnLogin" mnemonicParsing="false" text="Login" />
-                        <Button fx:id="btnRegister" mnemonicParsing="false" text="Register">
+                        <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#handleLoginBtn" text="Login" />
+                        <Button fx:id="btnRegister" mnemonicParsing="false" onAction="#handleRegBtn" text="Register">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>

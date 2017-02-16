@@ -51,71 +51,90 @@ public class LoginClientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-	loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
-	try {
-	    Scene scene = new Scene(loader.load());
-	    cController = loader.getController();
-	    clientStage.setScene(scene);
-	    clientStage.setResizable(true);
-	    clientStage.setMinWidth(850);
-	    clientStage.setMinHeight(650);
+        loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
+        try {
+            Scene scene = new Scene(loader.load());
+            cController = loader.getController();
+            clientStage.setScene(scene);
+            clientStage.setResizable(true);
+            clientStage.setMinWidth(850);
+            clientStage.setMinHeight(650);
 
-	} catch (IOException ex) {
-	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
-	    Platform.exit();
-	    System.exit(1);
-	}
+        } catch (IOException ex) {
+            System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+            Platform.exit();
+            System.exit(1);
+        }
 
-	btnLogin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-	    try {
-		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+    }
 
-		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
-		client.login(uname.getText(), base64Pass);
+    @FXML
+    private void handleLoginBtn() {
+        try {
 
-		cController.setClient(client);
-		startClient();
-		closeThisStage();
+            if (uname.getText().matches("([\\w\\d])*")) {
+                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
 
-	    } catch (IOException ex) {
-		showFatalError();
-	    }
-	});
+                String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
+                client.login(uname.getText(), base64Pass);
 
-	btnRegister.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-	    try {
-		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+                cController.setClient(client);
+                startClient();
+                closeThisStage();
+            } else {
+                showError("Uname can only contain letters and numbers");
+            }
+        } catch (IOException ex) {
+            showFatalError();
+        } catch (NumberFormatException ex) {
+            showError("Empty feild or wrong input");
+        }
+    }
 
-		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
-		client.regNewUser(uname.getText(), base64Pass);
+    @FXML
+    private void handleRegBtn() {
+        try {
+            if (uname.getText().matches("([\\w\\d])*")) {
+                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+                String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
+                client.regNewUser(uname.getText(), base64Pass);
+                cController.setClient(client);
+                startClient();
+                closeThisStage();
+            } else {
+                showError("Uname can only contain letters and numbers");
+            }
+        } catch (IOException ex) {
+            showFatalError();
+        } catch (NumberFormatException ex) {
+            showError("Empty feild or wrong input");
+        }
+    }
 
-		cController.setClient(client);
-		startClient();
-		closeThisStage();
-
-	    } catch (IOException ex) {
-		showFatalError();
-	    }
-	});
+    private void showError(String errorM) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error occurred");
+        alert.setHeaderText(errorM);
+        alert.showAndWait();
     }
 
     private void showFatalError() {
-	Alert alert = new Alert(Alert.AlertType.ERROR);
-	alert.setTitle("Error occurred");
-	alert.setHeaderText("Could not connect to server.");
-	alert.showAndWait();
-	Platform.exit();
-	System.exit(-1);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error occurred");
+        alert.setHeaderText("Could not connect to server.");
+        alert.showAndWait();
+        //Platform.exit();
+        //System.exit(-1);
     }
 
     private void startClient() {
-	clientStage.show();
+        clientStage.show();
     }
 
     private void closeThisStage() {
-	//Grab a random element on the FXML-view so we get the Stage
-	//then close.
-	((Stage) btnLogin.getScene().getWindow()).close();
+        //Grab a random element on the FXML-view so we get the Stage
+        //then close.
+        ((Stage) btnLogin.getScene().getWindow()).close();
     }
 
 }
