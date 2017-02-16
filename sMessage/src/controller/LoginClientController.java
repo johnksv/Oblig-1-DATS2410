@@ -52,7 +52,19 @@ public class LoginClientController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
 	loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
-	cController = loader.getController();
+	try {
+	    Scene scene = new Scene(loader.load());
+	    cController = loader.getController();
+	    clientStage.setScene(scene);
+	    clientStage.setResizable(true);
+	    clientStage.setMinWidth(850);
+	    clientStage.setMinHeight(650);
+
+	} catch (IOException ex) {
+	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+	    Platform.exit();
+	    System.exit(1);
+	}
 
 	btnLogin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
 	    try {
@@ -97,20 +109,7 @@ public class LoginClientController implements Initializable {
     }
 
     private void startClient() {
-	try {
-
-	    Scene scene = new Scene(loader.load());
-	    clientStage.setScene(scene);
-	    clientStage.setResizable(true);
-	    clientStage.setMinWidth(850);
-	    clientStage.setMinHeight(650);
-	    clientStage.show();
-
-	} catch (IOException ex) {
-	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
-	    Platform.exit();
-	    System.exit(1);
-	}
+	clientStage.show();
     }
 
     private void closeThisStage() {
