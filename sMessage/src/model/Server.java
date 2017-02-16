@@ -35,14 +35,21 @@ public class Server {
         start();
     }
 
+    /**
+     * Registers a new user, if username does not exist
+     * @param uname Username
+     * @param passord Password
+     * @return True if new user is created, false if username is used
+     */
     public boolean regNewUser(String uname, String passord) {
         for (User u : userList) {
             if (u.getUname().equals(uname)) {
                 return false;
             }
         }
-
-        userList.add(new User(uname, passord, true));
+        User u = new User(uname, passord, true);
+        userList.add(u);
+        serverController.update(Command.REGUSER, u);
         return true;
     }
 
@@ -74,6 +81,14 @@ public class Server {
         running = false;
         server.close();
 
+    }
+
+    public ServerSocket getServer() {
+        return server;
+    }
+
+    public String getPort() {
+        return Integer.toString(server.getLocalPort());
     }
 
     private class SocketInstanse extends Thread {
@@ -202,6 +217,7 @@ public class Server {
                     case "REGUSER":
                         if (regNewUser(sub[2], sub[3])) {
                             uname = sub[2];
+                            sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
                         } else {
                             sendCommandFromServer("TYPE 0", Command.ERROR, "Could not create user");
                         }
@@ -214,13 +230,13 @@ public class Server {
                         try {
                             logIn(sub);
                             sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
-                            sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, "uname", "+");
+                            sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
                         } catch (LoginException e) {
                             sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
                         }
                         break;
                     case "LOGOFF":
-                        sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, "uname", "0");
+                        sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "0");
                         logOff();
                         break;
                     case "CONNECT":

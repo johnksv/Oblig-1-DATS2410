@@ -11,6 +11,7 @@ import java.util.Base64;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -51,71 +52,71 @@ public class LoginClientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-	loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
-	try {
-	    Scene scene = new Scene(loader.load());
-	    cController = loader.getController();
-	    clientStage.setScene(scene);
-	    clientStage.setResizable(true);
-	    clientStage.setMinWidth(850);
-	    clientStage.setMinHeight(650);
+        loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
+        try {
+            Scene scene = new Scene(loader.load());
+            cController = loader.getController();
+            clientStage.setScene(scene);
+            clientStage.setResizable(true);
+            clientStage.setMinWidth(850);
+            clientStage.setMinHeight(650);
 
-	} catch (IOException ex) {
-	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
-	    Platform.exit();
-	    System.exit(1);
-	}
+        } catch (IOException ex) {
+            System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+            Platform.exit();
+            System.exit(1);
+        }
 
-	btnLogin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
-	    try {
-		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+        btnLogin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            try {
+                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
 
-		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
-		client.login(uname.getText(), base64Pass);
+                String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
+                client.login(uname.getText(), base64Pass);
 
-		cController.setClient(client);
-		startClient();
-		closeThisStage();
+                cController.setClient(client);
+                startClient();
+                closeThisStage();
 
-	    } catch (IOException ex) {
-		showFatalError();
-	    }
-	});
+            } catch (IOException ex) {
+                showFatalError();
+            }
+        });
 
-	btnRegister.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-	    try {
-		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+        btnRegister.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            try {
+                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
 
-		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
-		client.regNewUser(uname.getText(), base64Pass);
+                String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
+                client.regNewUser(uname.getText(), base64Pass);
 
-		cController.setClient(client);
-		startClient();
-		closeThisStage();
+                cController.setClient(client);
+                startClient();
+                closeThisStage();
 
-	    } catch (IOException ex) {
-		showFatalError();
-	    }
-	});
+            } catch (IOException ex) {
+                showFatalError();
+            }
+        });
     }
 
     private void showFatalError() {
-	Alert alert = new Alert(Alert.AlertType.ERROR);
-	alert.setTitle("Error occurred");
-	alert.setHeaderText("Could not connect to server.");
-	alert.showAndWait();
-	Platform.exit();
-	System.exit(-1);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error occurred");
+        alert.setHeaderText("Could not connect to server.");
+        alert.showAndWait();
+        Platform.exit();
+        System.exit(-1);
     }
 
     private void startClient() {
-	clientStage.show();
+        clientStage.show();
     }
 
     private void closeThisStage() {
-	//Grab a random element on the FXML-view so we get the Stage
-	//then close.
-	((Stage) btnLogin.getScene().getWindow()).close();
+        //Grab a random element on the FXML-view so we get the Stage
+        //then close.
+        ((Stage) btnLogin.getScene().getWindow()).close();
     }
 
 }
