@@ -53,6 +53,8 @@ public class Client {
 	sendCommandToServer("TYPE 0", Command.LOGOFF);
 	outToServer.close();
 	inFromServer.close();
+	//TODO: Check if we should warn the server that we are closing first, then wait.
+	clientsocket.close();
     }
 
     public void disconnectChat(String userID) throws IOException {
