@@ -30,7 +30,7 @@ public class Client {
 
     private void receiveMessages() {
 
-	new Thread(() -> {
+	Thread th = new Thread(() -> {
 	    String input;
 	    try {
 		while ((input = inFromServer.readLine()) != null) {
@@ -40,7 +40,9 @@ public class Client {
 	    } catch (IOException e) {
 		e.printStackTrace();
 	    }
-	}).start();
+	});
+	th.setDaemon(true);
+	th.start();
     }
 
     public void connectChat(String userID) throws IOException {

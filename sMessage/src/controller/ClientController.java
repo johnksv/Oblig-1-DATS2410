@@ -62,19 +62,6 @@ public class ClientController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-	Timer t = new Timer();
-	TimerTask task = new TimerTask() {
-	    @Override
-	    public void run() {
-		Platform.runLater(() -> {
-		    loginFailed();
-		}
-		);
-	    }
-	};
-
-	t.schedule(task, 2000);
-
 	createOverlay();
 	initTabel();
 	forTesting();
@@ -147,18 +134,6 @@ public class ClientController implements Initializable {
 	alert.showAndWait();
     }
 
-    /**
-     *
-     * @param username
-     * @param password
-     * @param IP
-     * @param port
-     * @param login true for login, false for reg
-     */
-    public void setLoginInformation(String username, String password, String IP, String port, boolean login) {
-	//TODO create/login user and connect to server
-    }
-
     public void addMessageToConversation(String userName, Message msg) {
 	for (Conversation cnv : friendList) {
 	    if (cnv.getTalkingWithUsername().equals(userName)) {
@@ -216,14 +191,9 @@ public class ClientController implements Initializable {
 	tryAgain.setOnAction(event -> {
 	    try {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginClient.fxml"));
-		Stage clientStage = new Stage();
+		Stage stage = (Stage) vboxContainer.getScene().getWindow();
 		Scene scene = new Scene(loader.load());
-		clientStage.setScene(scene);
-		clientStage.setResizable(false);
-		clientStage.show();
-
-		//Close ths current stage
-		((Stage) vboxContainer.getScene().getWindow()).close();
+		stage.setScene(scene);
 
 	    } catch (IOException ex) {
 		System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
