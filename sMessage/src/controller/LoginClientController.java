@@ -11,6 +11,7 @@ import java.util.Base64;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -125,12 +126,17 @@ public class LoginClientController implements Initializable {
 	alert.showAndWait();
 	//Platform.exit();
 	//System.exit(-1);
+
+    }
+
+    private void startClient() {
+        clientStage.show();
     }
 
     private void closeThisStage() {
-	//Grab a random element on the FXML-view so we get the Stage
-	//then close.
-	((Stage) btnLogin.getScene().getWindow()).close();
+        //Grab a random element on the FXML-view so we get the Stage
+        //then close.
+        ((Stage) btnLogin.getScene().getWindow()).close();
     }
 
 }
