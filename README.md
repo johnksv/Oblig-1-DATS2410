@@ -13,6 +13,7 @@ First mandatory assignment in DATS 2410 - Network and cloud computing
 	Kryptering av meldinger
 	Kallenavn
 	Gif-implementasjon & Emjois
+	Når man sender respons til noen burde de bli farget i listen, for å indikere at du har sendt en respons.
 	
 ##SMessage Protocol (SMP)
 Hver kommando starter med TYPE NUM
