@@ -74,7 +74,8 @@
                                     </HBox>
                                     <TableView fx:id="tvUsers" prefHeight="350.0" prefWidth="200.0">
                                       <columns>
-                                        <TableColumn fx:id="columnUsername" prefWidth="184.0" text="Online users" />
+                                          <TableColumn fx:id="columnStatus" editable="false" prefWidth="45.0" resizable="false" text="Status" />
+                                        <TableColumn fx:id="columnUsername" editable="false" prefWidth="214.0" text="Online users" />
                                       </columns>
                                     </TableView>
                                  </children>
