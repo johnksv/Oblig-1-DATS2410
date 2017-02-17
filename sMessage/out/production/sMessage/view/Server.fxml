@@ -73,18 +73,14 @@
             <Button mnemonicParsing="false" text="Help" />
         </items>
       </ToolBar>
-      <SplitPane dividerPositions="0.35" VBox.vgrow="ALWAYS">
+      <SplitPane fx:id="split" dividerPositions="0.35" VBox.vgrow="ALWAYS">
          <items>
-            <ScrollPane>
-               <content>
-                  <TableView fx:id="tableViewUsers" prefHeight="510.0" prefWidth="310.0">
+                  <TableView fx:id="tableViewUsers" prefWidth="250.0" prefHeight="510.0">
                     <columns>
-                      <TableColumn fx:id="tableColumnUsername" prefWidth="139.0" text="Username" />
-                      <TableColumn fx:id="tableColumnStatus" prefWidth="63.0" text="Status" />
+                      <TableColumn fx:id="tableColumnUsername" prefWidth="174.0" text="Username" />
+                      <TableColumn fx:id="tableColumnStatus" prefWidth="72.5" text="Status" />
                     </columns>
                   </TableView>
-               </content>
-            </ScrollPane>
       <AnchorPane id="Content" minWidth="30.0" prefHeight="545.0" prefWidth="430.0">
                <children>
                   <AreaChart fx:id="chartArea" layoutX="32.0" layoutY="52.0" minHeight="10.0" minWidth="10.0" prefHeight="211.0" prefWidth="619.0">

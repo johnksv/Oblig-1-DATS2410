@@ -23,6 +23,10 @@ public class Conversation {
 	return talkingWithUser.getUserName();
     }
 
+    public ClientUser getClientUser(){
+        return talkingWithUser;
+    }
+
     public Status getTalkingWidthStatus(){return talkingWithUser.getStatus();}
 
     public ArrayList<Message> getMessages() {

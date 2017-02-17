@@ -284,7 +284,7 @@ public class ClientController implements Initializable {
 
         for (int i = 0; i < friendList.size(); i++) {
             if (friendList.get(i).getTalkingWithUsername().equals(username)) {
-                userList.add(userList.get(i).getUser());
+                userList.add(friendList.get(i).getClientUser());
                 friendList.remove(i);
                 break;
             }

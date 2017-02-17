@@ -271,7 +271,7 @@ public final class Server {
 			disconnectMe(sub[2]);
 			break;
 		    default:
-			throw new IllegalArgumentException("Bad protocol");
+			//throw new IllegalArgumentException("Bad protocol");
 		}
 	    } else if (sub[0].equals("TYPE 1")) {
 		for (SocketInstanse partner : openConnections) {
