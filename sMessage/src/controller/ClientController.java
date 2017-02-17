@@ -101,6 +101,8 @@ public class ClientController implements Initializable {
 
 	tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
 	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
+	    if(idx == -1)
+	    	return;
 	    String user = userList.get(idx);
 
 	    Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -162,9 +164,11 @@ public class ClientController implements Initializable {
     }
 
     public void updateUserList(String restOfArray) {
-	String[] users = restOfArray.split(";");
-	for (String user : users) {
-	    userList.add(user);
+    	if(restOfArray.equals(""))
+			return;
+		String[] users = restOfArray.split(";");
+		for (String user : users) {
+	    userList.add(user.substring(1));
 	}
     }
 
@@ -266,6 +270,7 @@ public class ClientController implements Initializable {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Accepted");
 		alert.setContentText(username + " is added to your friends list. You can chat now.");
+		alert.showAndWait();
 	}
 
 
@@ -296,7 +301,7 @@ public class ClientController implements Initializable {
 		}
 	}
 
-	
+
     private void setActiveConversation(Conversation conv) {
 	activeConversation = conv;
 	appendMsgToConversation();
