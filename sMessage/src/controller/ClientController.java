@@ -169,8 +169,16 @@ public class ClientController implements Initializable {
     }
 
     public void updateStatus(String username) {
+    	String uname = username.substring(1);
+    	if(userList.contains(uname)){
     
+		}
+		else if (friendList.contains(uname)){
 		
+		}
+		else
+			userList.add(uname);
+		/*
 	if (username.charAt(0) == '+') {
 	    //TODO go through friendlist and userlist
            
@@ -178,8 +186,9 @@ public class ClientController implements Initializable {
 
 	} else if (username.charAt(0) == '0') {
 
+	}*/
 	}
-    }
+    
 
     public void loginFailed() {
 	//This is a label as defined in the initilaizer
