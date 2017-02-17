@@ -110,24 +110,24 @@ public class ClientController implements Initializable {
 	    if (idx == -1) {
 		return;
 	    }
-            if(newCon){
-	    String user = userList.get(idx);
+	    if (newCon) {
+		String user = userList.get(idx);
 
-	    Alert alert = new Alert(AlertType.CONFIRMATION);
-	    alert.setTitle("Confirm Connection");
-	    alert.setHeaderText("Do you want to connect with " + user);
-	    alert.setContentText("We will alert you when your peer "
-		    + "has responded to the request.");
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Connection");
+		alert.setHeaderText("Do you want to connect with " + user);
+		alert.setContentText("We will alert you when your peer "
+			+ "has responded to the request.");
 
-	    Optional<ButtonType> answer = alert.showAndWait();
-	    if (answer.isPresent() && answer.get() == ButtonType.OK) {
-		try {
-		    client.connectChat(user);
-		} catch (IOException ex) {
-		    showAlertIOException(ex);
+		Optional<ButtonType> answer = alert.showAndWait();
+		if (answer.isPresent() && answer.get() == ButtonType.OK) {
+		    try {
+			client.connectChat(user);
+		    } catch (IOException ex) {
+			showAlertIOException(ex);
+		    }
 		}
 	    }
-            }
 	});
     }
 
@@ -273,10 +273,10 @@ public class ClientController implements Initializable {
     }
 
     public void moveFromUsersToFriends(String username) {
-        newCon = false;
+	newCon = false;
 	userList.remove(username);
 	friendList.add(new Conversation(username));
-        newCon = true;
+	newCon = true;
 	Alert alert = new Alert(AlertType.INFORMATION);
 	alert.setTitle("Accepted");
 	alert.setContentText(username + " is added to your friends list. You can chat now.");
