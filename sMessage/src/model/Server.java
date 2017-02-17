@@ -16,7 +16,7 @@ import javafx.application.Platform;
 /**
  * @author s305046, s305080, s305084, s305089
  */
-public class Server {
+public final class Server {
 
     private final ArrayList<User> userList = new ArrayList<>();
     private final ArrayList<SocketInstanse> onlineClients = new ArrayList<>();
@@ -181,11 +181,11 @@ public class Server {
 		}
 
 		if (!u.isOnline()) {
-		    users.append("0").append(u.getUname()).append(";");
+		    users.append(u.getUname()).append(";").append("0").append(";");
 		} else if (u.isBusy()) {
-		    users.append("-").append(u.getUname()).append(";");
+		    users.append(u.getUname()).append(";").append("-").append(";");
 		} else {
-		    users.append("+").append(u.getUname()).append(";");
+		    users.append(u.getUname()).append(";").append("+").append(";");
 		}
 	    }
 
@@ -238,7 +238,7 @@ public class Server {
 		    case "REGUSER":
 			if (regNewUser(sub[2], sub[3])) {
 			    uname = sub[2];
-			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, '+' + uname);
+			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
 			    sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
 			} else {
 			    sendCommandFromServer("TYPE 0", Command.ERROR, "Could not create user");
@@ -252,7 +252,7 @@ public class Server {
 			try {
 			    logIn(sub);
 			    sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
-			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, '+' + uname);
+			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
 			} catch (LoginException e) {
 			    sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
 			}

@@ -7,11 +7,11 @@ import java.util.ArrayList;
  */
 public class Conversation {
 
-    private final String talkingWithUsername;
+    private final ClientUser talkingWithUser;
     private final ArrayList<Message> messages;
 
-    public Conversation(String talkingWithUsername) {
-	this.talkingWithUsername = talkingWithUsername;
+    public Conversation(ClientUser talkingWithUser) {
+	this.talkingWithUser = talkingWithUser;
 	messages = new ArrayList<>();
     }
 
@@ -20,11 +20,19 @@ public class Conversation {
     }
 
     public String getTalkingWithUsername() {
-	return talkingWithUsername;
+	return talkingWithUser.getUserName();
     }
+
+    public Status getTalkingWidthStatus(){return talkingWithUser.getStatus();}
 
     public ArrayList<Message> getMessages() {
 	return messages;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Conversation &&
+                ((Conversation) obj).getTalkingWithUsername().equals(getTalkingWithUsername());
     }
 
 }

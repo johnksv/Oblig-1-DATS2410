@@ -121,7 +121,7 @@ public class Client {
 		    break;
 		case "RESPONSE":
 		    if (sub[3].toUpperCase().equals("YES")) {
-			clientController.moveFromUsersToFriends(sub[2]);
+			clientController.moveFromUsersToFriends(sub[2], true);
 		    } else {
 			clientController.negativeResponse(sub[2]);
 		    }
@@ -140,7 +140,7 @@ public class Client {
 		    break;
 
 		case "STATUSUPDATE":
-		    clientController.updateStatus(sub[2]);
+		    clientController.updateStatus(sub[2], sub[3]);
 		    break;
 
 		default:
