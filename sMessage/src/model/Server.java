@@ -230,7 +230,8 @@ public class Server {
 		    case "REGUSER":
 			if (regNewUser(sub[2], sub[3])) {
 			    uname = sub[2];
-			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
+			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, '+' + uname);
+				sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
 			} else {
 			    sendCommandFromServer("TYPE 0", Command.ERROR, "Could not create user");
 			}
@@ -243,7 +244,7 @@ public class Server {
 			try {
 			    logIn(sub);
 			    sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
-			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
+			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, '+' + uname);
 			} catch (LoginException e) {
 			    sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
 			}
