@@ -97,6 +97,9 @@ public class ClientController implements Initializable {
 
 	tvFriends.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
 	    int idx = tvFriends.getSelectionModel().getFocusedIndex();
+	    if (idx == -1) {
+		return;
+	    }
 	    Conversation conv = friendList.get(idx);
 	    setActiveConversation(conv);
 	});
