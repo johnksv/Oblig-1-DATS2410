@@ -11,12 +11,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
@@ -24,13 +24,13 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerController">
   <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
             <HBox prefHeight="25.0" prefWidth="186.0" spacing="5.0">
                <children>
-                  <Label text="Port:" prefWidth="40.0">
+                  <Label prefWidth="40.0" text="Port:">
                      <HBox.margin>
                         <Insets top="3.0" />
                      </HBox.margin>
@@ -73,9 +73,9 @@
             <Button mnemonicParsing="false" text="Help" />
         </items>
       </ToolBar>
-      <BorderPane VBox.vgrow="ALWAYS">
-         <left>
-            <ScrollPane BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.35" VBox.vgrow="ALWAYS">
+         <items>
+            <ScrollPane>
                <content>
                   <TableView fx:id="tableViewUsers" prefHeight="510.0" prefWidth="310.0">
                     <columns>
@@ -85,11 +85,9 @@
                   </TableView>
                </content>
             </ScrollPane>
-         </left>
-         <center>
-      <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" BorderPane.alignment="CENTER">
+      <AnchorPane id="Content" minWidth="30.0" prefHeight="545.0" prefWidth="430.0">
                <children>
-                  <AreaChart fx:id="chartArea" layoutX="32.0" layoutY="52.0" prefHeight="211.0" prefWidth="619.0">
+                  <AreaChart fx:id="chartArea" layoutX="32.0" layoutY="52.0" minHeight="10.0" minWidth="10.0" prefHeight="211.0" prefWidth="619.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -97,7 +95,7 @@
                       <NumberAxis side="LEFT" />
                     </yAxis>
                   </AreaChart>
-                  <LineChart fx:id="chartLine" layoutX="32.0" layoutY="258.0" prefHeight="253.0" prefWidth="634.0">
+                  <LineChart fx:id="chartLine" layoutX="32.0" layoutY="258.0" minHeight="10.0" minWidth="10.0" prefHeight="253.0" prefWidth="634.0">
                     <xAxis>
                       <CategoryAxis side="BOTTOM" />
                     </xAxis>
@@ -107,8 +105,8 @@
                   </LineChart>
                </children>
       </AnchorPane>
-         </center>
-      </BorderPane>
+         </items>
+      </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
         <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
