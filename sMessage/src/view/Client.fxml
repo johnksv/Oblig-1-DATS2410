@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
@@ -101,7 +102,6 @@
                                           <VBox prefHeight="71.0" prefWidth="80.0" spacing="20.0">
                                              <children>
                                                 <Button fx:id="btnSend" mnemonicParsing="false" onAction="#handleSendMsg" text="Send" />
-                                                <Button fx:id="btnKick" mnemonicParsing="false" text="Kick" />
                                              </children>
                                              <BorderPane.margin>
                                                 <Insets left="10.0" top="20.0" />
@@ -117,7 +117,13 @@
                      <center>
                         <VBox BorderPane.alignment="CENTER">
                            <children>
-                              <Label fx:id="labelTalkingWIth" text="Talking with:" />
+                              <HBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label fx:id="labelTalkingWIth" text="Talking with:" />
+                                    <Region prefHeight="29.0" prefWidth="487.0" />
+                                    <Button mnemonicParsing="false" onAction="#handleDisconnectFromUser" text="Disconnect from user" />
+                                 </children>
+                              </HBox>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="405.0" prefWidth="700.0">
                                  <content>
                                     <TextArea fx:id="txtAreaMessages" editable="false" />
