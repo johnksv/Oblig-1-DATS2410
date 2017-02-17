@@ -313,6 +313,7 @@ public class Server {
 				s.sendCommandFromServer("TYPE 0", Command.RESPONSE, uname, answer);
 				if(answer.equals("YES"))
 					openConnections.add(s);
+					s.openConnections.add(this);
 				return;
 			}
 		}
