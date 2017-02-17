@@ -63,6 +63,7 @@ public class ClientController implements Initializable {
 
     private Client client;
     private Conversation activeConversation;
+    private boolean newCon = true;
 
     /**
      * Initializes the controller class.
@@ -124,6 +125,7 @@ public class ClientController implements Initializable {
                 }
             }
         });
+
     }
 
     private void showAlertIOException(IOException ex) {
@@ -165,8 +167,8 @@ public class ClientController implements Initializable {
             return;
         }
         String[] users = restOfArray.split(";");
-        for (int i = 0; i < users.length; i+=2) {
-            userList.add(new ClientUser(users[i], users[i+1]));
+        for (int i = 0; i < users.length; i += 2) {
+            userList.add(new ClientUser(users[i], users[i + 1]));
         }
     }
 
@@ -181,7 +183,7 @@ public class ClientController implements Initializable {
             userList.add(user);
         }
     /*
-	if (username.charAt(0) == '+') {
+    if (username.charAt(0) == '+') {
 	    //TODO go through friendlist and userlist
 	} else if (username.charAt(0) == '-') {
 
@@ -258,14 +260,16 @@ public class ClientController implements Initializable {
     }
 
     public void moveFromUsersToFriends(String username, boolean showAlert) {
-
+        newCon = false;
         for (int i = 0; i < userList.size(); i++) {
-            if(userList.get(i).getUserName().equals(username)){
+            if (userList.get(i).getUserName().equals(username)) {
                 friendList.add(new Conversation(userList.get(i)));
                 userList.remove(i);
+
                 break;
             }
         }
+        newCon = true;
 
         if (showAlert) {
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -278,7 +282,7 @@ public class ClientController implements Initializable {
     public void moveFromFriendsToUser(String username, boolean showAlert) {
 
         for (int i = 0; i < friendList.size(); i++) {
-            if(friendList.get(i).getTalkingWithUsername().equals(username)){
+            if (friendList.get(i).getTalkingWithUsername().equals(username)) {
                 userList.add(userList.get(i).getUser());
                 friendList.remove(i);
                 break;
@@ -328,9 +332,11 @@ public class ClientController implements Initializable {
     }
 
     private void appendMsgToConversation() {
+
         txtAreaMessages.clear();
         for (Message msg : activeConversation.getMessages()) {
             txtAreaMessages.appendText(msg.toString());
+            txtAreaNewMessage.appendText("\n");
         }
     }
 

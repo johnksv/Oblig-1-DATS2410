@@ -51,20 +51,20 @@ Kommandoer klient skal tolke
 - STATUSUPDATE
 
 
-Status codes:
-- Offline: 0
-- Busy: -
-- Online: +
-
+Status codes are specifed in the enum Status.java
 
 GetUsers: Each username is followed with a status code, like in the following syntax example.
 
 Syntax for commando STATUSUPDATE:
 
 	TYPE 0
-	STATUSUPDATE
-	[+/-/0]UNAME
-	
+	GETUSERS
+	USERNAME
+	ONLINE
+	USERNAME2
+	OFFLINE
+	USERNAME3
+	BUSY
 
 #Plan
 Uke 6
