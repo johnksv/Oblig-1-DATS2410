@@ -62,6 +62,7 @@ public class ClientController implements Initializable {
 
     private Client client;
     private Conversation activeConversation;
+    private boolean newCon = true;
 
     /**
      * Initializes the controller class.
@@ -109,6 +110,7 @@ public class ClientController implements Initializable {
 	    if (idx == -1) {
 		return;
 	    }
+            if(newCon){
 	    String user = userList.get(idx);
 
 	    Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -125,6 +127,7 @@ public class ClientController implements Initializable {
 		    showAlertIOException(ex);
 		}
 	    }
+            }
 	});
     }
 
@@ -270,8 +273,10 @@ public class ClientController implements Initializable {
     }
 
     public void moveFromUsersToFriends(String username) {
+        newCon = false;
 	userList.remove(username);
 	friendList.add(new Conversation(username));
+        newCon = true;
 	Alert alert = new Alert(AlertType.INFORMATION);
 	alert.setTitle("Accepted");
 	alert.setContentText(username + " is added to your friends list. You can chat now.");
