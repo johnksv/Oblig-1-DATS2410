@@ -104,24 +104,26 @@ public class ClientController implements Initializable {
         });
 
         tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
-            int idx = tvUsers.getSelectionModel().getFocusedIndex();
-            if (idx == -1) {
-                return;
-            }
-            ClientUser user = userList.get(idx);
+            if (newCon) {
+                int idx = tvUsers.getSelectionModel().getFocusedIndex();
+                if (idx == -1) {
+                    return;
+                }
+                ClientUser user = userList.get(idx);
 
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Confirm Connection");
-            alert.setHeaderText("Do you want to connect with " + user.getUserName());
-            alert.setContentText("We will alert you when your peer "
-                    + "has responded to the request.");
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Confirm Connection");
+                alert.setHeaderText("Do you want to connect with " + user.getUserName());
+                alert.setContentText("We will alert you when your peer "
+                        + "has responded to the request.");
 
-            Optional<ButtonType> answer = alert.showAndWait();
-            if (answer.isPresent() && answer.get() == ButtonType.OK) {
-                try {
-                    client.connectChat(user.getUserName());
-                } catch (IOException ex) {
-                    showAlertIOException(ex);
+                Optional<ButtonType> answer = alert.showAndWait();
+                if (answer.isPresent() && answer.get() == ButtonType.OK) {
+                    try {
+                        client.connectChat(user.getUserName());
+                    } catch (IOException ex) {
+                        showAlertIOException(ex);
+                    }
                 }
             }
         });
@@ -161,7 +163,6 @@ public class ClientController implements Initializable {
                 "This should not happen. Server should have control over this.");
     }
 
-
     public void updateUserList(String restOfArray) {
         if (restOfArray.equals("")) {
             return;
@@ -182,7 +183,7 @@ public class ClientController implements Initializable {
         } else {
             userList.add(user);
         }
-    /*
+        /*
     if (username.charAt(0) == '+') {
 	    //TODO go through friendlist and userlist
 	} else if (username.charAt(0) == '-') {
@@ -325,7 +326,8 @@ public class ClientController implements Initializable {
             String msg = txtAreaNewMessage.getText();
             activeConversation.addMessage(new Message("Me", msg));
             appendMsgToConversation();
-            client.sendMsg(activeConversation.getTalkingWithUsername(), msg);
+            client.sendMsg(activeConversation.getTalkingWithUsername(), msg.replace("\\", "&#92").replace(";", "&#59"));
+            txtAreaNewMessage.clear();
         } catch (IOException ex) {
             showAlertIOException(ex);
         }
@@ -335,8 +337,8 @@ public class ClientController implements Initializable {
 
         txtAreaMessages.clear();
         for (Message msg : activeConversation.getMessages()) {
-            txtAreaMessages.appendText(msg.toString());
-            txtAreaNewMessage.appendText("\n");
+            txtAreaMessages.appendText(msg.toString().replace("&#92", "\\").replace("&#59", ";"));
+            txtAreaMessages.appendText("\n");
         }
     }
 
