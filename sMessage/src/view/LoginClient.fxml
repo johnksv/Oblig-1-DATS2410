@@ -58,7 +58,7 @@
                         <Label text="Username:" />
                         <TextField id="uname" fx:id="uname" promptText="Username" GridPane.columnIndex="1" />
                         <Label text="Password" GridPane.rowIndex="1" />
-                        <TextField id="passw" fx:id="passw" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <javafx.scene.control.PasswordField id="passw" fx:id="passw" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Server IP:" GridPane.rowIndex="2" />
                         <TextField id="serverIP" fx:id="serverIP" promptText="Server IP" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label text="Portnumber" GridPane.rowIndex="3" />
