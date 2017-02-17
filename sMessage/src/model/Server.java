@@ -127,9 +127,10 @@ public class Server {
 		System.out.println("Done! Closing socket");
 		socket.close();
 		onlineClients.remove(this);
-		for(User u : userList){
-			if(u.getUname().equals(uname))
-				u.logOff();
+		for (User u : userList) {
+		    if (u.getUname().equals(uname)) {
+			u.logOff();
+		    }
 		}
 	    } catch (IOException e) {
 		System.err.println(e.getMessage());
@@ -175,6 +176,10 @@ public class Server {
 	    StringBuilder users = new StringBuilder();
 
 	    for (User u : userList) {
+		if (u.getUname().equals(uname)) {
+		    continue;
+		}
+
 		if (!u.isOnline()) {
 		    users.append("0").append(u.getUname()).append(";");
 		} else if (u.isBusy()) {
@@ -234,7 +239,7 @@ public class Server {
 			if (regNewUser(sub[2], sub[3])) {
 			    uname = sub[2];
 			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, '+' + uname);
-				sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
+			    sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
 			} else {
 			    sendCommandFromServer("TYPE 0", Command.ERROR, "Could not create user");
 			}
@@ -328,7 +333,7 @@ public class Server {
 	private void logIn(String[] sub) throws LoginException {
 	    for (User u : userList) {
 		if (u.getUname().equals(sub[2])) {
-			u.login(sub[3]);
+		    u.login(sub[3]);
 		    uname = sub[2];
 		    return;
 		}
