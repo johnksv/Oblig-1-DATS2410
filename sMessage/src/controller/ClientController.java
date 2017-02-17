@@ -46,16 +46,18 @@ public class ClientController implements Initializable {
     @FXML
     private Label labelTalkingWIth;
     @FXML
-    private Button btnSend;
-    @FXML
     private Button btnKick;
+    @FXML
+    private TextArea txtAreaMessages;
+    @FXML
+    private TextArea txtAreaNewMessage;
 
     private final ObservableList<Conversation> friendList = FXCollections.observableList(new ArrayList<>());
     private final ObservableList<String> userList = FXCollections.observableList(new ArrayList<>());
-    private String activeChat;
     private VBox vBoxOverlay;
 
     private Client client;
+    private Conversation activeConversation;
 
     /**
      * Initializes the controller class.
@@ -64,7 +66,6 @@ public class ClientController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 	createOverlay();
 	initTabel();
-	forTesting();
     }
 
     private void createOverlay() {
@@ -90,9 +91,11 @@ public class ClientController implements Initializable {
 	tvUsers.setItems(userList);
 
 	tvFriends.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
-	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
-	    labelTalkingWIth.setText("Talking with: " + userList.get(idx));
-	    //TODO: Set active user and update messages
+	    int idx = tvFriends.getSelectionModel().getFocusedIndex();
+	    Conversation conv = friendList.get(idx);
+	    labelTalkingWIth.setText("Talking with: " + conv.getTalkingWithUsername());
+
+	    setActiveConversation(conv);
 	});
 
 	tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
@@ -121,12 +124,6 @@ public class ClientController implements Initializable {
 	});
     }
 
-    private void forTesting() {
-	userList.add("StanBoy96");
-	userList.add("Truls");
-	userList.add("JohnKasper");
-    }
-
     private void showAlertBoxError(String title, String contentText) {
 	Alert alert = new Alert(AlertType.ERROR);
 	alert.setTitle(title);
@@ -138,6 +135,11 @@ public class ClientController implements Initializable {
 	for (Conversation cnv : friendList) {
 	    if (cnv.getTalkingWithUsername().equals(userName)) {
 		cnv.addMessage(msg);
+		if (activeConversation == cnv) {
+		    appendMsgToConversation();
+		} else {
+		    //TODO: Set the text of the user sent to to bold
+		}
 		return;
 	    }
 	}
@@ -278,5 +280,23 @@ public class ClientController implements Initializable {
 
     public void setClient(Client client) {
 	this.client = client;
+    }
+
+    private void setActiveConversation(Conversation conv) {
+	activeConversation = conv;
+	appendMsgToConversation();
+    }
+
+    @FXML
+    private void handleSendMsg() {
+	activeConversation.addMessage(new Message("Me", txtAreaNewMessage.getText()));
+	appendMsgToConversation();
+    }
+
+    private void appendMsgToConversation() {
+	txtAreaMessages.clear();
+	for (Message msg : activeConversation.getMessages()) {
+	    txtAreaMessages.appendText(msg.toString());
+	}
     }
 }
