@@ -96,8 +96,6 @@ public class ClientController implements Initializable {
 	tvFriends.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
 	    int idx = tvFriends.getSelectionModel().getFocusedIndex();
 	    Conversation conv = friendList.get(idx);
-	    labelTalkingWIth.setText("Talking with: " + conv.getTalkingWithUsername());
-
 	    setActiveConversation(conv);
 	});
 
@@ -297,6 +295,7 @@ public class ClientController implements Initializable {
 
     private void setActiveConversation(Conversation conv) {
 	activeConversation = conv;
+	labelTalkingWIth.setText("Talking with: " + conv.getTalkingWithUsername());
 	appendMsgToConversation();
     }
 
@@ -316,6 +315,16 @@ public class ClientController implements Initializable {
 	txtAreaMessages.clear();
 	for (Message msg : activeConversation.getMessages()) {
 	    txtAreaMessages.appendText(msg.toString());
+	}
+    }
+
+    @FXML
+    private void handleDisconnectFromUser() {
+	try {
+	    client.disconnectChat(activeConversation.getTalkingWithUsername());
+	    
+	} catch (IOException ex) {
+	    showAlertIOException(ex);
 	}
     }
 }
