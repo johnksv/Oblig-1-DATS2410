@@ -37,15 +37,14 @@ public class Client {
 	    try {
 		while ((input = inFromServer.readLine()) != null) {
 
-
-			final String finalInput = input;
-			Platform.runLater(() -> {
-				try {
-					parseCommand(finalInput);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
+		    final String finalInput = input;
+		    Platform.runLater(() -> {
+			try {
+			    parseCommand(finalInput);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+		    });
 
 		}
 		System.out.println("Thread done");
@@ -128,7 +127,7 @@ public class Client {
 		    }
 		    break;
 		case "DISCONNECT":
-		    clientController.removeFriend(restOfArray(sub, 2));
+		    clientController.moveFromFriendsToUser(restOfArray(sub, 2), true);
 		    break;
 		case "USERLIST":
 		    clientController.updateUserList(restOfArray(sub, 2));
