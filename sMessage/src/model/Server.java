@@ -127,7 +127,10 @@ public class Server {
 		System.out.println("Done! Closing socket");
 		socket.close();
 		onlineClients.remove(this);
-
+		for(User u : userList){
+			if(u.getUname().equals(uname))
+				u.logOff();
+		}
 	    } catch (IOException e) {
 		System.err.println(e.getMessage());
 	    }
@@ -325,7 +328,7 @@ public class Server {
 	private void logIn(String[] sub) throws LoginException {
 	    for (User u : userList) {
 		if (u.getUname().equals(sub[2])) {
-		    u.login(sub[3]);
+			u.login(sub[3]);
 		    uname = sub[2];
 		    return;
 		}
