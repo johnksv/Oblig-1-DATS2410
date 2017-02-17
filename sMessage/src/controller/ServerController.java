@@ -46,6 +46,8 @@ public class ServerController implements Initializable {
     @FXML
     private TableView tableViewUsers;
     @FXML
+    private SplitPane split;
+    @FXML
     private TableColumn<String, String> tableColumnUsername;
     @FXML
     private TableColumn<String, String> tableColumnStatus;
@@ -80,6 +82,7 @@ public class ServerController implements Initializable {
 	    }
 	    String user = userList.get(idx).getUname();
 	});
+        tableViewUsers.prefWidthProperty().bind(split.widthProperty());
 
     }
 
