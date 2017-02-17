@@ -156,7 +156,7 @@ public class ClientController implements Initializable {
     public void displayList(String[] list) {
 	userList.clear();
 	for (String user : list) {
-	    userList.add(user.substring(1));
+            userList.add(user.substring(1));
 	}
 
     }
@@ -169,23 +169,16 @@ public class ClientController implements Initializable {
     }
 
     public void updateStatus(String username) {
-    	String uname = username.substring(1);
-    	if(userList.contains(uname)){
-
-		}
-		else if (friendList.contains(uname)){
-
-		}
-		else
-			userList.add(uname);
-		/*
+    
+		
 	if (username.charAt(0) == '+') {
 	    //TODO go through friendlist and userlist
+           
 	} else if (username.charAt(0) == '-') {
 
 	} else if (username.charAt(0) == '0') {
 
-	}*/
+	}
     }
 
     public void loginFailed() {
