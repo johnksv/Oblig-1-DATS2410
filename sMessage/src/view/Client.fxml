@@ -13,10 +13,10 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
@@ -97,18 +97,11 @@
                               <HBox prefHeight="110.0" prefWidth="676.0">
                                  <children>
                                     <TextArea fx:id="txtAreaNewMessage" prefHeight="110.0" prefWidth="601.0" />
-                                    <BorderPane>
-                                       <center>
-                                          <VBox prefHeight="71.0" prefWidth="80.0" spacing="20.0">
-                                             <children>
-                                                <Button fx:id="btnSend" mnemonicParsing="false" onAction="#handleSendMsg" text="Send" />
-                                             </children>
-                                             <BorderPane.margin>
-                                                <Insets left="10.0" top="20.0" />
-                                             </BorderPane.margin>
-                                          </VBox>
-                                       </center>
-                                    </BorderPane>
+                                    <AnchorPane prefWidth="72.0">
+                                       <children>
+                                          <Button fx:id="btnSend" mnemonicParsing="false" onAction="#handleSendMsg" prefHeight="27.0" prefWidth="69.0" text="Send" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" />
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </HBox>
                            </children>
@@ -117,13 +110,12 @@
                      <center>
                         <VBox BorderPane.alignment="CENTER">
                            <children>
-                              <HBox alignment="CENTER_LEFT">
+                              <AnchorPane prefWidth="689.0">
                                  <children>
-                                    <Label fx:id="labelTalkingWIth" text="Talking with:" />
-                                    <Region prefHeight="29.0" prefWidth="487.0" />
-                                    <Button mnemonicParsing="false" onAction="#handleDisconnectFromUser" text="Disconnect from user" />
+                                    <Label fx:id="labelTalkingWIth" text="Talking with:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="7.0" />
+                                    <Button layoutX="316.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleDisconnectFromUser" text="Disconnect from user" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="2.0" />
                                  </children>
-                              </HBox>
+                              </AnchorPane>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="405.0" prefWidth="700.0">
                                  <content>
                                     <TextArea fx:id="txtAreaMessages" editable="false" />
