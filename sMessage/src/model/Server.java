@@ -101,7 +101,7 @@ public class Server {
 	private final Socket socket;
 	private final BufferedWriter out;
 	private String uname;
-	private ArrayList<SocketInstanse> openConnections;
+	private ArrayList<SocketInstanse> openConnections = new ArrayList<>();
 
 	public SocketInstanse(Socket s) throws IOException {
 	    socket = s;
@@ -302,8 +302,16 @@ public class Server {
 	    }
 	}
 
-	private void sendResponse(String s, String s1) throws IOException {
-	    sendCommandFromServer("TYPE 0", Command.RESPONSE, s, s1);
+	private void sendResponse(String userName, String answer) throws IOException {
+		for(SocketInstanse s : onlineClients){
+			if(s.uname.equals(userName)){
+				s.sendCommandFromServer("TYPE 0", Command.RESPONSE, uname, answer);
+				if(answer.equals("YES"))
+					openConnections.add(s);
+				return;
+			}
+		}
+		sendCommandFromServer("TYPE 0", Command.ERROR, "User not in online list");
 	}
 
 	//Stian: hmm tror kanksje dette ble tull, og vi har en online variabel, men den trengs nok ikke

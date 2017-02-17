@@ -78,7 +78,7 @@ public class LoginClientController implements Initializable {
 
 		String base64Pass = new String(Base64.getEncoder().encode(passw.getText().getBytes()));
 		client.login(uname.getText(), base64Pass);
-
+		// TODO handle loginFail try again
 		cController.setClient(client);
 		clientStage.show();
 		closeThisStage();

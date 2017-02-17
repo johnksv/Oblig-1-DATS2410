@@ -6,6 +6,8 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Base64;
+
+import javafx.application.Platform;
 import model.client.Message;
 
 /**
@@ -34,7 +36,17 @@ public class Client {
 	    String input;
 	    try {
 		while ((input = inFromServer.readLine()) != null) {
-		    parseCommand(input);
+
+
+			final String finalInput = input;
+			Platform.runLater(() -> {
+				try {
+					parseCommand(finalInput);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+
 		}
 		System.out.println("Thread done");
 	    } catch (IOException e) {
@@ -110,7 +122,7 @@ public class Client {
 		    break;
 		case "RESPONSE":
 		    if (sub[3].toUpperCase().equals("YES")) {
-			clientController.addFriend(sub[2]);
+			clientController.moveFromUsersToFriends(sub[2]);
 		    } else {
 			clientController.negativeResponse(sub[2]);
 		    }

@@ -64,7 +64,8 @@ public class ClientController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 	createOverlay();
 	initTabel();
-	forTesting();
+
+		//forTesting();
     }
 
     private void createOverlay() {
@@ -166,13 +167,23 @@ public class ClientController implements Initializable {
     }
 
     public void updateStatus(String username) {
+    	String uname = username.substring(1);
+    	if(userList.contains(uname)){
+
+		}
+		else if (friendList.contains(uname)){
+
+		}
+		else
+			userList.add(uname);
+		/*
 	if (username.charAt(0) == '+') {
 	    //TODO go through friendlist and userlist
 	} else if (username.charAt(0) == '-') {
 
 	} else if (username.charAt(0) == '0') {
 
-	}
+	}*/
     }
 
     public void loginFailed() {
@@ -221,42 +232,40 @@ public class ClientController implements Initializable {
      * @param username
      */
     public void connectRequest(String username) {
-	ButtonType accept = new ButtonType("Accept", ButtonBar.ButtonData.OK_DONE);
-	ButtonType reject = new ButtonType("Reject", ButtonBar.ButtonData.CANCEL_CLOSE);
-	Alert alert = new Alert(AlertType.CONFIRMATION, "", accept, reject);
-	alert.setTitle("Confirm Connection");
-	alert.setHeaderText(username + " wants to connect to you.");
 
-	Optional< ButtonType> answer = alert.showAndWait();
-	if (answer.isPresent()) {
-	    try {
-		String respons = answer.get() == accept ? "YES" : "NO";
-		client.sendRespons(username, respons);
-	    } catch (IOException ex) {
-		Alert alertErr = new Alert(AlertType.ERROR);
-		alertErr.setTitle("Error occurred");
-		alertErr.setHeaderText("An IOException occurred");
 
-		TextArea txtArea = new TextArea(ex.toString());
-		alert.getDialogPane().setExpandableContent(txtArea);
-	    }
-	}
+			ButtonType accept = new ButtonType("Accept", ButtonBar.ButtonData.OK_DONE);
+			ButtonType reject = new ButtonType("Reject", ButtonBar.ButtonData.CANCEL_CLOSE);
+			Alert alert = new Alert(AlertType.CONFIRMATION, "", accept, reject);
+			alert.setTitle("Confirm Connection");
+			alert.setHeaderText(username + " wants to connect to you.");
+
+			Optional< ButtonType> answer = alert.showAndWait();
+			if (answer.isPresent()) {
+				try {
+				String respons = answer.get() == accept ? "YES" : "NO";
+				client.sendRespons(username, respons);
+				if(respons.equals("YES"))
+					moveFromUsersToFriends(username);
+				} catch (IOException ex) {
+				Alert alertErr = new Alert(AlertType.ERROR);
+				alertErr.setTitle("Error occurred");
+				alertErr.setHeaderText("An IOException occurred");
+
+				TextArea txtArea = new TextArea(ex.toString());
+				alert.getDialogPane().setExpandableContent(txtArea);
+				}
+			}
     }
 
-    public void addFriend(String username) {
-	for (int i = 0; i < userList.size(); i++) {
-	    if (userList.get(i).equals(username)) {
-		friendList.remove(i);
-		Conversation conv = new Conversation(username);
-		friendList.add(conv);
-
+	public void moveFromUsersToFriends(String username) {
+		userList.remove(username);
+		friendList.add(new Conversation(username));
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Accepted");
 		alert.setContentText(username + " is added to your friends list. You can chat now.");
-		return;
-	    }
 	}
-    }
+
 
     public void negativeResponse(String username) {
 	Alert alert = new Alert(AlertType.INFORMATION);
@@ -278,5 +287,10 @@ public class ClientController implements Initializable {
 
     public void setClient(Client client) {
 	this.client = client;
-    }
+		try {
+			client.getUserList();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
