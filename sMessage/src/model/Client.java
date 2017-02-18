@@ -142,7 +142,9 @@ public class Client {
 		case "STATUSUPDATE":
 		    clientController.updateStatus(sub[2], sub[3]);
 		    break;
-
+                case "ERROR":
+                    clientController.loginFailed();
+                    break;
 		default:
 		    throw new IllegalArgumentException("Bad protocol");
 	    }

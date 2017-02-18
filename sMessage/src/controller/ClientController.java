@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.*;
 import javafx.collections.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -18,6 +19,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -280,12 +283,12 @@ public class ClientController implements Initializable {
         }
     }
 
+    //TODO handle activecon and there is a bug :/ ArrayIndexOutOfBoundsException: -1
     public void moveFromFriendsToUser(String username, boolean showAlert) {
 
         for (int i = 0; i < friendList.size(); i++) {
             if (friendList.get(i).getTalkingWithUsername().equals(username)) {
-                userList.add(friendList.get(i).getClientUser());
-                friendList.remove(i);
+                userList.add(friendList.remove(i).getClientUser());
                 break;
             }
         }
@@ -323,11 +326,13 @@ public class ClientController implements Initializable {
     @FXML
     private void handleSendMsg() {
         try {
-            String msg = txtAreaNewMessage.getText();
-            activeConversation.addMessage(new Message("Me", msg));
-            appendMsgToConversation();
-            client.sendMsg(activeConversation.getTalkingWithUsername(), msg.replace("\\", "&#92").replace(";", "&#59"));
-            txtAreaNewMessage.clear();
+            if (activeConversation != null) {
+                String msg = txtAreaNewMessage.getText();
+                activeConversation.addMessage(new Message("Me", msg));
+                appendMsgToConversation();
+                client.sendMsg(activeConversation.getTalkingWithUsername(), msg.replace("\n", "&#92").replace(";", "&#59"));
+                txtAreaNewMessage.clear();
+            }
         } catch (IOException ex) {
             showAlertIOException(ex);
         }
@@ -337,7 +342,7 @@ public class ClientController implements Initializable {
 
         txtAreaMessages.clear();
         for (Message msg : activeConversation.getMessages()) {
-            txtAreaMessages.appendText(msg.toString().replace("&#92", "\\").replace("&#59", ";"));
+            txtAreaMessages.appendText(msg.toString().replace("&#92", "\n").replace("&#59", ";"));
             txtAreaMessages.appendText("\n");
         }
     }
@@ -345,11 +350,29 @@ public class ClientController implements Initializable {
     @FXML
     private void handleDisconnectFromUser() {
         try {
-            String username = activeConversation.getTalkingWithUsername();
-            moveFromFriendsToUser(username, false);
-            client.disconnectChat(username);
+            if (activeConversation != null) {
+                String username = activeConversation.getTalkingWithUsername();
+                moveFromFriendsToUser(username, false);
+                client.disconnectChat(username);
+            }
         } catch (IOException ex) {
             showAlertIOException(ex);
         }
+    }
+
+   
+
+    @FXML
+    public void buttonPressed(KeyEvent e) {
+            System.out.println("hei: " + e.getText());
+        if (e.getCode().toString().equals("ENTER")) {
+            System.out.println("hei2: " + e.getText());
+            if (txtAreaNewMessage.isFocused() && !e.isShiftDown() && e.getCode().equals(KeyCode.ENTER)) {
+                handleSendMsg();
+                txtAreaNewMessage.clear();
+                e.consume();
+            }
+        }
+
     }
 }
