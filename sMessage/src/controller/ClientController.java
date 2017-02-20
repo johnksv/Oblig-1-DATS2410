@@ -205,7 +205,7 @@ public class ClientController implements Initializable {
         } else if (friendList.contains(con)) {
             if (newStatus == Status.OFFLINE) {
                 moveFromFriendsToUser(username, true);
-                userList.get(userList.size()).setStatus(newStatus);
+                userList.get(userList.size() - 1).setStatus(newStatus);
             } else {
                 friendList.get(friendList.indexOf(con)).getClientUser().setStatus(newStatus);
             }
