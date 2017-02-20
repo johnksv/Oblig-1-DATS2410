@@ -114,19 +114,18 @@ public final class Server {
 
         /**
          * Takes in socket, stores output stream in field "out"
-         * @param s
-         * @throws IOException
+         * @param socket The SocketInstance uses this socket to comunicate
+         * @throws IOException If network error
          */
-        public SocketInstanse(Socket s) throws IOException {
-            socket = s;
-            out = new BufferedWriter(new PrintWriter(socket.getOutputStream()));
-            System.out.println("SERVER PORT: " + s.getLocalPort());
+        public SocketInstanse(Socket socket) throws IOException {
+            this.socket = socket;
+            out = new BufferedWriter(new PrintWriter(this.socket.getOutputStream()));
+            System.out.println("SERVER PORT: " + socket.getLocalPort());
         }
 
-        public InetAddress getIP() {
-            return socket.getInetAddress();
-        }
-
+        /**
+         * Listens for messages in the inputstream 'in'. Then the connection i s lost, the user is logged off
+         */
         @Override
         public void run() {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
@@ -208,9 +207,9 @@ public final class Server {
         }
 
         /**
-         *
-         * @param lines
-         * @throws IOException
+         * Sends all the strings to the receiver in the other end of the outputstream 'out' separated by semicolon.
+         * @param lines The strings to be sent
+         * @throws IOException if network is lost
          */
         private void sendCommandFromServer(String... lines) throws IOException {
 
@@ -221,6 +220,7 @@ public final class Server {
             out.newLine();
             out.flush();
         }
+
 
         private void sendCommandFromServer(String type, Command command, String... lines) throws IOException {
             String[] newCommand = new String[lines.length + 2];
