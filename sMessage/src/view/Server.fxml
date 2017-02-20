@@ -63,11 +63,16 @@
             <Region prefHeight="27.0" prefWidth="183.0" />
             <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="200.0">
                <children>
-                  <Label text="IP:">
+                  <Label text="IP : ">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Label>
+                   <Label fx:id="ipLabel">
+                       <HBox.margin>
+                           <Insets />
+                       </HBox.margin>
+                   </Label>
                </children>
             </HBox>
             <Button mnemonicParsing="false" text="Help" />

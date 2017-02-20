@@ -364,9 +364,9 @@ public class ClientController implements Initializable {
 
     @FXML
     public void buttonPressed(KeyEvent e) {
-            System.out.println("hei: " + e.getText());
+
         if (e.getCode().toString().equals("ENTER")) {
-            System.out.println("hei2: " + e.getText());
+
             if (txtAreaNewMessage.isFocused() && !e.isShiftDown() && e.getCode().equals(KeyCode.ENTER)) {
                 handleSendMsg();
                 txtAreaNewMessage.clear();
