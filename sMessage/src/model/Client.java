@@ -151,7 +151,7 @@ public class Client {
 		    clientController.updateStatus(sub[2], sub[3]);
 		    break;
 		case "ERROR":
-		    clientController.loginFailed();
+		    clientController.showError(restOfArray(sub, 2));
 		    break;
 		default:
 		    throw new IllegalArgumentException("Bad protocol");
