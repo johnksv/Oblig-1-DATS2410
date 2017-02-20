@@ -18,8 +18,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Client;
 
@@ -30,6 +34,8 @@ import model.Client;
  */
 public class LoginClientController implements Initializable {
 
+    @FXML
+    private StackPane root;
     @FXML
     private Button btnLogin;
     @FXML
@@ -42,6 +48,10 @@ public class LoginClientController implements Initializable {
     private TextField serverIP;
     @FXML
     private TextField portNumber;
+    @FXML
+    private VBox vBoxOverlay;
+    @FXML
+    private VBox vboxContainer;
 
     private ClientController cController;
     private Stage clientStage = new Stage();
@@ -49,104 +59,119 @@ public class LoginClientController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
-        loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
-        try {
-            Scene scene = new Scene(loader.load());
-            cController = loader.getController();
-            clientStage.setScene(scene);
-            clientStage.setResizable(true);
-            clientStage.setMinWidth(850);
-            clientStage.setMinHeight(650);
 
-        } catch (IOException ex) {
-            System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
-            Platform.exit();
-            System.exit(1);
-        }
+	loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
+	try {
+	    Scene scene = new Scene(loader.load());
+	    cController = loader.getController();
+	    clientStage.setScene(scene);
+	    clientStage.setResizable(true);
+	    clientStage.setMinWidth(850);
+	    clientStage.setMinHeight(650);
+
+	} catch (IOException ex) {
+	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+	    Platform.exit();
+	    System.exit(1);
+	}
+	Label label = new Label("Wating on respons from server");
+	label.setFont(Font.font(18));
+	ProgressIndicator progIndicator = new ProgressIndicator();
+
+	vBoxOverlay = new VBox(label, progIndicator);
+	vBoxOverlay.setSpacing(10);
+	vBoxOverlay.setAlignment(Pos.CENTER);
 
     }
 
     @FXML
     private void handleLoginBtn() {
 
-        try {
-            if (uname.getText().matches("([\\w\\d])*")) {
-                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+	try {
+	    if (uname.getText().matches("([\\w\\d])*")) {
+		showWaitingOverlay();
+		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
 
-                try {
-                    client.login(uname.getText(), encrypt(passw.getText()));
-                } catch (Exception ex) {
-                    showError("Coding error, please report to the developers");
-                }
-                cController.setClient(client);
-                clientStage.show();
-                closeThisStage();
-            } else {
-                showError("Uname can only contain letters and numbers");
-            }
-        } catch (IOException ex) {
-            showFatalError();
-        } catch (NumberFormatException ex) {
-            showError("Empty field or wrong input");
-        }
+		try {
+		    client.login(uname.getText(), encrypt(passw.getText()));
+		} catch (Exception ex) {
+		    showError("Coding error, please report to the developers");
+		}
+		cController.setClient(client);
+		clientStage.show();
+		closeThisStage();
+	    } else {
+		showError("Uname can only contain letters and numbers");
+	    }
+	} catch (IOException ex) {
+	    showFatalError();
+	} catch (NumberFormatException ex) {
+	    showError("Empty field or wrong input");
+	}
     }
 
     private String encrypt(String encrypt) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(passw.getText().getBytes("UTF-16"));
-        byte[] digest = md.digest();
-        return new String(digest);
+	MessageDigest md = MessageDigest.getInstance("SHA-256");
+	md.update(encrypt.getBytes("UTF-16"));
+	byte[] digest = md.digest();
+	return new String(digest);
     }
 
     @FXML
     private void handleRegBtn() {
-        try {
-            if (uname.getText().matches("([\\w\\d])*")) {
-                Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
-                try {
-                    client.regNewUser(uname.getText(), encrypt(passw.getText()));
-                }  catch (Exception ex) {
-                    showError("Coding error, please report to the developers");
-                }
-                cController.setClient(client);
-                clientStage.show();
-                closeThisStage();
-            } else {
-                showError("Uname can only contain letters and numbers");
-            }
-        } catch (IOException ex) {
-            showFatalError();
-        } catch (NumberFormatException ex) {
-            showError("Empty field or wrong input");
-        }
+	try {
+	    if (uname.getText().matches("([\\w\\d])*")) {
+		showWaitingOverlay();
+		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+		try {
+		    client.regNewUser(uname.getText(), encrypt(passw.getText()));
+		} catch (Exception ex) {
+		    showError("Coding error, please report to the developers");
+		}
+		cController.setClient(client);
+		clientStage.show();
+		closeThisStage();
+	    } else {
+		showError("Uname can only contain letters and numbers");
+	    }
+	} catch (IOException ex) {
+	    showFatalError();
+	} catch (NumberFormatException ex) {
+	    showError("Empty field or wrong input");
+	}
     }
 
     private void showError(String errorM) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error occurred");
-        alert.setHeaderText(errorM);
-        alert.showAndWait();
+	Alert alert = new Alert(Alert.AlertType.ERROR);
+	alert.setTitle("Error occurred");
+	alert.setHeaderText(errorM);
+	alert.showAndWait();
     }
 
     private void showFatalError() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error occurred");
-        alert.setHeaderText("Could not connect to server.");
-        alert.showAndWait();
-        //Platform.exit();
-        //System.exit(-1);
+	Alert alert = new Alert(Alert.AlertType.ERROR);
+	alert.setTitle("Error occurred");
+	alert.setHeaderText("Could not connect to server.");
+	alert.showAndWait();
+	hideWaitingOverlay();
 
-    }
-
-    private void startClient() {
-        clientStage.show();
     }
 
     private void closeThisStage() {
-        //Grab a random element on the FXML-view so we get the Stage
-        //then close.
-        ((Stage) btnLogin.getScene().getWindow()).close();
+	//Grab a random element on the FXML-view so we get the Stage
+	//then close.
+	((Stage) btnLogin.getScene().getWindow()).close();
+    }
+
+    private void showWaitingOverlay() {
+	//Disable all children of the vbox with content
+	vboxContainer.setDisable(true);
+	root.getChildren().add(vBoxOverlay);
+    }
+
+    private void hideWaitingOverlay() {
+	vboxContainer.setDisable(false);
+	root.getChildren().remove(vBoxOverlay);
     }
 
 }
