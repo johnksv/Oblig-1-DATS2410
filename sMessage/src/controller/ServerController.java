@@ -35,9 +35,12 @@ import model.client.Conversation;
  */
 public class ServerController implements Initializable {
 
+    @FXML
     public Label ipLabel;
     @FXML
-    private Label labelServerStatus;
+    private Label portLabel;
+    @FXML
+    Label labelServerStatus;
     @FXML
     private Canvas canvasServerStatus;
     @FXML
@@ -58,6 +61,7 @@ public class ServerController implements Initializable {
     private Server server;
     private boolean serverRunning = false;
     private final ObservableList<User> userList = FXCollections.observableList(new ArrayList<>());
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -95,7 +99,7 @@ public class ServerController implements Initializable {
                     txtFieldPortManual.setDisable(newValue);
                 });
         TextFormatter<Integer> formater = new TextFormatter<>((TextFormatter.Change t) -> {
-            if (t.getText().matches("\\d")) {
+            if (t.getText().matches("\\d*")) {
                 //TODO Check if portnumber is between 1 - 65535
                 return t;
             }
@@ -132,6 +136,8 @@ public class ServerController implements Initializable {
             serverRunning = false;
             labelServerStatus.setText("Server is stopped");
             btnToogleServerStatus.setText("Turn on server");
+            portLabel.setText("");
+            ipLabel.setText("");
             server = null;
 
         } else {
@@ -141,13 +147,15 @@ public class ServerController implements Initializable {
             try {
                 if (chboxPortAutomatic.isSelected()) {
                     //TODO: Use stop or start instead
-                    server = new Server(this);
+                    server = new Server(this, 0);
 
                 } else {
                     server = new Server(this, Integer.parseInt(txtFieldPortManual.getText()));
 
                 }
+                portLabel.setText(server.getPort());
                 ipLabel.setText(InetAddress.getLocalHost().getHostAddress());
+                txtFieldPortManual.setText(server.getPort());
             } catch (IOException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error occurred");
@@ -162,6 +170,7 @@ public class ServerController implements Initializable {
         if (!chboxPortAutomatic.isSelected()) {
             txtFieldPortManual.setDisable(serverRunning);
         }
+
         drawServerStatus();
     }
 

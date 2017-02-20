@@ -23,7 +23,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerController">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerController">
   <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
@@ -59,27 +59,37 @@
                </padding>
             </HBox>
             <Separator orientation="VERTICAL" />
-            <Region prefHeight="27.0" prefWidth="183.0" />
-            <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="200.0">
+            <Region prefHeight="27.0" prefWidth="50.0" />
+            <HBox alignment="CENTER_LEFT" minWidth="200.0" prefHeight="27.0" prefWidth="200.0">
                <children>
                   <Label text="IP : ">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Label>
-                   <Label fx:id="ipLabel">
+                   <Label fx:id="ipLabel" prefWidth="50.0">
+                       <HBox.margin>
+                           <Insets />
+                       </HBox.margin>
+                   </Label>
+                   <Label text="Port : ">
+                       <HBox.margin>
+                           <Insets />
+                       </HBox.margin>
+                   </Label>
+                   <Label fx:id="portLabel">
                        <HBox.margin>
                            <Insets />
                        </HBox.margin>
                    </Label>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" text="Help" />
+            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Help" />
         </items>
       </ToolBar>
       <SplitPane fx:id="split" dividerPositions="0.35" VBox.vgrow="ALWAYS">
          <items>
-                  <TableView fx:id="tableViewUsers" prefWidth="250.0" prefHeight="510.0">
+                  <TableView fx:id="tableViewUsers" prefHeight="510.0" prefWidth="250.0">
                     <columns>
                       <TableColumn fx:id="tableColumnUsername" prefWidth="174.0" text="Username" />
                       <TableColumn fx:id="tableColumnStatus" prefWidth="72.5" text="Status" />
