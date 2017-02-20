@@ -13,6 +13,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -21,7 +22,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
    <children>
       <VBox fx:id="vboxContainer" prefHeight="600.0" prefWidth="900.0">
         <children>
@@ -73,7 +74,8 @@
                                     </HBox>
                                     <TableView fx:id="tvUsers" prefHeight="350.0" prefWidth="200.0">
                                       <columns>
-                                        <TableColumn fx:id="columnUsername" prefWidth="184.0" text="Online users" />
+                                          <TableColumn fx:id="columnStatus" editable="false" prefWidth="45.0" resizable="false" text="Status" />
+                                        <TableColumn fx:id="columnUsername" editable="false" prefWidth="214.0" text="Online users" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -95,20 +97,12 @@
                               </Separator>
                               <HBox prefHeight="110.0" prefWidth="676.0">
                                  <children>
-                                    <TextArea fx:id="txtAreaNewMessage" prefHeight="110.0" prefWidth="601.0" />
-                                    <BorderPane>
-                                       <center>
-                                          <VBox prefHeight="71.0" prefWidth="80.0" spacing="20.0">
-                                             <children>
-                                                <Button fx:id="btnSend" mnemonicParsing="false" onAction="#handleSendMsg" text="Send" />
-                                                <Button fx:id="btnKick" mnemonicParsing="false" text="Kick" />
-                                             </children>
-                                             <BorderPane.margin>
-                                                <Insets left="10.0" top="20.0" />
-                                             </BorderPane.margin>
-                                          </VBox>
-                                       </center>
-                                    </BorderPane>
+                                    <TextArea fx:id="txtAreaNewMessage" onKeyPressed="#buttonPressed" prefHeight="110.0" prefWidth="601.0" />
+                                    <AnchorPane prefWidth="72.0">
+                                       <children>
+                                          <Button fx:id="btnSend" mnemonicParsing="false" onAction="#handleSendMsg" prefHeight="27.0" prefWidth="69.0" text="Send" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" />
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </HBox>
                            </children>
@@ -117,7 +111,12 @@
                      <center>
                         <VBox BorderPane.alignment="CENTER">
                            <children>
-                              <Label fx:id="labelTalkingWIth" text="Talking with:" />
+                              <AnchorPane prefWidth="689.0">
+                                 <children>
+                                    <Label fx:id="labelTalkingWIth" text="Talking with:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="7.0" />
+                                    <Button layoutX="316.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleDisconnectFromUser" text="Disconnect from user" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="2.0" />
+                                 </children>
+                              </AnchorPane>
                               <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="405.0" prefWidth="700.0">
                                  <content>
                                     <TextArea fx:id="txtAreaMessages" editable="false" />

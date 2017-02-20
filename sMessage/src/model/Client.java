@@ -1,6 +1,7 @@
 package model;
 
 import controller.ClientController;
+import controller.LoginClientController;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -15,15 +16,15 @@ import model.client.Message;
  */
 public class Client {
 
-    Socket clientsocket;
-    BufferedWriter outToServer;
-    BufferedReader inFromServer;
-    ClientController clientController;
-    private InetAddress ip;
-    private int portNr;
+    private Socket clientsocket;
+    private BufferedWriter outToServer;
+    private BufferedReader inFromServer;
+    private ClientController clientController;
+    private LoginClientController loginController;
 
-    public Client(ClientController clientController, String ip, int port) throws IOException {
+    public Client(LoginClientController loginController, ClientController clientController, String ip, int port) throws IOException {
 	this.clientController = clientController;
+	this.loginController = loginController;
 	clientsocket = new Socket(ip, port);
 	outToServer = new BufferedWriter(new PrintWriter(clientsocket.getOutputStream()));
 	inFromServer = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
@@ -37,15 +38,15 @@ public class Client {
 	    try {
 		while ((input = inFromServer.readLine()) != null) {
 
-
-			final String finalInput = input;
-			Platform.runLater(() -> {
-				try {
-					parseCommand(finalInput);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
+		    final String finalInput = input;
+		    //The parsing and actions should be done on the JavaFX thread
+		    Platform.runLater(() -> {
+			try {
+			    parseCommand(finalInput);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+		    });
 
 		}
 		System.out.println("Thread done");
@@ -62,7 +63,12 @@ public class Client {
     }
 
     public void disconnectServer() throws IOException {
+	System.out.println("Loging off and shuting down socket.");
 	sendCommandToServer("TYPE 0", Command.LOGOFF);
+	shutdown();
+    }
+
+    public void shutdown() throws IOException {
 	outToServer.close();
 	inFromServer.close();
 	//TODO: Check if we should warn the server that we are closing first, then wait.
@@ -122,28 +128,30 @@ public class Client {
 		    break;
 		case "RESPONSE":
 		    if (sub[3].toUpperCase().equals("YES")) {
-			clientController.moveFromUsersToFriends(sub[2]);
+			clientController.moveFromUsersToFriends(sub[2], true);
 		    } else {
 			clientController.negativeResponse(sub[2]);
 		    }
 		    break;
 		case "DISCONNECT":
-		    clientController.removeFriend(restOfArray(sub, 2));
+		    clientController.moveFromFriendsToUser(restOfArray(sub, 2), true);
 		    break;
 		case "USERLIST":
 		    clientController.updateUserList(restOfArray(sub, 2));
 		    break;
 		case "LOGINFAIL":
-		    clientController.loginFailed();
+			loginController.loginFailed(sub[2]);
 		    break;
 		case "LOGINSUCCESS":
-		    clientController.loginSuccess();
+		    loginController.loginSuccess();
 		    break;
 
 		case "STATUSUPDATE":
-		    clientController.updateStatus(sub[2]);
+		    clientController.updateStatus(sub[2], sub[3]);
 		    break;
-
+		case "ERROR":
+		    clientController.showError(restOfArray(sub, 2));
+		    break;
 		default:
 		    throw new IllegalArgumentException("Bad protocol");
 	    }

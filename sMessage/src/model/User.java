@@ -64,6 +64,10 @@ public class User {
     public boolean isBusy() {
 	return busy;
     }
+
+    public String getStatus(){
+        return status ? (busy ? "Busy" : "Online") : "Offline";
+    }
     
     /**
      * Sets status as true.
@@ -72,8 +76,9 @@ public class User {
      * @throws LoginException 
      */
     public void login(String pswd) throws LoginException {
-	if (status) {
-	    throw new LoginException("Allready logged in!");
+
+        if (status) {
+            throw new LoginException("Allready logged in!");
 	}
 	if (!pswd.equals(this.pswd)) {
 	    throw new LoginException("Wrong password!");
@@ -83,6 +88,7 @@ public class User {
 
     @Override
     public String toString() {
+
 	return "User{" + "uname=" + uname + ", status=" + status + '}';
     }
 
