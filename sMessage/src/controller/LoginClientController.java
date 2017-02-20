@@ -11,10 +11,12 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,10 +41,6 @@ public class LoginClientController implements Initializable {
 
     @FXML
     private StackPane root;
-    @FXML
-    private Button btnLogin;
-    @FXML
-    private Button btnRegister;
     @FXML
     private TextField uname;
     @FXML
@@ -79,6 +77,7 @@ public class LoginClientController implements Initializable {
 	    Platform.exit();
 	    System.exit(0);
 	}
+
 	Label label = new Label("Wating on respons from server");
 	label.setFont(Font.font(18));
 	ProgressIndicator progIndicator = new ProgressIndicator();
@@ -86,7 +85,23 @@ public class LoginClientController implements Initializable {
 	vBoxOverlay = new VBox(label, progIndicator);
 	vBoxOverlay.setSpacing(10);
 	vBoxOverlay.setAlignment(Pos.CENTER);
+	root.getChildren().add(vBoxOverlay);
+	vBoxOverlay.setVisible(false);
 
+    }
+
+    public void loginSuccess() {
+	cController.setClient(client);
+	cController.setLeftLabelTest(uname.getText());
+	clientStage.show();
+	clientStage.setOnCloseRequest(event -> {
+	    try {
+		cController.getClient().disconnectServer();
+	    } catch (IOException ex) {
+		Logger.getLogger(LoginClientController.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	});
+	closeThisStage();
     }
 
     public void loginFailed(String reason) {
@@ -122,65 +137,63 @@ public class LoginClientController implements Initializable {
 	});
     }
 
-    public void loginSuccess() {
-
-	cController.setClient(client);
-	cController.setLeftLabelTest(uname.getText());
-	clientStage.show();
-	clientStage.setOnCloseRequest((WindowEvent event) -> {
-	    try {
-		cController.getClient().disconnectServer();
-	    } catch (IOException ex) {
-		Logger.getLogger(LoginClientController.class.getName()).log(Level.SEVERE, null, ex);
-	    }
-	});
-	closeThisStage();
-
+    public void regUserFailed() {
+	showError("User already exists. Please log in");
     }
 
     @FXML
     private void handleLoginBtn() {
-
-	try {
-	    if (uname.getText().matches("([\\w\\d])*")) {
-		showWaitingOverlay();
-		client = new Client(this, cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
-
-		try {
-		    client.login(uname.getText(), encrypt(passw.getText()));
-		} catch (Exception ex) {
-		    showError("Coding error, please report to the developers");
-		}
-
-	    } else {
-		showError("Uname can only contain letters and numbers");
-	    }
-	} catch (IOException ex) {
-	    showFatalError();
-	} catch (NumberFormatException ex) {
-	    showError("Empty field or wrong input");
-	}
+	showWaitingOverlay();
+	connectToServer(true);
     }
 
     @FXML
     private void handleRegBtn() {
+	showWaitingOverlay();
+	connectToServer(false);
+    }
+
+    private void connectToServer(boolean login) {
+	if (!uname.getText().matches("([\\w\\d])*")) {
+	    showError("Uname can only contain letters and numbers.");
+	    return;
+	}
+	if (passw.getText().trim().isEmpty()
+		|| serverIP.getText().trim().isEmpty()
+		|| portNumber.getText().trim().isEmpty()) {
+	    showError("One or more fields are empty.");
+	    return;
+	}
+	int port = 0;
 	try {
-	    if (uname.getText().matches("([\\w\\d])*")) {
-		showWaitingOverlay();
-		client = new Client(this, cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
-		try {
+	    port = Integer.parseInt(portNumber.getText());
+	} catch (NumberFormatException ex) {
+	    showError("Port number must be an integer number.");
+	    return;
+	}
+	if (port < 0 || port > 65536) {
+	    showError("Port number must be between 1 and 65535.");
+	    return;
+	}
+
+	try {
+	    client = new Client(this, cController, serverIP.getText(), port);
+	    try {
+		if (login) {
+		    client.login(uname.getText(), encrypt(passw.getText()));
+		} else {
 		    client.regNewUser(uname.getText(), encrypt(passw.getText()));
-		} catch (Exception ex) {
-		    showError("Coding error, please report to the developers");
 		}
-	    } else {
-		showError("Uname can only contain letters and numbers");
+	    } catch (Exception ex) {
+		showError("Coding error, please report to the developers");
 	    }
+
 	} catch (IOException ex) {
 	    showFatalError();
 	} catch (NumberFormatException ex) {
 	    showError("Empty field or wrong input");
 	}
+
     }
 
     private String encrypt(String encrypt) throws UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -190,37 +203,38 @@ public class LoginClientController implements Initializable {
 	return new String(digest);
     }
 
-    private void showError(String errorM) {
-	Alert alert = new Alert(Alert.AlertType.ERROR);
-	alert.setTitle("Error occurred");
-	alert.setHeaderText(errorM);
-	alert.showAndWait();
-    }
-
     private void showFatalError() {
 	Alert alert = new Alert(Alert.AlertType.ERROR);
 	alert.setTitle("Error occurred");
 	alert.setHeaderText("Could not connect to server.");
 	alert.showAndWait();
 	hideWaitingOverlay();
+    }
 
+    private void showError(String error) {
+	Alert alert = new Alert(Alert.AlertType.ERROR);
+	alert.setTitle("Error occurred");
+	alert.setHeaderText(error);
+	alert.showAndWait();
+	hideWaitingOverlay();
     }
 
     private void closeThisStage() {
 	//Grab a random element on the FXML-view so we get the Stage
 	//then close.
-	((Stage) btnLogin.getScene().getWindow()).close();
+	((Stage) root.getScene().getWindow()).close();
     }
 
     private void showWaitingOverlay() {
+
+	vBoxOverlay.setVisible(true);
 	//Disable all children of the vbox with content
 	vboxContainer.setDisable(true);
-	root.getChildren().add(vBoxOverlay);
     }
 
     private void hideWaitingOverlay() {
 	vboxContainer.setDisable(false);
-	root.getChildren().remove(vBoxOverlay);
+	vBoxOverlay.setVisible(false);
     }
 
 }

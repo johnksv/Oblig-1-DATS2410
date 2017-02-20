@@ -140,17 +140,19 @@ public class Client {
 		    clientController.updateUserList(restOfArray(sub, 2));
 		    break;
 		case "LOGINFAIL":
-			loginController.loginFailed(sub[2]);
+		    loginController.loginFailed(sub[2]);
 		    break;
 		case "LOGINSUCCESS":
 		    loginController.loginSuccess();
 		    break;
-
 		case "STATUSUPDATE":
 		    clientController.updateStatus(sub[2], sub[3]);
 		    break;
 		case "ERROR":
 		    clientController.showError(restOfArray(sub, 2));
+		    break;
+		case "REGUSERFAIL":
+		    loginController.regUserFailed();
 		    break;
 		default:
 		    throw new IllegalArgumentException("Bad protocol");
