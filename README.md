@@ -49,6 +49,7 @@ Kommandoer klient skal tolke
 - LOGINFAIL
 - LOGINSUCCESS
 - STATUSUPDATE
+- REGUSERFAIL
 
 
 Status codes are specifed in the enum Status.java
