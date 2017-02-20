@@ -311,7 +311,6 @@ public class ClientController implements Initializable {
 	txtAreaMessages.clear();
 	for (Message msg : activeConversation.getMessages()) {
 	    txtAreaMessages.appendText(msg.toString().replace("&#92", "\n").replace("&#59", ";"));
-	    txtAreaMessages.appendText("\n");
 	}
     }
 
@@ -330,15 +329,12 @@ public class ClientController implements Initializable {
 
     @FXML
     public void buttonPressed(KeyEvent e) {
-
-	if (e.getCode().toString().equals("ENTER")) {
-
-	    if (txtAreaNewMessage.isFocused() && !e.isShiftDown() && e.getCode().equals(KeyCode.ENTER)) {
-		handleSendMsg();
-		txtAreaNewMessage.clear();
-		e.consume();
-	    }
-	}
-
+        if (e.isShiftDown() && e.getCode().toString().equals("ENTER")) {
+            txtAreaNewMessage.appendText("\n");
+        } else if (e.getCode().toString().equals("ENTER")) {
+            handleSendMsg();
+            txtAreaNewMessage.clear();
+            e.consume();
+        }
     }
 }
