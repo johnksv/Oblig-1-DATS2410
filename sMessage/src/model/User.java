@@ -64,6 +64,10 @@ public class User {
     public boolean isBusy() {
 	return busy;
     }
+
+    public String getStatus(){
+        return status ? (busy ? "Busy" : "Online") : "Offline";
+    }
     
     /**
      * Sets status as true.

@@ -130,6 +130,7 @@ public final class Server {
                 for (User u : userList) {
                     if (u.getUname().equals(uname)) {
                         u.logOff();
+                        serverController.updateStatus();
                     }
                 }
             } catch (IOException e) {
@@ -255,6 +256,7 @@ public final class Server {
                             logIn(sub);
                             sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
                             sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
+                            serverController.updateStatus();
                         } catch (LoginException e) {
                             sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
                         }
@@ -347,6 +349,7 @@ public final class Server {
                 if (u.getUname().equals(sub[2])) {
                     u.login(sub[3]);
                     uname = sub[2];
+
                     return;
                 }
             }
