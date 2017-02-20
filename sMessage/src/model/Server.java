@@ -24,12 +24,6 @@ public final class Server {
     private boolean running = true;
     private ServerController serverController;
 
-    public Server(ServerController serverController) throws IOException {
-        this.serverController = serverController;
-        server = new ServerSocket();
-        start();
-    }
-
     public Server(ServerController serverController, int port) throws IOException {
         this.serverController = serverController;
         server = new ServerSocket(port);
@@ -65,6 +59,9 @@ public final class Server {
     public void banIP(String uname) {
     }
 
+    /**
+     * Creates a thread that listens for new connections.
+     */
     public void start() {
 
         new Thread(() -> {
@@ -82,20 +79,32 @@ public final class Server {
         }).start();
     }
 
+    /**
+     * Closes server
+     * @throws IOException if server.close fails
+     */
     public void stop() throws IOException {
         running = false;
         server.close();
-
     }
 
+    /**
+     * Returns Server
+     * @return server to be returned
+     */
     public ServerSocket getServer() {
         return server;
     }
 
+    /**
+     * Returns the port of the server socket
+     * @return the port
+     */
     public String getPort() {
         return Integer.toString(server.getLocalPort());
     }
 
+    //TODO javadoc
     private class SocketInstanse extends Thread {
 
         private final Socket socket;
@@ -103,6 +112,11 @@ public final class Server {
         private String uname;
         private ArrayList<SocketInstanse> openConnections = new ArrayList<>();
 
+        /**
+         * Takes in socket, stores output stream in field "out"
+         * @param s
+         * @throws IOException
+         */
         public SocketInstanse(Socket s) throws IOException {
             socket = s;
             out = new BufferedWriter(new PrintWriter(socket.getOutputStream()));
@@ -244,7 +258,7 @@ public final class Server {
                             sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
                             sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
                         } else {
-                            sendCommandFromServer("TYPE 0", Command.ERROR, "Could not create user");
+                            sendCommandFromServer("TYPE 0", Command.REGUSERFAIL);
                         }
 
                         break;
