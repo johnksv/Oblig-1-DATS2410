@@ -126,7 +126,12 @@ public class ClientController implements Initializable {
         alert.setContentText(contentText);
         alert.showAndWait();
     }
-
+    
+    /**
+     * Stores message string in conversation
+     * @param userName
+     * @param msg 
+     */
     public void addMessageToConversation(String userName, Message msg) {
         for (Conversation cnv : friendList) {
             if (cnv.getTalkingWithUsername().equals(userName)) {
@@ -144,6 +149,10 @@ public class ClientController implements Initializable {
                 "This should not happen. Server should have control over this.");
     }
 
+    /**
+     * 
+     * @param restOfArray 
+     */
     public void updateUserList(String restOfArray) {
         if (restOfArray.equals("")) {
             return;
@@ -154,10 +163,19 @@ public class ClientController implements Initializable {
         }
     }
 
+    /**
+     * Shows alert box 
+     * @param restOfArray 
+     */    
     public void showError(String restOfArray) {
         showAlertBoxError("Server error", restOfArray);
     }
-
+    
+    /**
+     * Updates user status to offline, busy or online in user and fiend list.
+     * @param username
+     * @param status 
+     */
     public void updateStatus(String username, String status) {
         ClientUser user = new ClientUser(username, status);
         Conversation con = new Conversation(user);
@@ -221,6 +239,11 @@ public class ClientController implements Initializable {
         }
     }
 
+    /**
+     * Moves user from userlist to friendslist
+     * @param username
+     * @param showAlert 
+     */
     public void moveFromUsersToFriends(String username, boolean showAlert) {
         removing = true;
         for (int i = 0; i < userList.size(); i++) {
@@ -245,8 +268,13 @@ public class ClientController implements Initializable {
             alert.show();
         }
     }
-
-    public void moveFromFriendsToUser(String username, boolean showAlert) {
+    
+    /**
+     * Moves user from friend list to user list
+     * @param username
+     * @param showAlert 
+     */
+   public void moveFromFriendsToUser(String username, boolean showAlert) {
         removing = true;
         for (int i = 0; i < friendList.size(); i++) {
             if (friendList.get(i).getTalkingWithUsername().equals(username)) {
@@ -269,13 +297,22 @@ public class ClientController implements Initializable {
 
     }
 
+    /**
+     * Displays alert box if a user rejects clients connection request
+     * @param username 
+     */
     public void negativeResponse(String username) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Rejected");
         alert.setContentText(username + " doesn't want to talk with you...");
-
+        
+        alert.show();
     }
-
+    /**
+     * Sets client
+     * @param client 
+     */
+    
     public void setClient(Client client) {
         this.client = client;
         try {

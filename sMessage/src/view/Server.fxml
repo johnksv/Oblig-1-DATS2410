@@ -59,7 +59,7 @@
                </padding>
             </HBox>
             <Separator orientation="VERTICAL" />
-            <Region prefHeight="27.0" prefWidth="50.0" />
+            <Region prefHeight="27.0" prefWidth="15.0" />
             <HBox alignment="CENTER_LEFT" minWidth="200.0" prefHeight="27.0" prefWidth="200.0">
                <children>
                   <Label text="IP : ">
@@ -67,7 +67,7 @@
                         <Insets />
                      </HBox.margin>
                   </Label>
-                   <Label fx:id="ipLabel" prefWidth="50.0">
+                   <Label fx:id="ipLabel" prefHeight="17.0" prefWidth="85.0">
                        <HBox.margin>
                            <Insets />
                        </HBox.margin>
