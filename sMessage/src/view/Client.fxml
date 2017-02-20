@@ -41,7 +41,7 @@
               </Menu>
             </menus>
           </MenuBar>
-            <SplitPane dividerPositions="0.3" prefWidth="900.0">
+            <SplitPane fx:id="split" dividerPositions="0.3" prefWidth="900.0">
                <items>
                   <VBox>
                      <children>
@@ -76,7 +76,7 @@
                                     </HBox>
                                     <TableView fx:id="tvUsers" prefHeight="350.0">
                                       <columns>
-                                          <TableColumn fx:id="columnUsernameStatus" editable="false" minWidth="50.0" prefWidth="50.0" resizable="false" text="Status" />
+                                          <TableColumn fx:id="columnUsernameStatus" editable="false" minWidth="60.0" prefWidth="-1.0" text="Status" />
                                         <TableColumn fx:id="columnUsername" editable="false" minWidth="100.0" prefWidth="190.0" text="Online users" />
                                       </columns>
                                     </TableView>

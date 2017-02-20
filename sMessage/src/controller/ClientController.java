@@ -38,6 +38,8 @@ public class ClientController implements Initializable {
     private TextArea txtAreaMessages;
     @FXML
     private TextArea txtAreaNewMessage;
+    @FXML
+    private SplitPane split;
 
     private final ObservableList<Conversation> friendList = FXCollections.observableList(new ArrayList<>());
     private final ObservableList<ClientUser> userList = FXCollections.observableList(new ArrayList<>());
@@ -76,6 +78,8 @@ public class ClientController implements Initializable {
         tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
             sendRequest();
         });
+        tvFriends.prefWidthProperty().bind(split.widthProperty());
+        tvUsers.prefWidthProperty().bind(split.widthProperty());
 
     }
 
