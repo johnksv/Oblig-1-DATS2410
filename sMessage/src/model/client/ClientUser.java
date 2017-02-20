@@ -1,20 +1,16 @@
 package model.client;
 
-import model.Client;
+import java.util.Objects;
+
 
 /**
- * Created by trulsstenrud on 17/02/2017.
+ * @author s305046, s305080, s305084, s305089
  */
 public class ClientUser {
     private Status status;
     private final String userName;
-    private ClientUser user;
 
 
-   /* public ClientUser(String userName){
-        this.userName = userName;
-        status = Status.ONLINE;
-    }*/
     public ClientUser(String userName, String status){
         this.userName = userName;
         switch(status){
@@ -35,8 +31,8 @@ public class ClientUser {
         return status;
     }
 
-    public void setStatus(){
-
+    public void setStatus(Status status){
+        this.status = status;
     }
 
     public String getUserName() {
@@ -48,7 +44,10 @@ public class ClientUser {
         return obj instanceof ClientUser && ((ClientUser) obj).getUserName().equals(getUserName());
     }
 
-    public ClientUser getUser() {
-        return user;
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.userName);
+        return hash;
     }
 }
