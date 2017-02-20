@@ -16,13 +16,11 @@ import model.client.Message;
  */
 public class Client {
 
-    Socket clientsocket;
-    BufferedWriter outToServer;
-    BufferedReader inFromServer;
-    ClientController clientController;
-    LoginClientController loginController;
-    private InetAddress ip;
-    private int portNr;
+    private Socket clientsocket;
+    private BufferedWriter outToServer;
+    private BufferedReader inFromServer;
+    private ClientController clientController;
+    private LoginClientController loginController;
 
     public Client(LoginClientController loginController, ClientController clientController, String ip, int port) throws IOException {
 	this.clientController = clientController;
@@ -65,6 +63,7 @@ public class Client {
     }
 
     public void disconnectServer() throws IOException {
+	System.out.println("Loging off and shuting down socket.");
 	sendCommandToServer("TYPE 0", Command.LOGOFF);
 	shutdown();
     }
