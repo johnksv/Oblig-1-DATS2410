@@ -17,5 +17,5 @@ public enum Command {
     LOGINFAIL,      // ,
     LOGINSUCCESS,   // ,
     LOGOFF,         //
-    ERROR           //
+    REGUSERFAIL, ERROR           //
 }
