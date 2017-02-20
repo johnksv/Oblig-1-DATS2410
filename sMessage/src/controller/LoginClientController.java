@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -56,6 +57,7 @@ public class LoginClientController implements Initializable {
     private ClientController cController;
     private Stage clientStage = new Stage();
     private FXMLLoader loader;
+    private Client client;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -84,22 +86,82 @@ public class LoginClientController implements Initializable {
 
     }
 
+    public void loginFailed() {
+	//This is a label as defined in the initilaizer
+	((Label) vBoxOverlay.getChildren().get(0)).setText("Login failed. Wrong username or password");
+	//Remove the progress indicator
+	vBoxOverlay.getChildren().remove(1);
+
+	Button tryAgain = new Button("Try again");
+	Button close = new Button("Close");
+	HBox hbox = new HBox(tryAgain, close);
+	hbox.setSpacing(5);
+	hbox.setAlignment(Pos.CENTER);
+	vBoxOverlay.getChildren().add(hbox);
+
+	tryAgain.setOnAction(event -> {
+	    try {
+		hideWaitingOverlay();
+		client.shutdown();
+	    } catch (IOException ex) {
+		showError("An I/O error occured. Please try again");
+	    }
+	});
+
+	close.setOnAction(event -> {
+	    try {
+		client.shutdown();
+	    } catch (IOException ex) {
+		System.err.println("I/O Exception while shutingdown client.\n" + ex.toString());
+	    }
+	    Platform.exit();
+	    System.exit(-1);
+	});
+    }
+
+    public void loginSuccess() {
+	cController.setClient(client);
+	cController.setLeftLabelTest(uname.getText());
+	clientStage.show();
+	closeThisStage();
+
+    }
+
     @FXML
     private void handleLoginBtn() {
 
 	try {
 	    if (uname.getText().matches("([\\w\\d])*")) {
 		showWaitingOverlay();
-		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+		client = new Client(this, cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
 
 		try {
 		    client.login(uname.getText(), encrypt(passw.getText()));
 		} catch (Exception ex) {
 		    showError("Coding error, please report to the developers");
 		}
-		cController.setClient(client);
-		clientStage.show();
-		closeThisStage();
+		loginSuccess();
+	    } else {
+		showError("Uname can only contain letters and numbers");
+	    }
+	} catch (IOException ex) {
+	    showFatalError();
+	} catch (NumberFormatException ex) {
+	    showError("Empty field or wrong input");
+	}
+    }
+
+    @FXML
+    private void handleRegBtn() {
+	try {
+	    if (uname.getText().matches("([\\w\\d])*")) {
+		showWaitingOverlay();
+		client = new Client(this, cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
+		try {
+		    client.regNewUser(uname.getText(), encrypt(passw.getText()));
+		} catch (Exception ex) {
+		    showError("Coding error, please report to the developers");
+		}
 	    } else {
 		showError("Uname can only contain letters and numbers");
 	    }
@@ -115,30 +177,6 @@ public class LoginClientController implements Initializable {
 	md.update(encrypt.getBytes("UTF-16"));
 	byte[] digest = md.digest();
 	return new String(digest);
-    }
-
-    @FXML
-    private void handleRegBtn() {
-	try {
-	    if (uname.getText().matches("([\\w\\d])*")) {
-		showWaitingOverlay();
-		Client client = new Client(cController, serverIP.getText(), Integer.parseInt(portNumber.getText()));
-		try {
-		    client.regNewUser(uname.getText(), encrypt(passw.getText()));
-		} catch (Exception ex) {
-		    showError("Coding error, please report to the developers");
-		}
-		cController.setClient(client);
-		clientStage.show();
-		closeThisStage();
-	    } else {
-		showError("Uname can only contain letters and numbers");
-	    }
-	} catch (IOException ex) {
-	    showFatalError();
-	} catch (NumberFormatException ex) {
-	    showError("Empty field or wrong input");
-	}
     }
 
     private void showError(String errorM) {

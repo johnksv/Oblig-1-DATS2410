@@ -1,6 +1,7 @@
 package model;
 
 import controller.ClientController;
+import controller.LoginClientController;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -19,11 +20,13 @@ public class Client {
     BufferedWriter outToServer;
     BufferedReader inFromServer;
     ClientController clientController;
+    LoginClientController loginController;
     private InetAddress ip;
     private int portNr;
 
-    public Client(ClientController clientController, String ip, int port) throws IOException {
+    public Client(LoginClientController loginController, ClientController clientController, String ip, int port) throws IOException {
 	this.clientController = clientController;
+	this.loginController = loginController;
 	clientsocket = new Socket(ip, port);
 	outToServer = new BufferedWriter(new PrintWriter(clientsocket.getOutputStream()));
 	inFromServer = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
@@ -38,6 +41,7 @@ public class Client {
 		while ((input = inFromServer.readLine()) != null) {
 
 		    final String finalInput = input;
+		    //The parsing and actions should be done on the JavaFX thread
 		    Platform.runLater(() -> {
 			try {
 			    parseCommand(finalInput);
@@ -62,6 +66,10 @@ public class Client {
 
     public void disconnectServer() throws IOException {
 	sendCommandToServer("TYPE 0", Command.LOGOFF);
+	shutdown();
+    }
+
+    public void shutdown() throws IOException {
 	outToServer.close();
 	inFromServer.close();
 	//TODO: Check if we should warn the server that we are closing first, then wait.
@@ -133,18 +141,18 @@ public class Client {
 		    clientController.updateUserList(restOfArray(sub, 2));
 		    break;
 		case "LOGINFAIL":
-		    clientController.loginFailed();
+		    loginController.loginFailed();
 		    break;
 		case "LOGINSUCCESS":
-		    clientController.loginSuccess();
+		    loginController.loginSuccess();
 		    break;
 
 		case "STATUSUPDATE":
 		    clientController.updateStatus(sub[2], sub[3]);
 		    break;
-                case "ERROR":
-                    clientController.loginFailed();
-                    break;
+		case "ERROR":
+		    clientController.showError(restOfArray(sub, 2));
+		    break;
 		default:
 		    throw new IllegalArgumentException("Bad protocol");
 	    }
