@@ -69,6 +69,8 @@ public class Client {
     }
 
     public void shutdown() throws IOException {
+	clientsocket.shutdownInput();
+	clientsocket.shutdownOutput();
 	outToServer.close();
 	inFromServer.close();
 	//TODO: Check if we should warn the server that we are closing first, then wait.

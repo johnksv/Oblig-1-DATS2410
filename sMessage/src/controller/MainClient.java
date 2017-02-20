@@ -12,13 +12,13 @@ import javafx.stage.Stage;
  * @author s305046, s305080, s305084, s305089
  */
 public class MainClient extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
 	Parent root = FXMLLoader.load(getClass().getResource("/view/LoginClient.fxml"));
-	
+
 	Scene scene = new Scene(root);
-	
+
 	stage.setScene(scene);
 	stage.show();
     }
@@ -27,7 +27,7 @@ public class MainClient extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-	    launch(args);
+	launch(args);
     }
-    
+
 }
