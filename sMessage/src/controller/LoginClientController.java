@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.io.IOException;
@@ -33,9 +28,8 @@ import javafx.stage.WindowEvent;
 import model.Client;
 
 /**
- * FXML Controller class
  *
- * @author Benjamin
+ * @author s305046, s305080, s305084, s305089
  */
 public class LoginClientController implements Initializable {
 
@@ -144,13 +138,13 @@ public class LoginClientController implements Initializable {
     @FXML
     private void handleLoginBtn() {
 	showWaitingOverlay();
-	connectToServer(true);
+	new Thread(() -> connectToServer(true)).start();
     }
 
     @FXML
     private void handleRegBtn() {
 	showWaitingOverlay();
-	connectToServer(false);
+	new Thread(() -> connectToServer(false)).start();
     }
 
     private void connectToServer(boolean login) {
@@ -204,19 +198,23 @@ public class LoginClientController implements Initializable {
     }
 
     private void showFatalError() {
-	Alert alert = new Alert(Alert.AlertType.ERROR);
-	alert.setTitle("Error occurred");
-	alert.setHeaderText("Could not connect to server.");
-	alert.showAndWait();
-	hideWaitingOverlay();
+	Platform.runLater(() -> {
+	    Alert alert = new Alert(Alert.AlertType.ERROR);
+	    alert.setTitle("Error occurred");
+	    alert.setHeaderText("Could not connect to server.");
+	    alert.showAndWait();
+	    hideWaitingOverlay();
+	});
     }
 
     private void showError(String error) {
-	Alert alert = new Alert(Alert.AlertType.ERROR);
-	alert.setTitle("Error occurred");
-	alert.setHeaderText(error);
-	alert.showAndWait();
-	hideWaitingOverlay();
+	Platform.runLater(() -> {
+	    Alert alert = new Alert(Alert.AlertType.ERROR);
+	    alert.setTitle("Error occurred");
+	    alert.setHeaderText(error);
+	    alert.showAndWait();
+	    hideWaitingOverlay();
+	});
     }
 
     private void closeThisStage() {
