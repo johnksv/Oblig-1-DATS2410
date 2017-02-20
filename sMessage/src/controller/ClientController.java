@@ -311,6 +311,7 @@ public class ClientController implements Initializable {
 	txtAreaMessages.clear();
 	for (Message msg : activeConversation.getMessages()) {
 	    txtAreaMessages.appendText(msg.toString().replace("&#92", "\n").replace("&#59", ";"));
+            txtAreaMessages.appendText("\n");
 	}
     }
 
