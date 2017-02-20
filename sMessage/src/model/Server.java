@@ -113,7 +113,7 @@ public final class Server {
         private ArrayList<SocketInstanse> openConnections = new ArrayList<>();
 
         /**
-         *
+         * Takes in socket, stores output stream in field "out"
          * @param s
          * @throws IOException
          */
