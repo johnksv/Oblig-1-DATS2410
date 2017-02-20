@@ -264,6 +264,7 @@ public final class Server {
                     case "LOGOFF":
                         sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "0");
                         logOff();
+                        serverController.updateStatus();
                         break;
                     case "CONNECT":
                         connectTo(sub[2]);
