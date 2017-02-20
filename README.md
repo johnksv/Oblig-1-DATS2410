@@ -3,7 +3,7 @@ First mandatory assignment in DATS 2410 - Network and cloud computing
 
 
 ##Implementasjon
-	Server pinger klienter for å sjekke status
+Server based chat application. Each user connects to a server that keeps control over all active users, and corectly route messages to the correct reciver.
 	
 	
 
