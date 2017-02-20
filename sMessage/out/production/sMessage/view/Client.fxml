@@ -22,7 +22,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
    <children>
       <VBox fx:id="vboxContainer" prefHeight="600.0" prefWidth="900.0">
         <children>
@@ -97,7 +97,7 @@
                               </Separator>
                               <HBox prefHeight="110.0" prefWidth="676.0">
                                  <children>
-                                    <TextArea fx:id="txtAreaNewMessage" prefHeight="110.0" prefWidth="601.0" />
+                                    <TextArea fx:id="txtAreaNewMessage" onKeyPressed="#buttonPressed" prefHeight="110.0" prefWidth="601.0" />
                                     <AnchorPane prefWidth="72.0">
                                        <children>
                                           <Button fx:id="btnSend" mnemonicParsing="false" onAction="#handleSendMsg" prefHeight="27.0" prefWidth="69.0" text="Send" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" />

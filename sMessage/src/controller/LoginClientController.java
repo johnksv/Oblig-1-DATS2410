@@ -86,9 +86,9 @@ public class LoginClientController implements Initializable {
 
     }
 
-    public void loginFailed() {
+    public void loginFailed(String reason) {
 	//This is a label as defined in the initilaizer
-	((Label) vBoxOverlay.getChildren().get(0)).setText("Login failed. Wrong username or password");
+	((Label) vBoxOverlay.getChildren().get(0)).setText(reason);
 	//Remove the progress indicator
 	vBoxOverlay.getChildren().remove(1);
 
@@ -120,6 +120,7 @@ public class LoginClientController implements Initializable {
     }
 
     public void loginSuccess() {
+
 	cController.setClient(client);
 	cController.setLeftLabelTest(uname.getText());
 	clientStage.show();
@@ -140,7 +141,7 @@ public class LoginClientController implements Initializable {
 		} catch (Exception ex) {
 		    showError("Coding error, please report to the developers");
 		}
-		loginSuccess();
+
 	    } else {
 		showError("Uname can only contain letters and numbers");
 	    }

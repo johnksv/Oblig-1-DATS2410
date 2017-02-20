@@ -141,7 +141,7 @@ public class Client {
 		    clientController.updateUserList(restOfArray(sub, 2));
 		    break;
 		case "LOGINFAIL":
-		    loginController.loginFailed();
+			loginController.loginFailed(sub[2]);
 		    break;
 		case "LOGINSUCCESS":
 		    loginController.loginSuccess();
