@@ -258,7 +258,7 @@ public final class Server {
                             sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
                             serverController.updateStatus();
                         } catch (LoginException e) {
-                            sendCommandFromServer("TYPE 0", Command.LOGINFAIL);
+                            sendCommandFromServer("TYPE 0", Command.LOGINFAIL, e.getMessage());
                         }
                         break;
                     case "LOGOFF":
@@ -347,6 +347,7 @@ public final class Server {
 
         private void logIn(String[] sub) throws LoginException {
             for (User u : userList) {
+                System.out.println("Comparing " + u.getUname() + " to " + sub[2]);
                 if (u.getUname().equals(sub[2])) {
                     u.login(sub[3]);
                     uname = sub[2];

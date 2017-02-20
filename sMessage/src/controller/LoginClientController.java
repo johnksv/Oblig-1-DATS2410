@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.Client;
 
 /**
@@ -72,9 +74,10 @@ public class LoginClientController implements Initializable {
 	    clientStage.setMinHeight(650);
 
 	} catch (IOException ex) {
-	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+	    System.err.println("IOException occured. Exiting. Error:\n" + ex.toString());
+	    System.err.println(ex.getStackTrace().toString());
 	    Platform.exit();
-	    System.exit(1);
+	    System.exit(0);
 	}
 	Label label = new Label("Wating on respons from server");
 	label.setFont(Font.font(18));
@@ -86,9 +89,9 @@ public class LoginClientController implements Initializable {
 
     }
 
-    public void loginFailed() {
+    public void loginFailed(String reason) {
 	//This is a label as defined in the initilaizer
-	((Label) vBoxOverlay.getChildren().get(0)).setText("Login failed. Wrong username or password");
+	((Label) vBoxOverlay.getChildren().get(0)).setText(reason);
 	//Remove the progress indicator
 	vBoxOverlay.getChildren().remove(1);
 
@@ -120,9 +123,17 @@ public class LoginClientController implements Initializable {
     }
 
     public void loginSuccess() {
+
 	cController.setClient(client);
 	cController.setLeftLabelTest(uname.getText());
 	clientStage.show();
+	clientStage.setOnCloseRequest((WindowEvent event) -> {
+	    try {
+		cController.getClient().disconnectServer();
+	    } catch (IOException ex) {
+		Logger.getLogger(LoginClientController.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	});
 	closeThisStage();
 
     }
@@ -140,7 +151,7 @@ public class LoginClientController implements Initializable {
 		} catch (Exception ex) {
 		    showError("Coding error, please report to the developers");
 		}
-		loginSuccess();
+
 	    } else {
 		showError("Uname can only contain letters and numbers");
 	    }
