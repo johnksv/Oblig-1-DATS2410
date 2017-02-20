@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
    <children>
       <VBox fx:id="vboxContainer" prefHeight="600.0" prefWidth="900.0">
         <children>
@@ -61,14 +61,10 @@
                            <content>
                               <VBox>
                                  <children>
-                                    <HBox prefHeight="31.0">
+                                    <HBox alignment="CENTER_RIGHT" prefHeight="31.0" spacing="10.0">
                                        <children>
-                                          <TextField prefHeight="25.0" prefWidth="123.0" promptText="Search" />
-                                          <Button mnemonicParsing="false" text="Button">
-                                             <HBox.margin>
-                                                <Insets left="5.0" />
-                                             </HBox.margin>
-                                          </Button>
+                                          <Label text="Search:" />
+                                          <TextField fx:id="textFieldSearch" prefHeight="25.0" prefWidth="123.0" promptText="Search" />
                                        </children>
                                        <padding>
                                           <Insets left="2.0" top="2.0" />
