@@ -42,6 +42,8 @@ public class ClientController implements Initializable {
     private TextArea txtAreaNewMessage;
     @FXML
     private TextField textFieldSearch;
+    @FXML
+    private SplitPane split;
 
     private final ObservableList<Conversation> friendList = FXCollections.observableList(new ArrayList<>());
     private final ObservableList<ClientUser> userList = FXCollections.observableList(new ArrayList<>());
@@ -92,6 +94,9 @@ public class ClientController implements Initializable {
 	SortedList<ClientUser> sortList = new SortedList<>(filteredList);
 	sortList.comparatorProperty().bind(tvUsers.comparatorProperty());
 	tvUsers.setItems(sortList);
+
+	tvFriends.prefWidthProperty().bind(split.widthProperty());
+	tvUsers.prefWidthProperty().bind(split.widthProperty());
     }
 
     private void sendRequest() {
