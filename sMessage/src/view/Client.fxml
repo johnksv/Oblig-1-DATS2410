@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientController">
    <children>
       <VBox fx:id="vboxContainer" prefHeight="600.0" prefWidth="900.0">
         <children>
@@ -76,7 +76,7 @@
                                     </HBox>
                                     <TableView fx:id="tvUsers" prefHeight="350.0">
                                       <columns>
-                                          <TableColumn fx:id="columnStatus" editable="false" minWidth="50.0" prefWidth="50.0" resizable="false" text="Status" />
+                                          <TableColumn fx:id="columnUsernameStatus" editable="false" minWidth="50.0" prefWidth="50.0" resizable="false" text="Status" />
                                         <TableColumn fx:id="columnUsername" editable="false" minWidth="100.0" prefWidth="190.0" text="Online users" />
                                       </columns>
                                     </TableView>
