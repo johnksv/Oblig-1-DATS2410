@@ -24,12 +24,6 @@ public final class Server {
     private boolean running = true;
     private ServerController serverController;
 
-    public Server(ServerController serverController) throws IOException {
-        this.serverController = serverController;
-        server = new ServerSocket();
-        start();
-    }
-
     public Server(ServerController serverController, int port) throws IOException {
         this.serverController = serverController;
         server = new ServerSocket(port);
