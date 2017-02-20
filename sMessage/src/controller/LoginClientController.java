@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.Client;
 
 /**
@@ -72,9 +74,10 @@ public class LoginClientController implements Initializable {
 	    clientStage.setMinHeight(650);
 
 	} catch (IOException ex) {
-	    System.err.println("IOException occured. Exiting.\nError:\n" + ex.toString());
+	    System.err.println("IOException occured. Exiting. Error:\n" + ex.toString());
+	    System.err.println(ex.getStackTrace().toString());
 	    Platform.exit();
-	    System.exit(1);
+	    System.exit(0);
 	}
 	Label label = new Label("Wating on respons from server");
 	label.setFont(Font.font(18));
@@ -123,6 +126,13 @@ public class LoginClientController implements Initializable {
 	cController.setClient(client);
 	cController.setLeftLabelTest(uname.getText());
 	clientStage.show();
+	clientStage.setOnCloseRequest((WindowEvent event) -> {
+	    try {
+		cController.getClient().disconnectServer();
+	    } catch (IOException ex) {
+		Logger.getLogger(LoginClientController.class.getName()).log(Level.SEVERE, null, ex);
+	    }
+	});
 	closeThisStage();
 
     }
