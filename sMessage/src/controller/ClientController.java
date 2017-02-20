@@ -261,7 +261,7 @@ public class ClientController implements Initializable {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Rejected");
         alert.setContentText(username + " doesn't want to talk with you...");
-        
+        alert.show();
     }
     
     public void setClient(Client client) {
