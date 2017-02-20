@@ -3,32 +3,15 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javafx.application.Platform;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.*;
 import javafx.collections.*;
-import javafx.event.EventHandler;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import model.Client;
-import model.client.ClientUser;
-import model.client.Conversation;
-import model.client.Message;
+import model.client.*;
 
 /**
  * FXML Controller class
@@ -37,10 +20,6 @@ import model.client.Message;
  */
 public class ClientController implements Initializable {
 
-    @FXML
-    private StackPane root;
-    @FXML
-    private VBox vboxContainer;
     @FXML
     private TableView tvFriends;
     @FXML
@@ -54,15 +33,12 @@ public class ClientController implements Initializable {
     @FXML
     private Label labelTalkingWIth;
     @FXML
-    private Button btnKick;
-    @FXML
     private TextArea txtAreaMessages;
     @FXML
     private TextArea txtAreaNewMessage;
 
     private final ObservableList<Conversation> friendList = FXCollections.observableList(new ArrayList<>());
     private final ObservableList<ClientUser> userList = FXCollections.observableList(new ArrayList<>());
-    private VBox vBoxOverlay;
 
     private Client client;
     private Conversation activeConversation;
@@ -291,6 +267,18 @@ public class ClientController implements Initializable {
 	}
     }
 
+    private void appendMsgToConversation() {
+
+	txtAreaMessages.clear();
+	for (Message msg : activeConversation.getMessages()) {
+	    txtAreaMessages.appendText(msg.toString().replace("&#92", "\n").replace("&#59", ";"));
+	}
+    }
+
+    public void setLeftLabelTest(String text) {
+	labelLeftStatus.setText("Your username: " + text);
+    }
+
     @FXML
     private void handleSendMsg() {
 	try {
@@ -303,14 +291,6 @@ public class ClientController implements Initializable {
 	    }
 	} catch (IOException ex) {
 	    showAlertIOException(ex);
-	}
-    }
-
-    private void appendMsgToConversation() {
-
-	txtAreaMessages.clear();
-	for (Message msg : activeConversation.getMessages()) {
-	    txtAreaMessages.appendText(msg.toString().replace("&#92", "\n").replace("&#59", ";"));
 	}
     }
 
@@ -329,12 +309,12 @@ public class ClientController implements Initializable {
 
     @FXML
     public void buttonPressed(KeyEvent e) {
-        if (e.isShiftDown() && e.getCode().toString().equals("ENTER")) {
-            txtAreaNewMessage.appendText("\n");
-        } else if (e.getCode().toString().equals("ENTER")) {
-            handleSendMsg();
-            txtAreaNewMessage.clear();
-            e.consume();
-        }
+	if (e.isShiftDown() && e.getCode().toString().equals("ENTER")) {
+	    txtAreaNewMessage.appendText("\n");
+	} else if (e.getCode().toString().equals("ENTER")) {
+	    handleSendMsg();
+	    txtAreaNewMessage.clear();
+	    e.consume();
+	}
     }
 }
