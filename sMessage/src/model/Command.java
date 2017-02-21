@@ -53,7 +53,7 @@ public enum Command {
      */
     LOGINSUCCESS,
     /**
-     * Is used to tell the server that te user of this SocketInstance is logging off.
+     * Is used to tell the server that the user of this SocketInstance is logging off.
      */
     LOGOFF,
     /**
