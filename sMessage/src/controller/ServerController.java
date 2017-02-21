@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,12 +26,13 @@ import model.User;
 
 /**
  * Controller for the Server screen.
+ *
  * @author s305046, s305080, s305084, s305089
  */
 public class ServerController implements Initializable {
 
     @FXML
-    public Label ipLabel;
+    private Label ipLabel;
     @FXML
     private Label portLabel;
     @FXML
@@ -55,7 +57,6 @@ public class ServerController implements Initializable {
     private Server server;
     private boolean serverRunning = false;
     private final ObservableList<User> userList = FXCollections.observableList(new ArrayList<>());
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -111,16 +112,27 @@ public class ServerController implements Initializable {
         canvasServerStatus.getGraphicsContext2D().fillOval(0, 0, 16, 16);
     }
 
-    public void printWarning(String s) {
-
+    /**
+     * Prints warning to the server admin.
+     *
+     * @param warning
+     */
+    public void printWarning(String warning) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(warning);
+            alert.showAndWait();
+        });
     }
 
-    public void update(Command command, User user) {
-        switch (command) {
-            case REGUSER:
-                userList.add(user);
-                break;
-        }
+    /**
+     * Adds new user to the list of users.
+     *
+     * @param user User to add.
+     */
+    public void addNewUser(User user) {
+        userList.add(user);
     }
 
     @FXML
@@ -176,6 +188,9 @@ public class ServerController implements Initializable {
         drawServerStatus();
     }
 
+    /**
+     * Refreshes the TableView. The TableView listing all users status.
+     */
     public void updateStatus() {
         tableViewUsers.refresh();
     }
