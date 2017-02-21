@@ -218,14 +218,14 @@ public final class Server {
 	    System.arraycopy(lines, 0, newCommand, 2, lines.length);
 	    sendCommandFromServer(newCommand);
 	}
-	private void sendUpdateToAll(String type, Command command, String... lines) throws IOException {
+	private void sendUpdateToAll(Command command, String... lines) throws IOException {
 	    for (SocketInstanse user : onlineClients) {
 		if (user.uname != null) {
 		    if (user.uname.equals(this.uname)) {
 			continue;
 		    }
 
-		    user.out.write(type + ";" + command.toString() + ";");
+		    user.out.write("TYPE 0" + ";" + command.toString() + ";");
 		    for (int i = 0; i < lines.length - 1; i++) {
 			user.out.write(lines[i] + ";");
 		    }
@@ -238,74 +238,77 @@ public final class Server {
 
 	private void parseCommand(String s) throws IOException {
 	    String[] sub = s.split(";");
-	    if (sub[0].equals("TYPE 0")) {
-		switch (sub[1]) {
-		    case "REGUSER":
-			if (regNewUser(sub[2], sub[3])) {
-			    uname = sub[2];
-			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
-			    sendCommandFromServer(Command.LOGINSUCCESS);
-			} else {
-			    sendCommandFromServer(Command.REGUSERFAIL);
-			}
+        switch (sub[0]) {
+            case "TYPE 0":
+                switch (sub[1]) {
+                    case "REGUSER":
+                        if (regNewUser(sub[2], sub[3])) {
+                            uname = sub[2];
+                            sendUpdateToAll(Command.STATUSUPDATE, uname, "+");
+                            sendCommandFromServer(Command.LOGINSUCCESS);
+                        } else {
+                            sendCommandFromServer(Command.REGUSERFAIL);
+                        }
 
-			break;
-		    case "GETUSERS":
-			sendUsers();
-			break;
-		    case "LOGIN":
-			try {
-			    logIn(sub);
-			    sendCommandFromServer(Command.LOGINSUCCESS);
-			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
-			    serverController.updateStatus();
-			} catch (LoginException e) {
-			    sendCommandFromServer(Command.LOGINFAIL, e.getMessage());
-			}
-			break;
-		    case "LOGOFF":
-			sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "0");
-			logOff();
-			serverController.updateStatus();
-			break;
-		    case "CONNECT":
-			connectTo(sub[2]);
-			break;
-		    case "RESPONSE":
-			sendResponse(sub[2], sub[3]);
-			break;
-		    case "DISCONNECT":
-			disconnectMe(sub[2]);
-			break;
-		    case "STATUSUPDATE":
-			String status = sub[2];
-			sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, status);
-			updateStatus(status);
-			serverController.updateStatus();
-			break;
-		    default:
-			System.err.println("Bad protocol");
-		}
-	    } else if (sub[0].equals("TYPE 1")) {
-		for (SocketInstanse partner : openConnections) {
-		    if (partner.uname.equals(sub[1])) {
-			StringBuilder msg = new StringBuilder();
-			for (int i = 2; i < sub.length; i++) {
-			    msg.append(sub[i]);
-			}
-			try {
-			    partner.sendMsg(uname, msg.toString());
-			} catch (IOException e) {
-			    serverController.printWarning(uname + " could not send message to " + partner.uname);
-			}
-			break;
-		    }
+                        break;
+                    case "GETUSERS":
+                        sendUsers();
+                        break;
+                    case "LOGIN":
+                        try {
+                            logIn(sub);
+                            sendCommandFromServer(Command.LOGINSUCCESS);
+                            sendUpdateToAll(Command.STATUSUPDATE, uname, "+");
+                            serverController.updateStatus();
+                        } catch (LoginException e) {
+                            sendCommandFromServer(Command.LOGINFAIL, e.getMessage());
+                        }
+                        break;
+                    case "LOGOFF":
+                        sendUpdateToAll(Command.STATUSUPDATE, uname, "0");
+                        logOff();
+                        serverController.updateStatus();
+                        break;
+                    case "CONNECT":
+                        connectTo(sub[2]);
+                        break;
+                    case "RESPONSE":
+                        sendResponse(sub[2], sub[3]);
+                        break;
+                    case "DISCONNECT":
+                        disconnectMe(sub[2]);
+                        break;
+                    case "STATUSUPDATE":
+                        String status = sub[2];
+                        sendUpdateToAll(Command.STATUSUPDATE, uname, status);
+                        updateStatus(status);
+                        serverController.updateStatus();
+                        break;
+                    default:
+                        System.err.println("Bad protocol");
+                }
+                break;
+            case "TYPE 1":
+                for (SocketInstanse partner : openConnections) {
+                    if (partner.uname.equals(sub[1])) {
+                        StringBuilder msg = new StringBuilder();
+                        for (int i = 2; i < sub.length; i++) {
+                            msg.append(sub[i]);
+                        }
+                        try {
+                            partner.sendMsg(uname, msg.toString());
+                        } catch (IOException e) {
+                            serverController.printWarning(uname + " could not send message to " + partner.uname);
+                        }
+                        break;
+                    }
 
-		}
+                }
 
-	    } else {
-		throw new IllegalArgumentException("Bad protocol");
-	    }
+                break;
+            default:
+                throw new IllegalArgumentException("Bad protocol");
+        }
 	}
 
 	private void connectTo(String s) throws IOException {
