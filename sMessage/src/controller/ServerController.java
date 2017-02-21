@@ -12,6 +12,7 @@ import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -137,6 +138,7 @@ public class ServerController implements Initializable {
 
     @FXML
     private void handleToogleServerStatus() {
+
         if (serverRunning) {
             serverRunning = false;
             labelServerStatus.setText("Server is stopped");
@@ -144,6 +146,8 @@ public class ServerController implements Initializable {
             portLabel.setText("");
             ipLabel.setText("");
 
+            portLabel.getScene().getWindow().setOnCloseRequest(null);
+            server.stop();
             server = null;
         } else {
             serverRunning = true;
@@ -162,6 +166,8 @@ public class ServerController implements Initializable {
                 ipLabel.setText(InetAddress.getLocalHost().getHostAddress());
                 txtFieldPortManual.setText(server.getPort());
 
+                portLabel.getScene().getWindow().setOnCloseRequest(e -> server.stop());
+
             } catch (IOException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error occurred");
@@ -171,6 +177,7 @@ public class ServerController implements Initializable {
                 alert.getDialogPane().setExpandableContent(txtArea);
                 alert.show();
                 handleToogleServerStatus();
+
             }
 
         }
