@@ -9,7 +9,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -22,9 +21,25 @@
   <children>
       <SplitPane fx:id="split" dividerPositions="0.5" VBox.vgrow="ALWAYS">
          <items>
-      <AnchorPane id="Content" minWidth="30.0" prefHeight="545.0" prefWidth="430.0">
+            <VBox>
                <children>
-                  <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="62.0" prefHeight="25.0" prefWidth="279.0" spacing="5.0">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SMessage Server Administrator">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Settings:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Text>
+                  <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="279.0" spacing="5.0">
                      <children>
                         <Label prefWidth="40.0" text="Port:">
                            <HBox.margin>
@@ -32,15 +47,33 @@
                            </HBox.margin>
                         </Label>
                         <TextField fx:id="txtFieldPortManual" disable="true" prefHeight="25.0" prefWidth="80.0" />
-                        <CheckBox fx:id="chboxPortAutomatic" mnemonicParsing="false" selected="true" text="Automatic port">
+                        <CheckBox fx:id="chboxPortAutomatic" mnemonicParsing="false" selected="true" text="Auto select port">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </CheckBox>
                      </children>
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
                   </HBox>
-                <Button fx:id="btnToogleServerStatus" layoutX="15.0" layoutY="101.0" mnemonicParsing="false" onAction="#handleToogleServerStatus" text="Turn on server" />
-                  <HBox layoutX="11.0" layoutY="162.0" prefWidth="133.0" spacing="5.0">
+                <Button fx:id="btnToogleServerStatus" mnemonicParsing="false" onAction="#handleToogleServerStatus" text="Turn on server">
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your connection status:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Text>
+                  <HBox prefWidth="133.0" spacing="5.0">
                      <children>
                         <Canvas fx:id="canvasServerStatus" height="16.0" width="16.0">
                            <HBox.margin>
@@ -53,29 +86,14 @@
                         <Insets top="5.0" />
                      </padding>
                   </HBox>
-                  <Text layoutX="6.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SMessage Server Administrator">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="12.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings:">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="11.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your connection status:">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Text>
-                  <GridPane layoutX="15.0" layoutY="184.0">
+                  <GridPane>
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="33.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="167.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="35.0" minWidth="35.0" prefWidth="33.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="IP : " />
@@ -83,9 +101,15 @@
                          <Label fx:id="portLabel" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                          <Label fx:id="ipLabel" prefHeight="17.0" prefWidth="100.0" GridPane.columnIndex="1" />
                      </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
                   </GridPane>
                </children>
-      </AnchorPane>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </VBox>
                   <TableView fx:id="tableViewUsers" prefHeight="510.0" prefWidth="250.0">
                     <columns>
                       <TableColumn fx:id="tableColumnUsername" prefWidth="174.0" text="Username" />
