@@ -15,6 +15,7 @@ import javafx.application.Platform;
 
 /**
  * Model for server.
+ *
  * @author Member(1-2-3-4)
  */
 public final class Server {
@@ -27,7 +28,7 @@ public final class Server {
 
     /**
      * Constructs the server object.
-     * 
+     *
      * @param serverController related {@link serverController controller}.
      * @param port Server port number.
      * @throws IOException if port is not available.
@@ -40,6 +41,7 @@ public final class Server {
 
     /**
      * Registers a new user, if username does not exist
+     *
      * @param uname Username
      * @param passord Password
      * @return True if new user is created, false if username is used
@@ -79,16 +81,15 @@ public final class Server {
     /**
      * Closes server
      *
-     * @throws IOException if server.close fails
      */
     public void stop() {
         running = false;
         try {
             server.close();
-			for (SocketInstanse onlineClient : onlineClients) {
-				onlineClient.socket.close();
-			}
-		} catch (IOException e) {
+            for (SocketInstanse onlineClient : onlineClients) {
+                onlineClient.socket.close();
+            }
+        } catch (IOException e) {
 
             e.printStackTrace();
         }
