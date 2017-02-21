@@ -91,7 +91,7 @@ public class LoginClientController implements Initializable {
      */
     public void loginSuccess() {
 	cController.setClient(client);
-	cController.setLeftLabelTest(uname.getText());
+	cController.setYourUnameLabel(uname.getText());
 	clientStage.show();
 	clientStage.setOnCloseRequest(event -> {
 	    try {

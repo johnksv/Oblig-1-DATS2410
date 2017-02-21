@@ -355,8 +355,9 @@ public class ClientController implements Initializable {
     }
 
     /**
-     * Sets client
-     *
+     * Sets client to be stored in this object.
+     * 
+     * @see Client
      * @param client
      */
     public void setClient(Client client) {
@@ -367,7 +368,13 @@ public class ClientController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * Returns the client object.
+     * 
+     * @see Client
+     * @return client 
+     */
     public Client getClient() {
         return client;
     }
@@ -394,7 +401,12 @@ public class ClientController implements Initializable {
         }
     }
 
-    public void setLeftLabelTest(String text) {
+    /**
+     * Writes text to GUI label, located to the left.
+     * Writes your username.
+     * @param text Your username
+     */
+    public void setYourUnameLabel(String text) {
         labelLeftStatus.setText("Your username: " + text);
     }
 
@@ -427,7 +439,7 @@ public class ClientController implements Initializable {
     }
 
     @FXML
-    public void buttonPressed(KeyEvent e) {
+    private void buttonPressed(KeyEvent e) {
         if (e.isShiftDown() && e.getCode().toString().equals("ENTER")) {
             txtAreaNewMessage.appendText("\n");
         } else if (e.getCode().toString().equals("ENTER")) {
