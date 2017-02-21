@@ -1,25 +1,14 @@
 package controller;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.UnaryOperator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -30,13 +19,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import model.Command;
 import model.Server;
 import model.User;
-import model.client.Conversation;
 
 /**
+ * Controller for the Server screen.
  * @author s305046, s305080, s305084, s305089
  */
 public class ServerController implements Initializable {
@@ -93,7 +81,6 @@ public class ServerController implements Initializable {
             if (idx < 0) {
                 return;
             }
-            String user = userList.get(idx).getUname();
         });
         tableViewUsers.prefWidthProperty().bind(split.widthProperty());
 

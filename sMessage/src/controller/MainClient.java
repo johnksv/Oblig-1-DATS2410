@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *
+ * Starts the client.
  * @author s305046, s305080, s305084, s305089
  */
 public class MainClient extends Application {
@@ -25,6 +25,7 @@ public class MainClient extends Application {
     }
 
     /**
+     * Launches JavaFX. 
      * @param args the command line arguments
      */
     public static void main(String[] args) {

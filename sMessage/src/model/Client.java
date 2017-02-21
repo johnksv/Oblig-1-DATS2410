@@ -4,12 +4,9 @@ import controller.ClientController;
 import controller.LoginClientController;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -26,6 +23,7 @@ public class Client {
     private BufferedReader inFromServer;
     private ClientController clientController;
     private LoginClientController loginController;
+    private boolean loggedin = false;
 
     public Client(LoginClientController loginController, ClientController clientController, String ip, int port) throws IOException {
         this.clientController = clientController;
@@ -47,7 +45,7 @@ public class Client {
             String input;
             try {
                 while ((input = inFromServer.readLine()) != null) {
-
+                    
                     final String finalInput = input;
                     //The parsing and actions should be done on the JavaFX thread
                     Platform.runLater(() -> {
@@ -59,25 +57,18 @@ public class Client {
                     });
 
                 }
-                Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Server closed");
-                    alert.setHeaderText("Server shutdown occurred.");
-                    alert.showAndWait();
-                    Platform.exit();
-                    System.exit(-1);
-
-                });
                 System.out.println("Thread done");
             } catch (SocketException e) {
-                Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Server closed");
-                    alert.setHeaderText("Server shutdown occurred.");
-                    alert.showAndWait();
-                    Platform.exit();
-                    System.exit(-1);
-                });
+                if (loggedin) {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Server closed");
+                        alert.setHeaderText("Server shutdown occurred.");
+                        alert.showAndWait();
+                        Platform.exit();
+                        System.exit(-1);
+                    });
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -186,6 +177,7 @@ public class Client {
                     loginController.loginFailed(sub[2]);
                     break;
                 case "LOGINSUCCESS":
+                    loggedin = true;
                     loginController.loginSuccess();
                     break;
                 case "STATUSUPDATE":
