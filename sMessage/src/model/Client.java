@@ -62,7 +62,7 @@ public class Client {
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Server closed");
-                    alert.setHeaderText("The server has closed.");
+                    alert.setHeaderText("Server shutdown occurred.");
                     alert.showAndWait();
                     Platform.exit();
                     System.exit(-1);
@@ -73,7 +73,7 @@ public class Client {
                 Platform.runLater(() -> {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Server closed");
-                    alert.setHeaderText("The server has closed.");
+                    alert.setHeaderText("Server shutdown occurred.");
                     alert.showAndWait();
                     Platform.exit();
                     System.exit(-1);
