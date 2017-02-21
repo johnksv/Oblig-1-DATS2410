@@ -7,9 +7,12 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import model.client.Message;
+import model.client.Status;
 
 /**
  * @author s305046, s305080, s305084, s305089
@@ -29,6 +32,11 @@ public class Client {
 	outToServer = new BufferedWriter(new PrintWriter(clientsocket.getOutputStream()));
 	inFromServer = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
 	receiveMessages();
+    }
+
+    public void sendStatusUpdate(Status status) throws IOException {
+	String newStatus = status == Status.ONLINE ? "+" : "-";
+	sendCommandToServer("TYPE 0", Command.STATUSUPDATE, newStatus);
     }
 
     private void receiveMessages() {
@@ -65,7 +73,19 @@ public class Client {
     public void disconnectServer() throws IOException {
 	System.out.println("Loging off and shuting down socket.");
 	sendCommandToServer("TYPE 0", Command.LOGOFF);
-	shutdown();
+	new Thread(() -> {
+	    try {
+		Thread.sleep(1000);
+	    } catch (InterruptedException ex) {
+	    }
+
+	    try {
+		shutdown();
+	    } catch (IOException ex) {
+		System.err.println("Could not close socket: " + ex.toString());
+	    }
+	});
+
     }
 
     public void shutdown() throws IOException {

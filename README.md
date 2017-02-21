@@ -40,6 +40,7 @@ Kommandoer server skal tolke:
 - CONNECT
 - RESPONSE
 - GETUSERS
+- USERSTATUSUPDATE
 
 Kommandoer klient skal tolke
 - CONNECT
@@ -67,6 +68,12 @@ Syntax for commando STATUSUPDATE:
 	USERNAME3
 	BUSY
 
+Syntax for USERSTATUSUPDATE:
+
+	TYPE 0
+	USERSTATUSUPDATE
+	0||+||-
+
 #Plan
 Uke 6
 - GUI
@@ -80,4 +87,5 @@ uke 8
 - Ekstra
 
 Intern deadline: 22. februar
+
 Innlevering: Mandag uke 9
