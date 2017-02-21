@@ -45,6 +45,8 @@ public class ClientController implements Initializable {
     private TextField textFieldSearch;
     @FXML
     private SplitPane split;
+    @FXML
+    private ComboBox comboBoxStatus;
 
     private final ObservableList<Conversation> friendList = FXCollections.observableList(new ArrayList<>());
     private final ObservableList<ClientUser> userList = FXCollections.observableList(new ArrayList<>());
@@ -59,6 +61,7 @@ public class ClientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 	initTabel();
+	initComboBox();
     }
 
     private void initTabel() {
@@ -81,7 +84,6 @@ public class ClientController implements Initializable {
 
 	tvUsers.setOnMouseClicked(e -> sendRequest());
 
-
 	FilteredList<ClientUser> filteredList = new FilteredList<>(userList, clientUser -> true);
 	textFieldSearch.textProperty().addListener((obs, old, newValue) -> {
 	    filteredList.setPredicate(clientUser -> {
@@ -99,39 +101,51 @@ public class ClientController implements Initializable {
 	tvUsers.prefWidthProperty().bind(split.widthProperty());
     }
 
+    private void initComboBox() {
+	comboBoxStatus.getItems().add(Status.ONLINE);
+	comboBoxStatus.getItems().add(Status.BUSY);
+	comboBoxStatus.getSelectionModel().select(Status.ONLINE);
+	comboBoxStatus.setOnAction(ev -> {
+	    try {
+		client.sendStatusUpdate((Status) comboBoxStatus.getSelectionModel().getSelectedItem());
+	    } catch (IOException ex) {
+		showAlertIOException(ex);
+	    }
+	});
+    }
 
-	private void sendRequest() {
-		if (!removing) {
-			int idx = tvUsers.getSelectionModel().getFocusedIndex();
-			if (idx == -1) {
-				return;
-			}
-			ClientUser user = userList.get(idx);
-			if (user.getStatus() == Status.ONLINE) {
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Confirm Connection");
-				alert.setHeaderText("Do you want to connect with " + user.getUserName());
-				alert.setContentText("We will alert you when your peer "
-						+ "has responded to the request.");
+    private void sendRequest() {
+	if (!removing) {
+	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
+	    if (idx == -1) {
+		return;
+	    }
+	    ClientUser user = userList.get(idx);
+	    if (user.getStatus() == Status.ONLINE) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Connection");
+		alert.setHeaderText("Do you want to connect with " + user.getUserName());
+		alert.setContentText("We will alert you when your peer "
+			+ "has responded to the request.");
 
-				Optional<ButtonType> answer = alert.showAndWait();
-				if (answer.isPresent() && answer.get() == ButtonType.OK) {
-					try {
-						client.connectChat(user.getUserName());
-					} catch (IOException ex) {
-						showAlertIOException(ex);
-					}
-				}
-			} else if (user.getStatus() == Status.BUSY) {
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setTitle("Connection Request");
-				alert.setHeaderText("User " + user.getUserName() + " is busy.");
-				alert.setContentText("This person is not available at the moment.");
-
-			}
+		Optional<ButtonType> answer = alert.showAndWait();
+		if (answer.isPresent() && answer.get() == ButtonType.OK) {
+		    try {
+			client.connectChat(user.getUserName());
+		    } catch (IOException ex) {
+			showAlertIOException(ex);
+		    }
 		}
-		tvUsers.getSelectionModel().clearSelection();
+	    } else if (user.getStatus() == Status.BUSY) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Connection Request");
+		alert.setHeaderText("User " + user.getUserName() + " is busy.");
+		alert.setContentText("This person is not available at the moment.");
+
+	    }
 	}
+	tvUsers.getSelectionModel().clearSelection();
+    }
 
     private void showAlertIOException(IOException ex) {
 	Alert alertErr = new Alert(AlertType.ERROR);
