@@ -25,6 +25,14 @@ public class Client {
     private LoginClientController loginController;
     private boolean loggedin = false;
 
+    /**
+     * 
+     * @param loginController
+     * @param clientController
+     * @param ip
+     * @param port
+     * @throws IOException
+     */
     public Client(LoginClientController loginController, ClientController clientController, String ip, int port) throws IOException {
         this.clientController = clientController;
         this.loginController = loginController;

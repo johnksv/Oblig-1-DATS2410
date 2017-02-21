@@ -32,7 +32,6 @@ public final class Server {
 
     /**
      * Registers a new user, if username does not exist
-     *
      * @param uname Username
      * @param passord Password
      * @return True if new user is created, false if username is used
