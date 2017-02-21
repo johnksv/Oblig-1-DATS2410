@@ -26,7 +26,7 @@ public class Client {
     private boolean loggedin = false;
 
     /**
-     * 
+     *
      * @param loginController
      * @param clientController
      * @param ip
