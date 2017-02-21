@@ -78,8 +78,8 @@ public final class Server {
 	running = false;
         try {
             server.close();
-			for (int i = 0; i < onlineClients.size(); i++) {
-				onlineClients.get(i).socket.close();
+			for (SocketInstanse onlineClient : onlineClients) {
+				onlineClient.socket.close();
 			}
 		} catch (IOException e) {
             e.printStackTrace();

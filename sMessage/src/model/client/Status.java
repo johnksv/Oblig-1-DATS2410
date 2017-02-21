@@ -1,7 +1,7 @@
 package model.client;
 
 /**
- * Created by trulsstenrud on 17/02/2017.
+ * @author s305046, s305080, s305084, s305089
  */
 public enum Status {
     ONLINE,
