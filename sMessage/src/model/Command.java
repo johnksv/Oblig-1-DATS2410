@@ -8,19 +8,24 @@ package model;
  */
 public enum Command {
     /**
-     *
+     * When this command is sent to server, it is followed by the name of the destination user
+     * When this command is sent to a client it is followed by the name of the sender
      */
     CONNECT,
     /**
-     *
+     *  When this command is sent to server, it is followed by destination user and yes/no
+     *  When this command is sent to a client, it is followed by source user and ues/no
      */
     RESPONSE,
     /**
-     *
+     * When this command is sent to server, it is followed by destination user
+     * When this command is sent to a client, it is followed by source user.
      */
     DISCONNECT,
     /**
-     *
+     * When this command is sent to server, it is followed by +/-/0 representing the status of the user of the
+     * associated SocketInstance
+     * When this command is sent to a client, it is followed by a username, and the status of that user
      */
     STATUSUPDATE,
     /**
