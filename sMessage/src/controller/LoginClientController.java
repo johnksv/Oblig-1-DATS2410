@@ -6,13 +6,10 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,7 +21,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import model.Client;
 
 /**
@@ -149,7 +145,11 @@ public class LoginClientController implements Initializable {
 
     private void connectToServer(boolean login) {
 	if (!uname.getText().matches("([\\w\\d])*")) {
-	    showError("Uname can only contain letters and numbers.");
+	    showError("Username can only contain letters and numbers.");
+	    return;
+	}
+        if (uname.getText().length() > 25) {
+	    showError("Username can't be longer then 25 characters.");
 	    return;
 	}
 	if (passw.getText().trim().isEmpty()
@@ -158,7 +158,7 @@ public class LoginClientController implements Initializable {
 	    showError("One or more fields are empty.");
 	    return;
 	}
-	int port = 0;
+	int port;
 	try {
 	    port = Integer.parseInt(portNumber.getText());
 	} catch (NumberFormatException ex) {
