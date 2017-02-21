@@ -142,7 +142,7 @@
                      </HBox.margin>
                   </Separator>
                   <Label text="Your status:" />
-                  <ComboBox fx:id="comboBoxStatus" prefWidth="150.0" />
+                  <ComboBox fx:id="comboBoxStatus" prefWidth="150.0" onAction="#changeStatus" />
             </children>
             <padding>
               <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
