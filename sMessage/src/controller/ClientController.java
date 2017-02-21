@@ -110,7 +110,6 @@ public class ClientController implements Initializable {
     @FXML
     private void changeStatus() {
         try {
-            System.out.println("test2");
             client.sendStatusUpdate((Status) comboBoxStatus.getSelectionModel().getSelectedItem());
         } catch (IOException ex) {
             showAlertIOException(ex);
@@ -139,12 +138,12 @@ public class ClientController implements Initializable {
                         showAlertIOException(ex);
                     }
                 }
-            } else if (user.getStatus() == Status.BUSY) {
+            } else{
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 alert.setTitle("Connection Request");
-                alert.setHeaderText("User " + user.getUserName() + " is busy.");
+                alert.setHeaderText("User " + user.getUserName() + " is " + user.getStatus().toString().toLowerCase() + ".");
                 alert.setContentText("This person is not available at the moment.");
-
+                alert.show();
             }
         }
         tvUsers.getSelectionModel().clearSelection();
