@@ -16,7 +16,7 @@ public class MainServer extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 	Parent root = FXMLLoader.load(getClass().getResource("/view/Server.fxml"));
-	
+	stage.setTitle("sMessage - Server");
 	Scene scene = new Scene(root);
 	
 	stage.setScene(scene);
