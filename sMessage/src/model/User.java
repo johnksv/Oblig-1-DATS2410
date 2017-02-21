@@ -78,7 +78,7 @@ public class User {
     public void login(String pswd) throws LoginException {
 
         if (status) {
-            throw new LoginException("Allready logged in!");
+            throw new LoginException("Already logged in!");
 	}
 	if (!pswd.equals(this.pswd)) {
 	    throw new LoginException("Wrong password!");

@@ -378,6 +378,7 @@ public final class Server {
             for (User u : userList) {
                 System.out.println("Comparing " + u.getUname() + " to " + sub[2]);
                 if (u.getUname().equals(sub[2])) {
+		    //Throws exception if allready logged in or wrong username
                     u.login(sub[3]);
                     uname = sub[2];
 

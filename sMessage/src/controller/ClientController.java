@@ -139,7 +139,7 @@ public class ClientController implements Initializable {
                     }
                 }
             } else{
-                Alert alert = new Alert(AlertType.CONFIRMATION);
+                Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Connection Request");
                 alert.setHeaderText("User " + user.getUserName() + " is " + user.getStatus().toString().toLowerCase() + ".");
                 alert.setContentText("This person is not available at the moment.");
