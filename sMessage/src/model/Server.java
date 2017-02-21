@@ -20,7 +20,7 @@ public final class Server {
 
     private final ArrayList<User> userList = new ArrayList<>();
     private final ArrayList<SocketInstanse> onlineClients = new ArrayList<>();
-    ServerSocket server;
+    private ServerSocket server;
     private boolean running = true;
     private ServerController serverController;
 
@@ -37,7 +37,7 @@ public final class Server {
      * @param passord Password
      * @return True if new user is created, false if username is used
      */
-    public boolean regNewUser(String uname, String passord) {
+    private boolean regNewUser(String uname, String passord) {
 	for (User u : userList) {
 	    if (u.getUname().equals(uname)) {
 		return false;
@@ -45,18 +45,9 @@ public final class Server {
 	}
 	User u = new User(uname, passord, true);
 	userList.add(u);
-	Platform.runLater(() -> {
-	    serverController.update(Command.REGUSER, u);
-	});
+	Platform.runLater(() -> serverController.update(Command.REGUSER, u));
 
 	return true;
-    }
-
-    public boolean kickUser(String uname) {
-	return false;
-    }
-
-    public void banIP(String uname) {
     }
 
     /**
@@ -119,7 +110,7 @@ public final class Server {
 	 * @param socket The SocketInstance uses this socket to comunicate
 	 * @throws IOException If network error
 	 */
-	public SocketInstanse(Socket socket) throws IOException {
+    SocketInstanse(Socket socket) throws IOException {
 	    this.socket = socket;
 	    out = new BufferedWriter(new PrintWriter(this.socket.getOutputStream()));
 	    System.out.println("SERVER PORT: " + socket.getLocalPort());
@@ -162,7 +153,7 @@ public final class Server {
 	 * @throws IOException If the user could not be reached, possibly due to
 	 * network issues
 	 */
-	public void sendMsg(String uname, String msg) throws IOException {
+    void sendMsg(String uname, String msg) throws IOException {
 	    sendCommandFromServer("TYPE 1", uname, msg);
 	}
 
@@ -176,7 +167,7 @@ public final class Server {
 	private void disconnectMe(String userName) throws IOException {
 	    for (SocketInstanse i : openConnections) {
 		if (i.uname.equals(userName)) {
-		    i.sendCommandFromServer("TYPE 0", Command.DISCONNECT, uname);
+		    i.sendCommandFromServer(Command.DISCONNECT, uname);
 		    break;
 		}
 	    }
@@ -189,7 +180,7 @@ public final class Server {
 	 * @throws IOException If the user could not be reached, possibly due to
 	 * network issues
 	 */
-	public void sendUsers() throws IOException {
+    void sendUsers() throws IOException {
 	    StringBuilder users = new StringBuilder();
 
 	    for (User u : userList) {
@@ -206,16 +197,9 @@ public final class Server {
 		}
 	    }
 
-	    sendCommandFromServer("TYPE 0", Command.USERLIST, users.toString());
+	    sendCommandFromServer(Command.USERLIST, users.toString());
 	}
 
-	/**
-	 * Sends all the strings to the receiver in the other end of the
-	 * outputstream 'out' separated by semicolon.
-	 *
-	 * @param lines The strings to be sent
-	 * @throws IOException if network is lost
-	 */
 	private void sendCommandFromServer(String... lines) throws IOException {
 
 	    for (int i = 0; i < lines.length - 1; i++) {
@@ -226,14 +210,14 @@ public final class Server {
 	    out.flush();
 	}
 
-	private void sendCommandFromServer(String type, Command command, String... lines) throws IOException {
+
+	private void sendCommandFromServer(Command command, String... lines) throws IOException {
 	    String[] newCommand = new String[lines.length + 2];
-	    newCommand[0] = type;
+	    newCommand[0] = "TYPE 0";
 	    newCommand[1] = command.toString();
 	    System.arraycopy(lines, 0, newCommand, 2, lines.length);
 	    sendCommandFromServer(newCommand);
 	}
-
 	private void sendUpdateToAll(String type, Command command, String... lines) throws IOException {
 	    for (SocketInstanse user : onlineClients) {
 		if (user.uname != null) {
@@ -260,9 +244,9 @@ public final class Server {
 			if (regNewUser(sub[2], sub[3])) {
 			    uname = sub[2];
 			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
-			    sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
+			    sendCommandFromServer(Command.LOGINSUCCESS);
 			} else {
-			    sendCommandFromServer("TYPE 0", Command.REGUSERFAIL);
+			    sendCommandFromServer(Command.REGUSERFAIL);
 			}
 
 			break;
@@ -272,11 +256,11 @@ public final class Server {
 		    case "LOGIN":
 			try {
 			    logIn(sub);
-			    sendCommandFromServer("TYPE 0", Command.LOGINSUCCESS);
+			    sendCommandFromServer(Command.LOGINSUCCESS);
 			    sendUpdateToAll("TYPE 0", Command.STATUSUPDATE, uname, "+");
 			    serverController.updateStatus();
 			} catch (LoginException e) {
-			    sendCommandFromServer("TYPE 0", Command.LOGINFAIL, e.getMessage());
+			    sendCommandFromServer(Command.LOGINFAIL, e.getMessage());
 			}
 			break;
 		    case "LOGOFF":
@@ -328,9 +312,9 @@ public final class Server {
 	    for (SocketInstanse i : onlineClients) {
 		if (i.uname.equals(s)) {
 		    try {
-			i.sendCommandFromServer("TYPE 0", Command.CONNECT, uname);
+			i.sendCommandFromServer(Command.CONNECT, uname);
 		    } catch (IOException e) {
-			sendCommandFromServer("TYPE 0", Command.ERROR, "Could not connect to user");
+			sendCommandFromServer(Command.ERROR, "Could not connect to user");
 		    }
 		}
 	    }
@@ -339,7 +323,7 @@ public final class Server {
 	private void sendResponse(String userName, String answer) throws IOException {
 	    for (SocketInstanse s : onlineClients) {
 		if (s.uname.equals(userName)) {
-		    s.sendCommandFromServer("TYPE 0", Command.RESPONSE, uname, answer);
+		    s.sendCommandFromServer(Command.RESPONSE, uname, answer);
 		    if (answer.equals("YES")) {
 			openConnections.add(s);
 		    }
@@ -347,7 +331,7 @@ public final class Server {
 		    return;
 		}
 	    }
-	    sendCommandFromServer("TYPE 0", Command.ERROR, "User not in online list");
+	    sendCommandFromServer(Command.ERROR, "User not in online list");
 	}
 
 	private void logOff() {
