@@ -12,7 +12,7 @@ public class Conversation {
 
     /**
      * Constructor for the Conversation class.
-     * @param talkingWithUser The conversation is between the owner of the object and talkingWithUser.
+     * @param talkingWithUser The conversation is between the owner of the object and the clientUser talkingWithUser.
      */
     public Conversation(ClientUser talkingWithUser) {
 	this.talkingWithUser = talkingWithUser;
@@ -28,23 +28,25 @@ public class Conversation {
     }
 
     /**
-     * A getter for the talkingWithUsername variable.
-     * @return THe string talkingWithUsername.
+     * A getter for the username of the conversation partner.
+     * @return THe string talkingWithUser.
      */
     public String getTalkingWithUsername() {
 	return talkingWithUser.getUserName();
     }
 
     /**
-     * A getter for the
-     * @return
+     * A getter for the clientUser talkingWithUser.
+     * @return The clientUser you are talking to.
      */
     public ClientUser getClientUser(){
         return talkingWithUser;
     }
 
-    public Status getTalkingWidthStatus(){return talkingWithUser.getStatus();}
-
+    /**
+     * Getter for all the messages.
+     * @return all the messages in an array.
+     */
     public ArrayList<Message> getMessages() {
 	return messages;
     }

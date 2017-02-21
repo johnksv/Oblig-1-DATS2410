@@ -40,7 +40,6 @@ public final class Server {
 
     /**
      * Registers a new user, if username does not exist
-     *
      * @param uname Username
      * @param passord Password
      * @return True if new user is created, false if username is used
@@ -86,10 +85,11 @@ public final class Server {
         running = false;
         try {
             server.close();
-            for (int i = 0; i < onlineClients.size(); i++) {
-                onlineClients.get(i).socket.close();
-            }
-        } catch (IOException e) {
+			for (SocketInstanse onlineClient : onlineClients) {
+				onlineClient.socket.close();
+			}
+		} catch (IOException e) {
+
             e.printStackTrace();
         }
     }
