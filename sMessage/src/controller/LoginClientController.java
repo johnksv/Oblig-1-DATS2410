@@ -24,7 +24,10 @@ import javafx.stage.Stage;
 import model.Client;
 
 /**
- *
+ * Controller for the Login screen.
+ * All methods needed for the functionality of the login screen.
+ * Will initiate the Client class and handle user input under login. 
+ * 
  * @author s305046, s305080, s305084, s305089
  */
 public class LoginClientController implements Initializable {
@@ -79,7 +82,13 @@ public class LoginClientController implements Initializable {
 	vBoxOverlay.setVisible(false);
 
     }
-
+    
+    /**
+     * Changes the stage to the {@link ClientController Client stage}. <br>
+     * Sets a client object with the server connection and the username to the client controller.<br>
+     * Sets a listener on closing the closing of the new stage that calls {@link model.Client#disconnectServer() disconnectServer} method in the {@link model.Client client} stored in the {@link ClientController contoller}. <br>
+     * Gets call by the {@link model.Client#parseCommand(java.lang.String) client class}.
+     */
     public void loginSuccess() {
 	cController.setClient(client);
 	cController.setLeftLabelTest(uname.getText());
@@ -94,6 +103,12 @@ public class LoginClientController implements Initializable {
 	closeThisStage();
     }
 
+    /**
+     * Shows error message to user.
+     * Gives the option to end the application or try login one more time. <br>
+     * Gets call by the {@link model.Client#parseCommand(java.lang.String) client class}.
+     * @param reason why login failed.
+     */
     public void loginFailed(String reason) {
 	//This is a label as defined in the initilaizer
 	((Label) vBoxOverlay.getChildren().get(0)).setText(reason);
@@ -126,7 +141,11 @@ public class LoginClientController implements Initializable {
 	    System.exit(-1);
 	});
     }
-
+    
+    /**
+     * Shows the user that registration failed. '
+     * Gives no option to quit the application, but tells the user to log in. 
+     */
     public void regUserFailed() {
 	showError("User already exists. Please log in");
     }

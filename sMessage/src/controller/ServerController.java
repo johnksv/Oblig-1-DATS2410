@@ -163,6 +163,8 @@ public class ServerController implements Initializable {
 
                 TextArea txtArea = new TextArea(ex.toString());
                 alert.getDialogPane().setExpandableContent(txtArea);
+                alert.show();
+                handleToogleServerStatus();
             }
 
         }
