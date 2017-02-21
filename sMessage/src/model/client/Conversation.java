@@ -36,7 +36,7 @@ public class Conversation {
     }
 
     /**
-     * A getter for the 
+     * A getter for the
      * @return
      */
     public ClientUser getClientUser(){
