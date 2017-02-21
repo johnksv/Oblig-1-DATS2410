@@ -60,7 +60,7 @@ public class LoginClientController implements Initializable {
 	    clientStage.setResizable(true);
 	    clientStage.setMinWidth(850);
 	    clientStage.setMinHeight(650);
-
+            clientStage.setTitle("sMessage - Client");
 	} catch (IOException ex) {
 	    System.err.println("IOException occured. Exiting. Error:\n" + ex.toString());
 	    System.err.println(ex.getStackTrace().toString());

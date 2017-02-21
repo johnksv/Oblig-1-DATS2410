@@ -17,6 +17,7 @@ public class MainClient extends Application {
     public void start(Stage stage) throws Exception {
 	Parent root = FXMLLoader.load(getClass().getResource("/view/LoginClient.fxml"));
 
+        stage.setTitle("sMessage - Login");
 	Scene scene = new Scene(root);
 
 	stage.setScene(scene);
