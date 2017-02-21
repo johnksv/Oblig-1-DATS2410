@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import model.Client;
 import model.client.*;
 
@@ -78,9 +79,8 @@ public class ClientController implements Initializable {
 	    }
 	});
 
-	tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
-	    sendRequest();
-	});
+	tvUsers.setOnMouseClicked(e -> sendRequest());
+//	tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> sendRequest());
 
 	FilteredList<ClientUser> filteredList = new FilteredList<>(userList, clientUser -> true);
 	textFieldSearch.textProperty().addListener((obs, old, newValue) -> {
@@ -99,37 +99,39 @@ public class ClientController implements Initializable {
 	tvUsers.prefWidthProperty().bind(split.widthProperty());
     }
 
-    private void sendRequest() {
-	if (!removing) {
-	    int idx = tvUsers.getSelectionModel().getFocusedIndex();
-	    if (idx == -1) {
-		return;
-	    }
-	    ClientUser user = userList.get(idx);
-	    if (user.getStatus() == Status.ONLINE) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Confirm Connection");
-		alert.setHeaderText("Do you want to connect with " + user.getUserName());
-		alert.setContentText("We will alert you when your peer "
-			+ "has responded to the request.");
 
-		Optional<ButtonType> answer = alert.showAndWait();
-		if (answer.isPresent() && answer.get() == ButtonType.OK) {
-		    try {
-			client.connectChat(user.getUserName());
-		    } catch (IOException ex) {
-			showAlertIOException(ex);
-		    }
+	private void sendRequest() {
+		if (!removing) {
+			int idx = tvUsers.getSelectionModel().getFocusedIndex();
+			if (idx == -1) {
+				return;
+			}
+			ClientUser user = userList.get(idx);
+			if (user.getStatus() == Status.ONLINE) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Confirm Connection");
+				alert.setHeaderText("Do you want to connect with " + user.getUserName());
+				alert.setContentText("We will alert you when your peer "
+						+ "has responded to the request.");
+
+				Optional<ButtonType> answer = alert.showAndWait();
+				if (answer.isPresent() && answer.get() == ButtonType.OK) {
+					try {
+						client.connectChat(user.getUserName());
+					} catch (IOException ex) {
+						showAlertIOException(ex);
+					}
+				}
+			} else if (user.getStatus() == Status.BUSY) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Connection Request");
+				alert.setHeaderText("User " + user.getUserName() + " is busy.");
+				alert.setContentText("This person is not available at the moment.");
+
+			}
 		}
-	    } else if (user.getStatus() == Status.BUSY) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Connection Request");
-		alert.setHeaderText("User " + user.getUserName() + " is busy.");
-		alert.setContentText("This person is not available at the moment.");
-
-	    }
+		tvUsers.getSelectionModel().clearSelection();
 	}
-    }
 
     private void showAlertIOException(IOException ex) {
 	Alert alertErr = new Alert(AlertType.ERROR);
