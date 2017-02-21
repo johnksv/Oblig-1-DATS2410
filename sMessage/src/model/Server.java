@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javafx.application.Platform;
 
 /**
+ * Model for server.
  * @author s305046, s305080, s305084, s305089
  */
 public final class Server {
@@ -24,6 +25,13 @@ public final class Server {
     private boolean running = true;
     private ServerController serverController;
 
+    /**
+     * Constructs the server object.
+     * 
+     * @param serverController related {@link serverController controller}.
+     * @param port Server port number.
+     * @throws IOException if port is not available.
+     */
     public Server(ServerController serverController, int port) throws IOException {
         this.serverController = serverController;
         server = new ServerSocket(port);
