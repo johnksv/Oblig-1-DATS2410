@@ -10,7 +10,11 @@ public class ClientUser {
     private Status status;
     private final String userName;
 
-
+    /**
+     * Constructor for the ClienUser class.
+     * @param userName The username of this ClientUser.
+     * @param status The status of this clientuser represented by +, - or 0.
+     */
     public ClientUser(String userName, String status){
         this.userName = userName;
         switch(status){
@@ -27,14 +31,26 @@ public class ClientUser {
         }
     }
 
+    /**
+     * A getter for the status.
+     * @return
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * A setter for the status.
+     * @param status The status to be sett.
+     */
     public void setStatus(Status status){
         this.status = status;
     }
 
+    /**
+     * Getter for the username.
+     * @return
+     */
     public String getUserName() {
         return userName;
     }

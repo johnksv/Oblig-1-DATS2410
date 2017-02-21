@@ -78,7 +78,10 @@ public final class Server {
 	running = false;
         try {
             server.close();
-        } catch (IOException e) {
+			for (int i = 0; i < onlineClients.size(); i++) {
+				onlineClients.get(i).socket.close();
+			}
+		} catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -103,7 +106,7 @@ public final class Server {
 
     private class SocketInstanse extends Thread {
 
-	private final Socket socket;
+	public final Socket socket;
 	private final BufferedWriter out;
 	private String uname;
 	private ArrayList<SocketInstanse> openConnections = new ArrayList<>();
