@@ -57,6 +57,16 @@ public class Client {
                     });
 
                 }
+                if (loggedin) {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Server closed");
+                        alert.setHeaderText("Server shutdown occurred.");
+                        alert.showAndWait();
+                        Platform.exit();
+                        System.exit(-1);
+                    });
+                }
                 System.out.println("Thread done");
             } catch (SocketException e) {
                 if (loggedin) {
