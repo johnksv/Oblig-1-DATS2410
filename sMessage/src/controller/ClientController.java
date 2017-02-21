@@ -80,7 +80,7 @@ public class ClientController implements Initializable {
 	});
 
 	tvUsers.setOnMouseClicked(e -> sendRequest());
-//	tvUsers.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> sendRequest());
+
 
 	FilteredList<ClientUser> filteredList = new FilteredList<>(userList, clientUser -> true);
 	textFieldSearch.textProperty().addListener((obs, old, newValue) -> {
