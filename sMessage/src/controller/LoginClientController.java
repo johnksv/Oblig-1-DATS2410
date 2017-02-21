@@ -28,7 +28,7 @@ import model.Client;
  * All methods needed for the functionality of the login screen.
  * Will initiate the Client class and handle user input under login. 
  * 
- * @author s305046, s305080, s305084, s305089
+ * @author Member(1-2-3-4)
  */
 public class LoginClientController implements Initializable {
 

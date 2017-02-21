@@ -3,7 +3,7 @@ package model.client;
 import java.util.ArrayList;
 
 /**
- * @author s305046, s305080, s305084, s305089
+ * @author Member(1-2-3-4)
  */
 public class Conversation {
 
