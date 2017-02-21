@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -22,6 +23,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -138,8 +143,8 @@ public class ServerController implements Initializable {
             btnToogleServerStatus.setText("Turn on server");
             portLabel.setText("");
             ipLabel.setText("");
-            server = null;
 
+            server = null;
         } else {
             serverRunning = true;
             labelServerStatus.setText("Server is running");
@@ -156,6 +161,7 @@ public class ServerController implements Initializable {
                 portLabel.setText(server.getPort());
                 ipLabel.setText(InetAddress.getLocalHost().getHostAddress());
                 txtFieldPortManual.setText(server.getPort());
+
             } catch (IOException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error occurred");

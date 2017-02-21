@@ -74,9 +74,13 @@ public final class Server {
      *
      * @throws IOException if server.close fails
      */
-    public void stop() throws IOException {
+    public void stop(){
 	running = false;
-	server.close();
+        try {
+            server.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
