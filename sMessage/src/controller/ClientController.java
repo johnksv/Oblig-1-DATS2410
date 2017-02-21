@@ -167,9 +167,10 @@ public class ClientController implements Initializable {
     }
 
     /**
-     * Stores message string in conversation
-     *
-     * @param userName
+     * Stores message string in conversation.
+     * 
+     * @see model.client.Conversation
+     * @param userName senders name
      * @param msg Message
      */
     public void addMessageToConversation(String userName, Message msg) {
@@ -178,8 +179,6 @@ public class ClientController implements Initializable {
                 cnv.addMessage(msg);
                 if (activeConversation == cnv) {
                     appendMsgToConversation();
-                } else {
-
                 }
                 return;
             }
@@ -190,13 +189,14 @@ public class ClientController implements Initializable {
     }
 
     /**
-     *
+     * 
      * @param restOfArray
      */
     public void updateUserList(String restOfArray) {
         if (restOfArray.equals("")) {
             return;
         }
+        userList.clear();
         String[] users = restOfArray.split(";");
         for (int i = 0; i < users.length; i += 2) {
             userList.add(new ClientUser(users[i], users[i + 1]));
