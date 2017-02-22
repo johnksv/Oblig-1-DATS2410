@@ -36,24 +36,30 @@ public final class Server {
      *
      * @param serverController related {@link ServerController controller}.
      * @param port Server port number.
+     * @param loadUsers If saved users should be loaded from the "usernames.smf"
+     * file
      * @throws IOException if port is not available.
      */
-    public Server(ServerController serverController, int port) throws IOException {
+    public Server(ServerController serverController, int port, boolean loadUsers) throws IOException {
 	this.serverController = serverController;
 	server = new ServerSocket(port);
-	readInUsersFromFile();
+	if (loadUsers) {
+	    readInUsersFromFile();
+	}
 	start();
     }
 
     private synchronized void readInUsersFromFile() {
-	File file = new File(".\\usernames.smf");
+	File file = new File("usernames.smf");
 	try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 	    String in;
 	    while ((in = reader.readLine()) != null) {
 		String[] user = in.split(";");
-		User u = new User(user[0], user[1], false);
-		userList.add(u);
-		Platform.runLater(() -> serverController.addNewUser(u));
+		if (user.length == 2) {
+		    User u = new User(user[0], user[1], false);
+		    userList.add(u);
+		    Platform.runLater(() -> serverController.addNewUser(u));
+		}
 	    }
 	} catch (IOException e) {
 	    System.err.println("Could not save to file:\n" + e.toString());
@@ -62,24 +68,12 @@ public final class Server {
     }
 
     private synchronized void writeUsersToFile(String str) {
-	File file = new File(".\\usernames.smf");
+	File file = new File("usernames.smf");
 	try (PrintWriter out
 		= new PrintWriter(
 			new BufferedWriter(
 				new FileWriter(file, true)), true)) {
 	    out.println(str);
-	} catch (IOException e) {
-	    System.err.println("Could not save to file:\n" + e.toString());
-	}
-    }
-
-    public synchronized void clearSaveFIle() {
-	File file = new File(".\\usernames.smf");
-	try (PrintWriter out
-		= new PrintWriter(
-			new BufferedWriter(
-				new FileWriter(file, true)), false)) {
-	    out.println("");
 	} catch (IOException e) {
 	    System.err.println("Could not save to file:\n" + e.toString());
 	}

@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="600.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerController">
+<VBox prefHeight="600.0" prefWidth="686.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ServerController">
   <children>
       <SplitPane fx:id="split" dividerPositions="0.5" VBox.vgrow="ALWAYS">
          <items>
@@ -39,32 +39,56 @@
                         <Insets bottom="5.0" />
                      </VBox.margin>
                   </Text>
-                  <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="279.0" spacing="5.0">
+                  <GridPane>
+                     <VBox.margin>
+                        <Insets left="5.0" />
+                     </VBox.margin>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.0" minWidth="10.0" prefWidth="148.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="185.0" prefWidth="185.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
-                        <Label prefWidth="40.0" text="Port:">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <TextField fx:id="txtFieldPortManual" disable="true" prefHeight="25.0" prefWidth="80.0" />
-                        <CheckBox fx:id="chboxPortAutomatic" mnemonicParsing="false" selected="true" text="Auto select port">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
+                        <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="279.0" spacing="5.0">
+                           <children>
+                              <Label prefWidth="40.0" text="Port:">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Label>
+                              <TextField fx:id="txtFieldPortManual" disable="true" prefHeight="25.0" prefWidth="80.0" />
+                           </children>
+                        </HBox>
+                        <CheckBox fx:id="chboxPortAutomatic" mnemonicParsing="false" selected="true" text="Auto select port" GridPane.columnIndex="1" />
+                      <Button fx:id="btnToogleServerStatus" mnemonicParsing="false" onAction="#handleToogleServerStatus" text="Turn on server" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets top="10.0" />
+                           </GridPane.margin>
+                        </Button>
+                        <CheckBox fx:id="chboxLoadUserFromSave" mnemonicParsing="false" text="Load users from savefile" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets top="10.0" />
+                           </GridPane.margin>
                         </CheckBox>
                      </children>
+                  </GridPane>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Savefile:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
                      <VBox.margin>
-                        <Insets left="5.0" />
+                        <Insets top="10.0" />
                      </VBox.margin>
-                     <padding>
-                        <Insets bottom="10.0" />
-                     </padding>
-                  </HBox>
-                <Button fx:id="btnToogleServerStatus" mnemonicParsing="false" onAction="#handleToogleServerStatus" text="Turn on server">
+                  </Text>
+                  <Label fx:id="labelSaveFileLoc" text="Location:">
                      <VBox.margin>
-                        <Insets left="5.0" />
+                        <Insets bottom="5.0" />
                      </VBox.margin>
-                  </Button>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#handleClearSaveFile" text="Clear save file" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your connection status:">
                      <VBox.margin>
                         <Insets top="10.0" />

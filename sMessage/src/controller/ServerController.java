@@ -1,6 +1,10 @@
 package controller;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
@@ -35,11 +39,15 @@ public class ServerController implements Initializable {
     @FXML
     private Label portLabel;
     @FXML
+    private Label labelSaveFileLoc;
+    @FXML
     Label labelServerStatus;
     @FXML
     private Canvas canvasServerStatus;
     @FXML
     private CheckBox chboxPortAutomatic;
+    @FXML
+    private CheckBox chboxLoadUserFromSave;
     @FXML
     private TextField txtFieldPortManual;
     @FXML
@@ -60,55 +68,59 @@ public class ServerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        drawServerStatus();
-        initTabel();
+	drawServerStatus();
+	initTabel();
 
-        initFXMLNodes();
+	initFXMLNodes();
+
+	File file = new File("usernames.smf");
+	labelSaveFileLoc.setText("Location: " + file.getAbsolutePath());
+	labelSaveFileLoc.setWrapText(true);
 
     }
 
     private void initTabel() {
 
-        tableColumnUsername.setCellValueFactory((TableColumn.CellDataFeatures<User, String> param)
-                -> new SimpleObjectProperty<>(param.getValue().getUname()));
-        tableColumnStatus.setCellValueFactory((TableColumn.CellDataFeatures<User, String> param)
-                -> new SimpleObjectProperty<>(param.getValue().getStatus()));
+	tableColumnUsername.setCellValueFactory((TableColumn.CellDataFeatures<User, String> param)
+		-> new SimpleObjectProperty<>(param.getValue().getUname()));
+	tableColumnStatus.setCellValueFactory((TableColumn.CellDataFeatures<User, String> param)
+		-> new SimpleObjectProperty<>(param.getValue().getStatus()));
 
-        tableViewUsers.setItems(userList);
+	tableViewUsers.setItems(userList);
 
-        tableViewUsers.setOnMouseClicked((MouseEvent event) -> {
-            int idx = tableViewUsers.getSelectionModel().getFocusedIndex();
-            if (idx < 0) {
-                return;
-            }
-        });
-        tableViewUsers.prefWidthProperty().bind(split.widthProperty());
+	tableViewUsers.setOnMouseClicked((MouseEvent event) -> {
+	    int idx = tableViewUsers.getSelectionModel().getFocusedIndex();
+	    if (idx < 0) {
+		return;
+	    }
+	});
+	tableViewUsers.prefWidthProperty().bind(split.widthProperty());
 
     }
 
     private void initFXMLNodes() {
-        chboxPortAutomatic.selectedProperty().addListener(
-                (ObservableValue<? extends Boolean> obs, Boolean old, Boolean newValue) -> {
-                    txtFieldPortManual.setDisable(newValue);
-                });
-        TextFormatter<Integer> formater = new TextFormatter<>((TextFormatter.Change t) -> {
-            if (t.getText().matches("\\d*")) {
-                //TODO Check if portnumber is between 1 - 65535
-                return t;
-            }
-            return null;
-        });
+	chboxPortAutomatic.selectedProperty().addListener(
+		(ObservableValue<? extends Boolean> obs, Boolean old, Boolean newValue) -> {
+		    txtFieldPortManual.setDisable(newValue);
+		});
+	TextFormatter<Integer> formater = new TextFormatter<>((TextFormatter.Change t) -> {
+	    if (t.getText().matches("\\d*")) {
+		//TODO Check if portnumber is between 1 - 65535
+		return t;
+	    }
+	    return null;
+	});
 
-        txtFieldPortManual.setTextFormatter(formater);
+	txtFieldPortManual.setTextFormatter(formater);
     }
 
     private void drawServerStatus() {
-        if (serverRunning) {
-            canvasServerStatus.getGraphicsContext2D().setFill(Color.GREEN);
-        } else {
-            canvasServerStatus.getGraphicsContext2D().setFill(Color.RED);
-        }
-        canvasServerStatus.getGraphicsContext2D().fillOval(0, 0, 16, 16);
+	if (serverRunning) {
+	    canvasServerStatus.getGraphicsContext2D().setFill(Color.GREEN);
+	} else {
+	    canvasServerStatus.getGraphicsContext2D().setFill(Color.RED);
+	}
+	canvasServerStatus.getGraphicsContext2D().fillOval(0, 0, 16, 16);
     }
 
     /**
@@ -117,12 +129,12 @@ public class ServerController implements Initializable {
      * @param warning
      */
     public void printWarning(String warning) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(warning);
-            alert.showAndWait();
-        });
+	Platform.runLater(() -> {
+	    Alert alert = new Alert(Alert.AlertType.ERROR);
+	    alert.setTitle("Error");
+	    alert.setHeaderText(warning);
+	    alert.showAndWait();
+	});
     }
 
     /**
@@ -131,62 +143,77 @@ public class ServerController implements Initializable {
      * @param user User to add.
      */
     public void addNewUser(User user) {
-        userList.add(user);
+	userList.add(user);
     }
 
     @FXML
     private void handleToogleServerStatus() {
 
-        if (serverRunning) {
-            serverRunning = false;
-            labelServerStatus.setText("Server is stopped");
-            btnToogleServerStatus.setText("Turn on server");
-            portLabel.setText("");
-            ipLabel.setText("");
+	if (serverRunning) {
+	    serverRunning = false;
+	    labelServerStatus.setText("Server is stopped");
+	    btnToogleServerStatus.setText("Turn on server");
+	    portLabel.setText("");
+	    ipLabel.setText("");
 	    userList.clear();
-            portLabel.getScene().getWindow().setOnCloseRequest(null);
-            server.stop();
-            server = null;
-        } else {
-            try {
-                if (chboxPortAutomatic.isSelected()) {
-                    server = new Server(this, 0);
-                } else {
-                    server = new Server(this, Integer.parseInt(txtFieldPortManual.getText()));
+	    portLabel.getScene().getWindow().setOnCloseRequest(null);
+	    server.stop();
+	    server = null;
+	} else {
+	    try {
+		boolean loadUsers = chboxLoadUserFromSave.isSelected();
+		if (chboxPortAutomatic.isSelected()) {
+		    server = new Server(this, 0, loadUsers);
+		} else {
+		    server = new Server(this, Integer.parseInt(txtFieldPortManual.getText()), loadUsers);
 
-                }
-                serverRunning = true;
-                labelServerStatus.setText("Server is running");
-                btnToogleServerStatus.setText("Turn off server");
-                portLabel.setText(server.getPort());
-                ipLabel.setText(InetAddress.getLocalHost().getHostAddress());
-                txtFieldPortManual.setText(server.getPort());
+		}
+		serverRunning = true;
+		labelServerStatus.setText("Server is running");
+		btnToogleServerStatus.setText("Turn off server");
+		portLabel.setText(server.getPort());
+		ipLabel.setText(InetAddress.getLocalHost().getHostAddress());
+		txtFieldPortManual.setText(server.getPort());
 
-                portLabel.getScene().getWindow().setOnCloseRequest(e -> server.stop());
+		portLabel.getScene().getWindow().setOnCloseRequest(e -> server.stop());
 
-            } catch (IOException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error occurred");
-                alert.setHeaderText("An IOException occurred");
+	    } catch (IOException ex) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("Error occurred");
+		alert.setHeaderText("An IOException occurred");
 
-                TextArea txtArea = new TextArea(ex.toString());
-                alert.getDialogPane().setExpandableContent(txtArea);
-                alert.show();
-            }
+		TextArea txtArea = new TextArea(ex.toString());
+		alert.getDialogPane().setExpandableContent(txtArea);
+		alert.show();
+	    }
 
-        }
-        chboxPortAutomatic.setDisable(serverRunning);
-        if (!chboxPortAutomatic.isSelected()) {
-            txtFieldPortManual.setDisable(serverRunning);
-        }
+	}
+	chboxPortAutomatic.setDisable(serverRunning);
+	if (!chboxPortAutomatic.isSelected()) {
+	    txtFieldPortManual.setDisable(serverRunning);
+	}
 
-        drawServerStatus();
+	drawServerStatus();
+    }
+
+    @FXML
+    private void handleClearSaveFile() {
+
+	File file = new File(".\\usernames.smf");
+	try (PrintWriter out
+		= new PrintWriter(
+			new BufferedWriter(
+				new FileWriter(file, false)), true)) {
+	    out.println("");
+	} catch (IOException e) {
+	    System.err.println("Could clear file:\n" + e.toString());
+	}
     }
 
     /**
      * Refreshes the TableView. The TableView listing all users status.
      */
     public void updateStatus() {
-        tableViewUsers.refresh();
+	tableViewUsers.refresh();
     }
 }
