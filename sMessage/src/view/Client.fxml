@@ -24,13 +24,13 @@
         <children>
             <SplitPane fx:id="split" dividerPositions="0.3" prefWidth="900.0">
                <items>
-                  <VBox>
+                  <VBox fillWidth="false" prefWidth="400.0">
                      <children>
                         <ScrollPane>
                            <content>
                               <TableView fx:id="tvFriends" prefHeight="192.0">
                                 <columns>
-                                  <TableColumn fx:id="columnFriends" minWidth="150.0" prefWidth="240.0" text="Friends" />
+                                  <TableColumn fx:id="columnFriends" minWidth="150.0" prefWidth="240.0" text="Conversations" />
                                 </columns>
                               </TableView>
                            </content>
@@ -40,7 +40,7 @@
                         </ScrollPane>
                         <ScrollPane>
                            <content>
-                              <VBox>
+                              <VBox fillWidth="false">
                                  <children>
                                     <HBox alignment="CENTER_RIGHT" prefHeight="31.0" spacing="10.0">
                                        <children>
@@ -54,7 +54,7 @@
                                     <TableView fx:id="tvUsers" prefHeight="350.0">
                                       <columns>
                                           <TableColumn fx:id="columnUsernameStatus" editable="false" minWidth="60.0" prefWidth="-1.0" text="Status" />
-                                        <TableColumn fx:id="columnUsername" editable="false" minWidth="100.0" prefWidth="190.0" text="Online users" />
+                                        <TableColumn fx:id="columnUsername" editable="false" minWidth="100.0" prefWidth="190.0" text="Usersname" />
                                       </columns>
                                     </TableView>
                                  </children>
