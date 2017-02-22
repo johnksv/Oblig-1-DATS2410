@@ -71,7 +71,7 @@ public final class Server {
                     SocketInstanse socketIn = new SocketInstanse(server.accept());
                     socketIn.start();
                     onlineClients.add(socketIn);
-                    
+
                 } catch (IOException e) {
                     if(!(e instanceof SocketException)) {
                         serverController.printWarning("An IOException appeared, check your internet connection and try again.\n" + e.toString());
@@ -360,10 +360,16 @@ public final class Server {
             for (User u : userList) {
                 if (u.getUname().equals(uname)) {
                     u.logOff();
+                    try {
+                     socket.shutdownOutput();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     for (SocketInstanse connection : openConnections) {
                         for (int i = 0; i < connection.openConnections.size(); i++) {
                             if (connection.openConnections.get(i).uname.equals(uname)) {
                                 connection.openConnections.remove(i);
+
                                 break;
                             }
                         }

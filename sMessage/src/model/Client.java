@@ -141,14 +141,18 @@ public class Client {
     }
 
     /**
-     *
-     * @param userID
-     * @throws IOException
+     * Disconnects the client from the user with the username userID.
+     * @param userID is the name of the user you want to disconnect from.
+     * @throws IOException if an I/O error occurs.
      */
     public void disconnectChat(String userID) throws IOException {
         sendCommandToServer("TYPE 0", Command.DISCONNECT, userID);
     }
 
+    /**
+     * Asks the {@Link Server}
+     * @throws IOException
+     */
     public void getUserList() throws IOException {
         sendCommandToServer("TYPE 0", Command.GETUSERS);
     }
