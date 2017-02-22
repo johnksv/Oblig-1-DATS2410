@@ -179,7 +179,7 @@ public class LoginClientController implements Initializable {
 	}
 	int port;
 	try {
-	    port = Integer.parseInt(portNumber.getText());
+	    port = Integer.parseInt(portNumber.getText().trim());
 	} catch (NumberFormatException ex) {
 	    showError("Port number must be an integer number.");
 	    return;
@@ -190,7 +190,7 @@ public class LoginClientController implements Initializable {
 	}
 
 	try {
-	    client = new Client(this, cController, serverIP.getText(), port);
+	    client = new Client(this, cController, serverIP.getText().trim(), port);
 	    try {
 		if (login) {
 		    client.login(uname.getText(), encrypt(passw.getText()));
