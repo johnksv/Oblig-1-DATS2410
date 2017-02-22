@@ -12,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+
 import javafx.application.Platform;
 
 /**
@@ -31,7 +32,7 @@ public final class Server {
      * Constructs the server object.
      *
      * @param serverController related {@link ServerController controller}.
-     * @param port Server port number.
+     * @param port             Server port number.
      * @throws IOException if port is not available.
      */
     public Server(ServerController serverController, int port) throws IOException {
@@ -43,7 +44,7 @@ public final class Server {
     /**
      * Registers a new user, if username does not exist
      *
-     * @param uname Username
+     * @param uname   Username
      * @param passord Password
      * @return True if new user is created, false if username is used
      */
@@ -73,7 +74,7 @@ public final class Server {
                     onlineClients.add(socketIn);
 
                 } catch (IOException e) {
-                    if(!(e instanceof SocketException)) {
+                    if (!(e instanceof SocketException)) {
                         serverController.printWarning("An IOException appeared, check your internet connection and try again.\n" + e.toString());
                     }
                 }
@@ -83,7 +84,6 @@ public final class Server {
 
     /**
      * Closes server
-     *
      */
     public void stop() {
         running = false;
@@ -153,24 +153,33 @@ public final class Server {
                 System.out.println("Done! Closing socket");
                 socket.close();
                 onlineClients.remove(this);
-                for (User u : userList) {
-                    if (u.getUname().equals(uname)) {
-                        u.logOff();
-                        serverController.updateStatus();
-                    }
-                }
+
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
+
+            for (User u : userList) {
+                if (u.getUname().equals(uname)) {
+                    if(u.isOnline()){
+                        try {
+                            sendUpdateToAll(Command.STATUSUPDATE, uname, "0");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        logOff();
+                    }
+                }
+            }
+
         }
 
         /**
          * Sends a text message to the user connected to this socket instanse
          *
          * @param uname The sender of the message
-         * @param msg The message
+         * @param msg   The message
          * @throws IOException If the user could not be reached, possibly due to
-         * network issues
+         *                     network issues
          */
         void sendMsg(String uname, String msg) throws IOException {
             sendCommandFromServer("TYPE 1", uname, msg);
@@ -181,7 +190,7 @@ public final class Server {
          *
          * @param userName The username of the user to be disconnected from
          * @throws IOException If the user could not be reached, possibly due to
-         * network issues
+         *                     network issues
          */
         private void disconnectMe(String userName) throws IOException {
             for (SocketInstanse i : openConnections) {
@@ -197,7 +206,7 @@ public final class Server {
          * socketInstance
          *
          * @throws IOException If the user could not be reached, possibly due to
-         * network issues
+         *                     network issues
          */
         void sendUsers() throws IOException {
             StringBuilder users = new StringBuilder();
@@ -361,7 +370,7 @@ public final class Server {
                 if (u.getUname().equals(uname)) {
                     u.logOff();
                     try {
-                     socket.shutdownOutput();
+                        socket.shutdownOutput();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -382,7 +391,7 @@ public final class Server {
             for (User u : userList) {
                 System.out.println("Comparing " + u.getUname() + " to " + sub[2]);
                 if (u.getUname().equals(sub[2])) {
-		    //Throws exception if allready logged in or wrong username
+                    //Throws exception if allready logged in or wrong username
                     u.login(sub[3]);
                     uname = sub[2];
 
