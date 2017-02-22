@@ -150,9 +150,7 @@ public class ServerController implements Initializable {
         } else {
             try {
                 if (chboxPortAutomatic.isSelected()) {
-                    //TODO: Use stop or start instead
                     server = new Server(this, 0);
-
                 } else {
                     server = new Server(this, Integer.parseInt(txtFieldPortManual.getText()));
 

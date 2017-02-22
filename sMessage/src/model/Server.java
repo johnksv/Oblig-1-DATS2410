@@ -71,7 +71,7 @@ public final class Server {
                     SocketInstanse socketIn = new SocketInstanse(server.accept());
                     socketIn.start();
                     onlineClients.add(socketIn);
-                    System.out.println(socketIn.socket.getPort());
+                    
                 } catch (IOException e) {
                     if(!(e instanceof SocketException)) {
                         serverController.printWarning("An IOException appeared, check your internet connection and try again.\n" + e.toString());
