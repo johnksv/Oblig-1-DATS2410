@@ -134,7 +134,7 @@ public class Client {
      * @throws IOException if an I/O error occurs.
      */
     public void shutdown() throws IOException {
-        
+
         clientsocket.shutdownOutput();
         clientsocket.close();
     }
@@ -149,29 +149,58 @@ public class Client {
     }
 
     /**
-     * Asks the {@Link Server}
-     * @throws IOException
+     * Asks the {@Link Server} for a complete list of all the users.
+     * @throws IOException if a I/O error occurs.
      */
     public void getUserList() throws IOException {
         sendCommandToServer("TYPE 0", Command.GETUSERS);
     }
 
+    /**
+     * Registers a new user
+     * @param uname Is the username of the new user.
+     * @param passord Is the password for the new user.
+     * @throws IOException If a I/O error occurs.
+     */
     public void regNewUser(String uname, String passord) throws IOException {
         sendCommandToServer("TYPE 0", Command.REGUSER, uname, new String(Base64.getEncoder().encode(passord.getBytes())));
     }
 
+    /**
+     * Tries to log in with username and password.
+     * @param uname The username that is trying to log in.
+     * @param passord The password for the Username.
+     * @throws IOException If an I/O error occurs
+     */
     public void login(String uname, String passord) throws IOException {
         sendCommandToServer("TYPE 0", Command.LOGIN, uname, new String(Base64.getEncoder().encode(passord.getBytes())));
     }
 
+    /**
+     * Sends a message to a user.
+     * @param receiverID The username of the receiver.
+     * @param msg The message to be sent.
+     * @throws IOException If an I/O error occurs.
+     */
     public void sendMsg(String receiverID, String msg) throws IOException {
         sendCommandToServer("TYPE 1", receiverID, msg);
     }
 
+    /**
+     * Sends a response to a CONNECT request from another user.
+     * @param username The name of the reciever.
+     * @param respons The response, always yes or no.
+     * @throws IOException if an I/O error occurs.
+     */
     public void sendRespons(String username, String respons) throws IOException {
         sendCommandToServer("TYPE 0", Command.RESPONSE, username, respons.toUpperCase());
     }
 
+    /**
+     * Sends an indefinite number of Srings to the {@link Server}.
+     * @param lines The Strings to be sent.
+     * @throws IOException if an I/O error occurs.
+     */
     private void sendCommandToServer(String... lines) throws IOException {
 
         for (int i = 0; i < lines.length - 1; i++) {
@@ -183,6 +212,13 @@ public class Client {
         outToServer.flush();
     }
 
+    /**
+     *
+     * @param type
+     * @param command
+     * @param lines
+     * @throws IOException
+     */
     private void sendCommandToServer(String type, Command command, String... lines) throws IOException {
         String[] newCommand = new String[lines.length + 2];
         newCommand[0] = type;
