@@ -74,7 +74,7 @@ public class ServerController implements Initializable {
 
 	initFXMLNodes();
 
-	File file = new File("usernames.smf");
+	File file = new File("usernames.txt");
 	labelSaveFileLoc.setText("Location: " + file.getAbsolutePath());
 	labelSaveFileLoc.setWrapText(true);
 

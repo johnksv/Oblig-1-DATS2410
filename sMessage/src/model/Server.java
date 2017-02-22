@@ -50,7 +50,10 @@ public final class Server {
     }
 
     private synchronized void readInUsersFromFile() {
-	File file = new File("usernames.smf");
+	File file = new File("usernames.txt");
+	if (!file.exists()) {
+	    return;
+	}
 	try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 	    String in;
 	    while ((in = reader.readLine()) != null) {
@@ -68,7 +71,7 @@ public final class Server {
     }
 
     private synchronized void writeUsersToFile(String str) {
-	File file = new File("usernames.smf");
+	File file = new File("usernames.txt");
 	try (PrintWriter out
 		= new PrintWriter(
 			new BufferedWriter(
