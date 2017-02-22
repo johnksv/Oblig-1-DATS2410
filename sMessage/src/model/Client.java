@@ -14,7 +14,7 @@ import model.client.Message;
 import model.client.Status;
 
 /**
- *
+ * Client class for comunicating with a {@link Server}.
  * @author Member(1-2-3-4)
  */
 public class Client {
@@ -28,12 +28,12 @@ public class Client {
     public boolean loggedin = false;
 
     /**
-     *
-     * @param loginController
-     * @param clientController
-     * @param ip
-     * @param port
-     * @throws IOException
+     * Constructor for the client class.
+     * @param loginController Is for communicating between the controllers.
+     * @param clientController Is for communicating between the controllers.
+     * @param ip Server IP
+     * @param port Server port
+     * @throws IOException if an I/O error occurs.
      */
     public Client(LoginClientController loginController, ClientController clientController, String ip, int port) throws IOException {
         this.clientController = clientController;
@@ -44,6 +44,11 @@ public class Client {
         receiveMessages();
     }
 
+    /**
+     * Sends a statusupdate to the server.
+     * @param status The new status.
+     * @throws IOException if an I/O error occurs.
+     */
     public void sendStatusUpdate(Status status) throws IOException {
         String newStatus = status == Status.ONLINE ? "+" : "-";
         sendCommandToServer("TYPE 0", Command.STATUSUPDATE, newStatus);
@@ -196,11 +201,6 @@ public class Client {
         sendCommandToServer("TYPE 0", Command.RESPONSE, username, respons.toUpperCase());
     }
 
-    /**
-     * Sends an indefinite number of Srings to the {@link Server}.
-     * @param lines The Strings to be sent.
-     * @throws IOException if an I/O error occurs.
-     */
     private void sendCommandToServer(String... lines) throws IOException {
 
         for (int i = 0; i < lines.length - 1; i++) {
@@ -212,13 +212,6 @@ public class Client {
         outToServer.flush();
     }
 
-    /**
-     *
-     * @param type
-     * @param command
-     * @param lines
-     * @throws IOException
-     */
     private void sendCommandToServer(String type, Command command, String... lines) throws IOException {
         String[] newCommand = new String[lines.length + 2];
         newCommand[0] = type;
