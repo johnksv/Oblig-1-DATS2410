@@ -1,5 +1,6 @@
 package model.client;
 
+import model.Status;
 import java.util.Objects;
 
 
