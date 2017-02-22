@@ -222,7 +222,7 @@ public class ServerController implements Initializable {
     @FXML
     private void handleClearSaveFile() {
 
-	File file = new File(".\\usernames.smf");
+	File file = new File(".\\usernames.txt");
 	try (PrintWriter out
 		= new PrintWriter(
 			new BufferedWriter(
