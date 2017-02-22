@@ -30,7 +30,7 @@ public class ClientController implements Initializable {
     @FXML
     private TableColumn<ClientUser, String> columnUsername;
     @FXML
-    private TableColumn<ClientUser, String> columnUsernameStatus;
+    private TableColumn<ClientUser, Status> columnUsernameStatus;
     @FXML
     private TableColumn<Conversation, String> columnFriends;
     @FXML
@@ -70,8 +70,30 @@ public class ClientController implements Initializable {
         columnFriends.setCellValueFactory((TableColumn.CellDataFeatures<Conversation, String> param)
                 -> new SimpleObjectProperty<>(param.getValue().getTalkingWithUsername()));
 
-        columnUsernameStatus.setCellValueFactory((TableColumn.CellDataFeatures<ClientUser, String> param)
-                -> new SimpleObjectProperty<>(param.getValue().getStatus().toString()));
+        columnUsernameStatus.setCellValueFactory((TableColumn.CellDataFeatures<ClientUser, Status> param)
+                -> new SimpleObjectProperty<>(param.getValue().getStatus()));
+	columnUsernameStatus.setComparator(new Comparator<Status>() {
+	    @Override
+	    public int compare(Status o1, Status o2) {
+		//If they are the same, return 0
+		if (o1 == o2) {
+		    return 0;
+		}
+		//o1 should be placed at top if online
+		if (o1 == Status.ONLINE) {
+		    return 1;
+		}
+		//o1 should be placed at bottom if offline
+		if (o1 == Status.OFFLINE) {
+		    return -1;
+		}
+
+		//We now know that o1 is busy. o2 is either online or offline
+		//if o2 is offline, o1 should be placed on top
+		return o2 == Status.OFFLINE ? 1 : -1;
+
+	    }
+	});
         tvFriends.setItems(friendList);
 
         tvFriends.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {

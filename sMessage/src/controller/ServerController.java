@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
@@ -86,7 +87,28 @@ public class ServerController implements Initializable {
 		-> new SimpleObjectProperty<>(param.getValue().getUname()));
 	tableColumnStatus.setCellValueFactory((TableColumn.CellDataFeatures<User, Status> param)
 		-> new SimpleObjectProperty<>(param.getValue().getStatus()));
+	tableColumnStatus.setComparator(new Comparator<Status>() {
+	    @Override
+	    public int compare(Status o1, Status o2) {
+		//If they are the same, return 0
+		if (o1 == o2) {
+		    return 0;
+		}
+		//o1 should be placed at top if online
+		if (o1 == Status.ONLINE) {
+		    return 1;
+		}
+		//o1 should be placed at bottom if offline
+		if (o1 == Status.OFFLINE) {
+		    return -1;
+		}
 
+		//We now know that o1 is busy. o2 is either online or offline
+		//if o2 is offline, o1 should be placed on top
+		return o2 == Status.OFFLINE ? 1 : -1;
+
+	    }
+	});
 	tableViewUsers.setItems(userList);
 
 	tableViewUsers.setOnMouseClicked((MouseEvent event) -> {
