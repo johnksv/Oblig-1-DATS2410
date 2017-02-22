@@ -167,7 +167,6 @@ public class ServerController implements Initializable {
                 portLabel.getScene().getWindow().setOnCloseRequest(e -> server.stop());
 
             } catch (IOException ex) {
-                System.out.println(server);
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error occurred");
                 alert.setHeaderText("An IOException occurred");
