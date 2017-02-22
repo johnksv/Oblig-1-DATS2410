@@ -36,7 +36,7 @@ public final class Server {
      *
      * @param serverController related {@link ServerController controller}.
      * @param port Server port number.
-     * @param loadUsers If saved users should be loaded from the "usernames.smf"
+     * @param loadUsers If saved users should be loaded from the "usernames.txt"
      * file
      * @throws IOException if port is not available.
      */
