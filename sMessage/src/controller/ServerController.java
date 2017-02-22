@@ -143,7 +143,7 @@ public class ServerController implements Initializable {
             btnToogleServerStatus.setText("Turn on server");
             portLabel.setText("");
             ipLabel.setText("");
-
+	    userList.clear();
             portLabel.getScene().getWindow().setOnCloseRequest(null);
             server.stop();
             server = null;
