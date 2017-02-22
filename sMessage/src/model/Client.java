@@ -134,10 +134,8 @@ public class Client {
      * @throws IOException if an I/O error occurs.
      */
     public void shutdown() throws IOException {
-        clientsocket.shutdownInput();
+        
         clientsocket.shutdownOutput();
-        outToServer.close();
-        inFromServer.close();
         clientsocket.close();
     }
 

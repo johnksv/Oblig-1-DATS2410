@@ -367,16 +367,6 @@ public class ClientController implements Initializable {
             e.printStackTrace();
         }
     }
-    
-    /**
-     * Returns the client object.
-     * 
-     * @see Client
-     * @return client 
-     */
-    public Client getClient() {
-        return client;
-    }
 
     private void setActiveConversation(Conversation conv) {
         if (conv != null) {
