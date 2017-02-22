@@ -30,7 +30,7 @@ public final class Server {
     /**
      * Constructs the server object.
      *
-     * @param serverController related {@link serverController controller}.
+     * @param serverController related {@link ServerController controller}.
      * @param port Server port number.
      * @throws IOException if port is not available.
      */

@@ -281,7 +281,7 @@ public class ClientController implements Initializable {
     }
 
     /**
-     * Moves user from userlist to friendslist
+     * Moves user from user list to conversation list
      *
      * @param username
      * @param showAlert
@@ -306,13 +306,13 @@ public class ClientController implements Initializable {
         if (showAlert) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Accepted");
-            alert.setContentText(username + " is added to your friends list. You can chat now.");
+            alert.setContentText(username + " is added to your conversation list. You can now chat.");
             alert.show();
         }
     }
 
     /**
-     * Moves user from friend list to user list
+     * Moves user from conversation list to user list
      *
      * @param username
      * @param showAlert
