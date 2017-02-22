@@ -14,6 +14,7 @@ import model.client.Message;
 import model.client.Status;
 
 /**
+ *
  * @author Member(1-2-3-4)
  */
 public class Client {
@@ -96,10 +97,19 @@ public class Client {
         th.start();
     }
 
+    /**
+     * Asks the server to connect to the user userID.
+     * @param userID is the username of the user you want to connect to.
+     * @throws IOException if an I/O error occurs.
+     */
     public void connectChat(String userID) throws IOException {
         sendCommandToServer("TYPE 0", Command.CONNECT, userID);
     }
 
+    /**
+     * Disconnects the this {@link Client} from the {@link Server} .
+     * @throws IOException if an I/O error occurs.
+     */
     public void disconnectServer() throws IOException {
         System.out.println("Loging off and shuting down socket.");
         sendCommandToServer("TYPE 0", Command.LOGOFF);
@@ -118,19 +128,31 @@ public class Client {
 
     }
 
+    /**
+     * Shuts down all input and output from this {@link Client}.
+     * @throws IOException if an I/O error occurs.
+     */
     public void shutdown() throws IOException {
         clientsocket.shutdownInput();
         clientsocket.shutdownOutput();
         outToServer.close();
         inFromServer.close();
-        //TODO: Check if we should warn the server that we are closing first, then wait.
         clientsocket.close();
     }
 
+    /**
+     * Disconnects the client from the user with the username userID.
+     * @param userID is the name of the user you want to disconnect from.
+     * @throws IOException if an I/O error occurs.
+     */
     public void disconnectChat(String userID) throws IOException {
         sendCommandToServer("TYPE 0", Command.DISCONNECT, userID);
     }
 
+    /**
+     * Asks the {@Link Server}
+     * @throws IOException
+     */
     public void getUserList() throws IOException {
         sendCommandToServer("TYPE 0", Command.GETUSERS);
     }

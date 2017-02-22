@@ -22,14 +22,31 @@ NUM definerer om det er en melding fra klient (1) eller en kommando (0)
 
 Eks:
 	
-	TYPE 1
-	ID til klient jeg sender til
-	"Dette er en melding."
-	
-	TYPE 0
-	CONNECT
-	ID til klient jeg skal koble til
-	
+//Send a message (TYPE 1) to the username “Ane”. The message is “Hello”
+TYPE 1
+Ane
+Hello
+
+// This is sent from server to client if the login failed
+//Send a command (TYPE 0) from the server to the client,
+TYPE 0
+LOGINFAIL
+
+// This is sent to the server if i want to connect to Stan, or it is sent to a client if Stan want 
+// to connect to that person. 
+TYPE 0
+CONNECT
+Stan
+
+// This is sent from the server to a client if that client asks for a complete userlist
+TYPE 0
+USERLIST
+Ane
++
+Stan
+0
+George
+-
 
 Første melding til server er versjon av klient
 

@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import javafx.application.Platform;
 
@@ -70,14 +71,11 @@ public final class Server {
                     SocketInstanse socketIn = new SocketInstanse(server.accept());
                     socketIn.start();
                     onlineClients.add(socketIn);
-                } catch (IOException e) {
-		    //Added 21. feb by member 4:
-		    //	When we call this.stop() the server.accept() (line 70) 
-		    //	will throw a SocketException (extends IOException) as expected. 
-		    //	This catch should therefor not do anything, and igonere the exception
-		    //	server.close() (line 94) which causes this is only called from the stop() method.
-		    //serverController.printWarning("An IOException appeared, check your internet connection and try again.\n" + e.toString());
 
+                } catch (IOException e) {
+                    if(!(e instanceof SocketException)) {
+                        serverController.printWarning("An IOException appeared, check your internet connection and try again.\n" + e.toString());
+                    }
                 }
             }
         }).start();
@@ -362,10 +360,16 @@ public final class Server {
             for (User u : userList) {
                 if (u.getUname().equals(uname)) {
                     u.logOff();
+                    try {
+                     socket.shutdownOutput();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     for (SocketInstanse connection : openConnections) {
                         for (int i = 0; i < connection.openConnections.size(); i++) {
                             if (connection.openConnections.get(i).uname.equals(uname)) {
                                 connection.openConnections.remove(i);
+
                                 break;
                             }
                         }
