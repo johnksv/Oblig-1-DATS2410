@@ -18,8 +18,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginClientController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginClientController">
    <children>
       <VBox fx:id="vBoxOverlay" prefHeight="200.0" prefWidth="100.0" />
       <VBox fx:id="vboxContainer" prefHeight="400.0" prefWidth="432.0" style="-fx-background-color: #F5F5F5;">
@@ -42,7 +41,7 @@
                         </RadialGradient>
                      </fill>
                   </Rectangle>
-                  <Label alignment="CENTER" layoutX="71.0" layoutY="14.0" prefHeight="27.0" prefWidth="304.0" style="&#10;" text="SMessage  " textAlignment="CENTER" wrapText="false">
+                  <Label alignment="CENTER" layoutX="71.0" layoutY="14.0" prefHeight="27.0" prefWidth="304.0" style="&#10;" text="sMessage  " textAlignment="CENTER" wrapText="false">
                      <font>
                         <Font size="35.0" />
                      </font>
