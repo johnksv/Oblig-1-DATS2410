@@ -95,9 +95,11 @@ public class LoginClientController implements Initializable {
 	clientStage.show();
 	clientStage.setOnCloseRequest(event -> {
 	    try {
-		cController.getClient().disconnectServer();
+	    	client.loggedin = false;
+			cController.getClient().disconnectServer();
+
 	    } catch (IOException ex) {
-		Logger.getLogger(LoginClientController.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(LoginClientController.class.getName()).log(Level.SEVERE, null, ex);
 	    }
 	});
 	closeThisStage();

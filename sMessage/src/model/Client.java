@@ -19,12 +19,13 @@ import model.client.Status;
  */
 public class Client {
 
+
     private Socket clientsocket;
     private BufferedWriter outToServer;
     private BufferedReader inFromServer;
     private ClientController clientController;
     private LoginClientController loginController;
-    private boolean loggedin = false;
+    public boolean loggedin = false;
 
     /**
      *
