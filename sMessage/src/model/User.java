@@ -12,14 +12,13 @@ package model;
 public class User {
 
     private final String uname, pswd;
-    private boolean status;
-    private boolean busy;
+    private Status status;
 
     /**
      * Initiates a new user, and stores the password and username. Status is set
      * here, but can be change later not like password and username.
      */
-    public User(String uname, String pswd, boolean status) {
+    public User(String uname, String pswd, Status status) {
 	this.uname = uname;
 	this.pswd = pswd;
 	this.status = status;
@@ -38,8 +37,7 @@ public class User {
      * Sets status to false. Sets busy to false.
      */
     public void logOff() {
-	status = false;
-	busy = false;
+	status = Status.OFFLINE;
     }
 
     /**
@@ -48,16 +46,7 @@ public class User {
      * @return status
      */
     public boolean isOnline() {
-	return status;
-    }
-
-    /**
-     * Sets busy true or false.
-     *
-     * @param busy
-     */
-    public void setBusy(boolean busy) {
-	this.busy = busy;
+	return status == Status.ONLINE;
     }
 
     /**
@@ -66,11 +55,15 @@ public class User {
      * @return busy
      */
     public boolean isBusy() {
-	return busy;
+	return status == Status.BUSY;
     }
 
-    public String getStatus() {
-	return status ? (busy ? "Busy" : "Online") : "Offline";
+    public void setStatus(Status status) {
+	this.status = status;
+    }
+
+    public Status getStatus() {
+	return status;
     }
 
     /**
@@ -82,13 +75,13 @@ public class User {
      */
     public void login(String pswd) throws LoginException {
 
-	if (status) {
+	if (status == Status.ONLINE) {
 	    throw new LoginException("Already logged in!");
 	}
 	if (!pswd.equals(this.pswd)) {
 	    throw new LoginException("Wrong password!");
 	}
-	status = true;
+	status = Status.ONLINE;
     }
 
     @Override

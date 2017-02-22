@@ -60,7 +60,7 @@ public class ServerController implements Initializable {
     @FXML
     private TableColumn<User, String> tableColumnUsername;
     @FXML
-    private TableColumn<User, String> tableColumnStatus;
+    private TableColumn<User, Status> tableColumnStatus;
 
     private Server server;
     private boolean serverRunning = false;
@@ -84,7 +84,7 @@ public class ServerController implements Initializable {
 
 	tableColumnUsername.setCellValueFactory((TableColumn.CellDataFeatures<User, String> param)
 		-> new SimpleObjectProperty<>(param.getValue().getUname()));
-	tableColumnStatus.setCellValueFactory((TableColumn.CellDataFeatures<User, String> param)
+	tableColumnStatus.setCellValueFactory((TableColumn.CellDataFeatures<User, Status> param)
 		-> new SimpleObjectProperty<>(param.getValue().getStatus()));
 
 	tableViewUsers.setItems(userList);

@@ -56,7 +56,7 @@ public final class Server {
 	    while ((in = reader.readLine()) != null) {
 		String[] user = in.split(";");
 		if (user.length == 2) {
-		    User u = new User(user[0], user[1], false);
+		    User u = new User(user[0], user[1], Status.OFFLINE);
 		    userList.add(u);
 		    Platform.runLater(() -> serverController.addNewUser(u));
 		}
@@ -92,7 +92,7 @@ public final class Server {
 		return false;
 	    }
 	}
-	User u = new User(uname, passord, true);
+	User u = new User(uname, passord, Status.ONLINE);
 	userList.add(u);
 	writeUsersToFile(u.toString());
 	Platform.runLater(() -> serverController.addNewUser(u)
@@ -449,7 +449,7 @@ public final class Server {
 	    for (User u : userList) {
 		if (u.getUname().equals(uname)) {
 		    boolean busy = !status.equals("+");
-		    u.setBusy(busy);
+		    u.setStatus(Status.BUSY);
 		    return;
 		}
 	    }
