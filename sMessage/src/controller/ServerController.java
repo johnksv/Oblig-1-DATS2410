@@ -148,9 +148,6 @@ public class ServerController implements Initializable {
             server.stop();
             server = null;
         } else {
-            serverRunning = true;
-            labelServerStatus.setText("Server is running");
-            btnToogleServerStatus.setText("Turn off server");
             try {
                 if (chboxPortAutomatic.isSelected()) {
                     //TODO: Use stop or start instead
@@ -160,6 +157,9 @@ public class ServerController implements Initializable {
                     server = new Server(this, Integer.parseInt(txtFieldPortManual.getText()));
 
                 }
+                serverRunning = true;
+                labelServerStatus.setText("Server is running");
+                btnToogleServerStatus.setText("Turn off server");
                 portLabel.setText(server.getPort());
                 ipLabel.setText(InetAddress.getLocalHost().getHostAddress());
                 txtFieldPortManual.setText(server.getPort());
@@ -167,6 +167,7 @@ public class ServerController implements Initializable {
                 portLabel.getScene().getWindow().setOnCloseRequest(e -> server.stop());
 
             } catch (IOException ex) {
+                System.out.println(server);
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error occurred");
                 alert.setHeaderText("An IOException occurred");
@@ -174,8 +175,6 @@ public class ServerController implements Initializable {
                 TextArea txtArea = new TextArea(ex.toString());
                 alert.getDialogPane().setExpandableContent(txtArea);
                 alert.show();
-                handleToogleServerStatus();
-
             }
 
         }
