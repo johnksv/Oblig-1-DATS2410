@@ -39,3 +39,6 @@ sMessage/out/
 sMessage/dist/
 sMessage/build/
 sMessage/nbproject/UPDATED.TXT
+
+# Files # 
+sMessage/usernames.txt
