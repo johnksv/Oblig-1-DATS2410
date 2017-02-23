@@ -145,7 +145,7 @@ public class LoginClientController implements Initializable {
     }
     
     /**
-     * Shows the user that registration failed. '
+     * Shows the user that registration failed.
      * Gives no option to quit the application, but tells the user to log in. 
      */
     public void regUserFailed() {

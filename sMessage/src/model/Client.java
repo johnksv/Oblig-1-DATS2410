@@ -13,21 +13,22 @@ import javafx.scene.control.Alert;
 import model.client.Message;
 
 /**
- * Client class for comunicating with a {@link Server}.
+ * Client class for communicating with a {@link Server}.
  * @author Member(1-2-3-4)
  */
 public class Client {
 
 
-    private Socket clientsocket;
-    private BufferedWriter outToServer;
-    private BufferedReader inFromServer;
-    private ClientController clientController;
-    private LoginClientController loginController;
+    private final Socket clientsocket;
+    private final BufferedWriter outToServer;
+    private final BufferedReader inFromServer;
+    private final ClientController clientController;
+    private final LoginClientController loginController;
     public boolean loggedin = false;
 
     /**
      * Constructor for the client class.
+     * Starts a new thread to listen for server messages.
      * @param loginController Is for communicating between the controllers.
      * @param clientController Is for communicating between the controllers.
      * @param ip Server IP
@@ -44,7 +45,7 @@ public class Client {
     }
 
     /**
-     * Sends a statusupdate to the server.
+     * Sends a status update to the server.
      * @param status The new status.
      * @throws IOException if an I/O error occurs.
      */

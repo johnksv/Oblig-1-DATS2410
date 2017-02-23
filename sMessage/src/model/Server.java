@@ -20,7 +20,7 @@ import javafx.application.Platform;
 
 /**
  * Model for server.
- *
+ * Contains the SocketInstanse class. This is used 
  * @author Member(1-2-3-4)
  */
 public final class Server {
@@ -33,7 +33,7 @@ public final class Server {
 
     /**
      * Constructs the server object.
-     *
+     * Starts the thread listening for connecting users.
      * @param serverController related {@link ServerController controller}.
      * @param port Server port number.
      * @param loadUsers If saved users should be loaded from the "usernames.txt"
@@ -107,7 +107,7 @@ public final class Server {
     /**
      * Creates a thread that listens for new connections.
      */
-    public void start() {
+    private void start() {
 
 	new Thread(() -> {
 	    while (running) {
@@ -126,7 +126,7 @@ public final class Server {
     }
 
     /**
-     * Closes server
+     * Terminating server.
      */
     public void stop() {
 	running = false;

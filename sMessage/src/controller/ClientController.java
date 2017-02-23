@@ -73,7 +73,7 @@ public class ClientController implements Initializable {
         columnUsernameStatus.setCellValueFactory((TableColumn.CellDataFeatures<ClientUser, Status> param)
                 -> new SimpleObjectProperty<>(param.getValue().getStatus()));
 	columnUsernameStatus.setComparator(new Comparator<Status>() {
-	    @Override
+            @Override
 	    public int compare(Status o1, Status o2) {
 		//If they are the same, return 0
 		if (o1 == o2) {
@@ -211,8 +211,9 @@ public class ClientController implements Initializable {
     }
 
     /**
+     * Clears the list of user and inserts all registered users.
      * 
-     * @param restOfArray
+     * @param restOfArray String list of users separated with ;. Each user must have two fields, the first with uname the second status.
      */
     public void updateUserList(String restOfArray) {
         if (restOfArray.equals("")) {
@@ -226,9 +227,9 @@ public class ClientController implements Initializable {
     }
 
     /**
-     * Shows alert box
+     * Shows alert box, with input error.
      *
-     * @param restOfArray
+     * @param restOfArray Error message.
      */
     public void showError(String restOfArray) {
         showAlertBoxError("Server error", restOfArray);
@@ -416,10 +417,10 @@ public class ClientController implements Initializable {
     /**
      * Writes text to GUI label, located to the left.
      * Writes your username.
-     * @param text Your username
+     * @param username
      */
-    public void setYourUnameLabel(String text) {
-        labelLeftStatus.setText("Your username: " + text);
+    public void setYourUnameLabel(String username) {
+        labelLeftStatus.setText("Your username: " + username);
     }
 
     @FXML
