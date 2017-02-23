@@ -11,7 +11,6 @@ import java.util.Base64;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import model.client.Message;
-import model.client.Status;
 
 /**
  * Client class for comunicating with a {@link Server}.

@@ -1,4 +1,4 @@
-package model.client;
+package model;
 
 /**
  * Enum: ONLINE, OFFLINE and BUSY.
