@@ -72,7 +72,9 @@ public class Client {
 
                 }
                 if (loggedin) {
+		    shutdown();
                     Platform.runLater(() -> {
+			System.out.println("Shutdown line 77");
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Server closed");
                         alert.setHeaderText("Server shutdown occurred.");
@@ -84,7 +86,12 @@ public class Client {
                 System.out.println("Thread done");
             } catch (SocketException e) {
                 if (loggedin) {
-                    Platform.runLater(() -> {
+		    try {
+			shutdown();
+		    } catch (IOException ex) {
+		    }
+		    Platform.runLater(() -> {
+			System.out.println("Shutdown line 947");
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setTitle("Server closed");
                         alert.setHeaderText("Server shutdown occurred.");
