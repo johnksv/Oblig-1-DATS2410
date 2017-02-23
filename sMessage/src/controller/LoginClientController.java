@@ -49,13 +49,12 @@ public class LoginClientController implements Initializable {
 
     private ClientController cController;
     private Stage clientStage = new Stage();
-    private FXMLLoader loader;
-    private Client client;
+	private Client client;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-	loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Client.fxml"));
 	try {
 	    Scene scene = new Scene(loader.load());
 	    cController = loader.getController();
@@ -66,7 +65,7 @@ public class LoginClientController implements Initializable {
             clientStage.setTitle("sMessage - Client");
 	} catch (IOException ex) {
 	    System.err.println("IOException occured. Exiting. Error:\n" + ex.toString());
-	    System.err.println(ex.getStackTrace().toString());
+	    ex.printStackTrace();
 	    Platform.exit();
 	    System.exit(0);
 	}

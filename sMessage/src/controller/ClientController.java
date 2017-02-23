@@ -72,28 +72,25 @@ public class ClientController implements Initializable {
 
         columnUsernameStatus.setCellValueFactory((TableColumn.CellDataFeatures<ClientUser, Status> param)
                 -> new SimpleObjectProperty<>(param.getValue().getStatus()));
-	columnUsernameStatus.setComparator(new Comparator<Status>() {
-            @Override
-	    public int compare(Status o1, Status o2) {
-		//If they are the same, return 0
-		if (o1 == o2) {
-		    return 0;
-		}
-		//o1 should be placed at top if online
-		if (o1 == Status.ONLINE) {
-		    return 1;
-		}
-		//o1 should be placed at bottom if offline
-		if (o1 == Status.OFFLINE) {
-		    return -1;
-		}
+	columnUsernameStatus.setComparator((o1, o2) -> {
+//If they are the same, return 0
+if (o1 == o2) {
+    return 0;
+}
+//o1 should be placed at top if online
+if (o1 == Status.ONLINE) {
+    return 1;
+}
+//o1 should be placed at bottom if offline
+if (o1 == Status.OFFLINE) {
+    return -1;
+}
 
-		//We now know that o1 is busy. o2 is either online or offline
-		//if o2 is offline, o1 should be placed on top
-		return o2 == Status.OFFLINE ? 1 : -1;
+//We now know that o1 is busy. o2 is either online or offline
+//if o2 is offline, o1 should be placed on top
+return o2 == Status.OFFLINE ? 1 : -1;
 
-	    }
-	});
+});
         tvFriends.setItems(friendList);
 
         tvFriends.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
@@ -238,8 +235,8 @@ public class ClientController implements Initializable {
     /**
      * Updates user status to offline, busy or online in user and fiend list.
      *
-     * @param username
-     * @param status
+     * @param username Is the username to change the status of.
+     * @param status THe user is changed to this status.
      */
     public void updateStatus(String username, String status) {
         ClientUser user = new ClientUser(username, status);
@@ -280,7 +277,7 @@ public class ClientController implements Initializable {
     /**
      * Reacts to an request from another client.
      *
-     * @param username
+     * @param username Username of the user that wants to conect.
      */
     public void connectRequest(String username) {
 
@@ -307,8 +304,8 @@ public class ClientController implements Initializable {
     /**
      * Moves user from user list to conversation list
      *
-     * @param username
-     * @param showAlert
+     * @param username Username to move.
+     * @param showAlert If the user should get an alert or not.
      */
     public void moveFromUsersToFriends(String username, boolean showAlert) {
         removing = true;
@@ -338,8 +335,8 @@ public class ClientController implements Initializable {
     /**
      * Moves user from conversation list to user list
      *
-     * @param username
-     * @param showAlert
+     * @param username Username to move.
+     * @param showAlert If the user should get an alert or not.
      */
     public void moveFromFriendsToUser(String username, boolean showAlert) {
         removing = true;
@@ -367,7 +364,7 @@ public class ClientController implements Initializable {
     /**
      * Displays alert box if a user rejects clients connection request
      *
-     * @param username
+     * @param username Username of the user that rejected the raquest.
      */
     public void negativeResponse(String username) {
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -381,9 +378,9 @@ public class ClientController implements Initializable {
      * Sets client to be stored in this object.
      * 
      * @see Client
-     * @param client
+     * @param client the client to store in the Client field.
      */
-    public void setClient(Client client) {
+    void setClient(Client client) {
         this.client = client;
         try {
             client.getUserList();
@@ -417,9 +414,9 @@ public class ClientController implements Initializable {
     /**
      * Writes text to GUI label, located to the left.
      * Writes your username.
-     * @param username
+     * @param username The username bound to this client.
      */
-    public void setYourUnameLabel(String username) {
+    void setYourUnameLabel(String username) {
         labelLeftStatus.setText("Your username: " + username);
     }
 
