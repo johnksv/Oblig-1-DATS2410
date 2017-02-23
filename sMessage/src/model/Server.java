@@ -20,7 +20,10 @@ import javafx.application.Platform;
 
 /**
  * Model for server.
- * Contains the SocketInstanse class. This is used 
+ * Contains the SocketInstanse class. This is used for every connected user and every user has its own thread.
+ * SocketInstanse listens for user input and can connect to other users through lists in the server class.<br>
+ * The Server object stores all users and there status.
+ * 
  * @author Member(1-2-3-4)
  */
 public final class Server {
@@ -193,7 +196,7 @@ public final class Server {
 		    System.out.println("Client [" + clientAddr.getHostAddress() + ":" + clientPort + "] > " + receivedText);
 		    parseCommand(receivedText);
 		}
-		System.out.println("Done! Closing socket");
+		System.out.println("Closing socket");
 		socket.close();
 		onlineClients.remove(this);
 

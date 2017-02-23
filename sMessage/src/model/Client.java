@@ -13,7 +13,7 @@ import javafx.scene.control.Alert;
 import model.client.Message;
 
 /**
- * Client class for communicating with a {@link Server}.
+ * Client class for communicating with a {@link Server server}.
  * @author Member(1-2-3-4)
  */
 public class Client {
@@ -120,7 +120,7 @@ public class Client {
     }
 
     /**
-     * Disconnects the this {@link Client} from the {@link Server} .
+     * Disconnects the this {@link Client client} from the {@link Server server} .
      * @throws IOException if an I/O error occurs.
      */
     public void disconnectServer() throws IOException {
@@ -142,7 +142,7 @@ public class Client {
     }
 
     /**
-     * Shuts down all input and output from this {@link Client}.
+     * Shuts down all input and output from this {@link Client client}.
      * @throws IOException if an I/O error occurs.
      */
     public void shutdown() throws IOException {
@@ -161,7 +161,7 @@ public class Client {
     }
 
     /**
-     * Asks the {@Link Server} for a complete list of all the users.
+     * Asks the {@link Server server} for a complete list of all the users.
      * @throws IOException if a I/O error occurs.
      */
     public void getUserList() throws IOException {
