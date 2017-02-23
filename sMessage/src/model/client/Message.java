@@ -1,6 +1,8 @@
 package model.client;
 
 /**
+ * Stores a Message: sender and text.
+ * 
  * @author Member(1-2-3-4)
  */
 public class Message {

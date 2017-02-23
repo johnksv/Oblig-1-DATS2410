@@ -3,6 +3,8 @@ package model.client;
 import java.util.ArrayList;
 
 /**
+ * Stores {@link Message Messages} and links them to a {@link ClientUser ClientUser}. This allows multiple conversations by the client. 
+ * Stores if the {@link Message Message} was from the Client using the application or from a connected user.
  * @author Member(1-2-3-4)
  */
 public class Conversation {

@@ -5,6 +5,8 @@ import java.util.Objects;
 
 
 /**
+ * For storing users in {@link model.Client Client}.
+ * Very similar to {@link model.User User}, but does not store password and have a modified equals.
  * @author Member(1-2-3-4)
  */
 public class ClientUser {
