@@ -24,6 +24,9 @@ public class Client {
     private final BufferedReader inFromServer;
     private final ClientController clientController;
     private final LoginClientController loginController;
+    /**
+     * Boolean that determents if a user gets the server shutdown error message or not.
+     */
     public boolean loggedin = false;
 
     /**
