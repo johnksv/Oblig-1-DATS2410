@@ -15,6 +15,10 @@ public class User {
     /**
      * Initiates a new user, and stores the password and username. Status is set
      * here, but can be change later not like password and username.
+     * @see Status
+     * @param uname Username
+     * @param pswd Password
+     * @param status 
      */
     public User(String uname, String pswd, Status status) {
 	this.uname = uname;

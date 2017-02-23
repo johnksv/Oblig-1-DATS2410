@@ -22,7 +22,8 @@ import javafx.application.Platform;
  * Model for server.
  * Contains the SocketInstanse class. This is used for every connected user and every user has its own thread.
  * SocketInstanse listens for user input and can connect to other users through lists in the server class.<br>
- * The Server object stores all users and there status.
+ * The Server object stores all users and there status.<br>
+ * <b>NB:</b> Every message is printed to the terminal this is only for testing, and we are aware of the privacy problem. 
  * 
  * @author Member(1-2-3-4)
  */
