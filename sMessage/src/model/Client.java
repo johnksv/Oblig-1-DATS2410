@@ -89,7 +89,7 @@ public class Client {
                 if (loggedin) {
 		    try {
 			shutdown();
-		    } catch (IOException ex) {
+		    } catch (IOException ignored) {
 		    }
 		    Platform.runLater(() -> {
 			System.out.println("Shutdown line 947");
@@ -129,7 +129,7 @@ public class Client {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-            } catch (InterruptedException ex) {
+            } catch (InterruptedException ignored) {
             }
 
             try {
@@ -161,7 +161,7 @@ public class Client {
     }
 
     /**
-     * Asks the {@Link Server} for a complete list of all the users.
+     * Asks the {@link Server server} for a complete list of all the users.
      * @throws IOException if a I/O error occurs.
      */
     public void getUserList() throws IOException {
