@@ -1,9 +1,11 @@
 package controller;
 
 import model.Status;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
 import javafx.scene.control.*;
 import javafx.collections.*;
 import javafx.beans.property.SimpleObjectProperty;
@@ -72,25 +74,25 @@ public class ClientController implements Initializable {
 
         columnUsernameStatus.setCellValueFactory((TableColumn.CellDataFeatures<ClientUser, Status> param)
                 -> new SimpleObjectProperty<>(param.getValue().getStatus()));
-	columnUsernameStatus.setComparator((o1, o2) -> {
-//If they are the same, return 0
-if (o1 == o2) {
-    return 0;
-}
-//o1 should be placed at top if online
-if (o1 == Status.ONLINE) {
-    return 1;
-}
-//o1 should be placed at bottom if offline
-if (o1 == Status.OFFLINE) {
-    return -1;
-}
+        columnUsernameStatus.setComparator((o1, o2) -> {
+            //If they are the same, return 0
+            if (o1 == o2) {
+                return 0;
+            }
+            //o1 should be placed at top if online
+            if (o1 == Status.ONLINE) {
+                return 1;
+            }
+            //o1 should be placed at bottom if offline
+            if (o1 == Status.OFFLINE) {
+                return -1;
+            }
 
-//We now know that o1 is busy. o2 is either online or offline
-//if o2 is offline, o1 should be placed on top
-return o2 == Status.OFFLINE ? 1 : -1;
+            //We now know that o1 is busy. o2 is either online or offline
+            //if o2 is offline, o1 should be placed on top
+            return o2 == Status.OFFLINE ? 1 : -1;
 
-});
+        });
         tvFriends.setItems(friendList);
 
         tvFriends.getSelectionModel().getSelectedItems().addListener((ListChangeListener.Change c) -> {
@@ -158,7 +160,7 @@ return o2 == Status.OFFLINE ? 1 : -1;
                         showAlertIOException(ex);
                     }
                 }
-            } else{
+            } else {
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Connection Request");
                 alert.setHeaderText("User " + user.getUserName() + " is " + user.getStatus().toString().toLowerCase() + ".");
@@ -187,10 +189,10 @@ return o2 == Status.OFFLINE ? 1 : -1;
 
     /**
      * Stores message string in conversation.
-     * 
-     * @see model.client.Conversation
+     *
      * @param userName senders name
-     * @param msg Message
+     * @param msg      Message
+     * @see model.client.Conversation
      */
     public void addMessageToConversation(String userName, Message msg) {
         for (Conversation cnv : friendList) {
@@ -209,7 +211,7 @@ return o2 == Status.OFFLINE ? 1 : -1;
 
     /**
      * Clears the list of user and inserts all registered users.
-     * 
+     *
      * @param restOfArray String list of users separated with ;. Each user must have two fields, the first with uname the second status.
      */
     public void updateUserList(String restOfArray) {
@@ -236,7 +238,7 @@ return o2 == Status.OFFLINE ? 1 : -1;
      * Updates user status to offline, busy or online in user and fiend list.
      *
      * @param username Is the username to change the status of.
-     * @param status THe user is changed to this status.
+     * @param status   THe user is changed to this status.
      */
     public void updateStatus(String username, String status) {
         ClientUser user = new ClientUser(username, status);
@@ -304,7 +306,7 @@ return o2 == Status.OFFLINE ? 1 : -1;
     /**
      * Moves user from user list to conversation list
      *
-     * @param username Username to move.
+     * @param username  Username to move.
      * @param showAlert If the user should get an alert or not.
      */
     public void moveFromUsersToFriends(String username, boolean showAlert) {
@@ -335,7 +337,7 @@ return o2 == Status.OFFLINE ? 1 : -1;
     /**
      * Moves user from conversation list to user list
      *
-     * @param username Username to move.
+     * @param username  Username to move.
      * @param showAlert If the user should get an alert or not.
      */
     public void moveFromFriendsToUser(String username, boolean showAlert) {
@@ -376,9 +378,9 @@ return o2 == Status.OFFLINE ? 1 : -1;
 
     /**
      * Sets client to be stored in this object.
-     * 
-     * @see Client
+     *
      * @param client the client to store in the Client field.
+     * @see Client
      */
     void setClient(Client client) {
         this.client = client;
@@ -414,9 +416,10 @@ return o2 == Status.OFFLINE ? 1 : -1;
     /**
      * Writes text to GUI label, located to the left.
      * Writes your username.
+     *
      * @param username The username bound to this client.
      */
-    void setYourUnameLabel(String username) {
+    public void setYourUnameLabel(String username) {
         labelLeftStatus.setText("Your username: " + username);
     }
 
