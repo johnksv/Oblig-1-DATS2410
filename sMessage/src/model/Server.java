@@ -104,10 +104,6 @@ public final class Server {
 	return true;
     }
 
-    public void addUserToUserList() {
-
-    }
-
     /**
      * Creates a thread that listens for new connections.
      */
