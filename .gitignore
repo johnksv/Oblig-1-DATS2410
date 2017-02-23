@@ -34,7 +34,7 @@ Thumbs.db
 # Folders #
 .idea
 *.iml
-out/*
+sMessage/out/*
 /sMessage/nbproject/private/
 sMessage/dist/
 sMessage/build/
