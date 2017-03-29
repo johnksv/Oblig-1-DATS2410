@@ -11,10 +11,10 @@ Rapporten inneholder applikasjons beskrivelse, program struktur, vår egenlagde 
 
 
 
-##Implementasjon
+## Implementasjon
 Server based chat application. Each user connects to a server that keeps control over all active users, and corectly route messages to the correct reciver.
 
-##Features
+## Features
 	Klienten kan snakke med mer en annen klient
 	Endre status (online, busy)
 	Lagre brukere til disk
@@ -23,14 +23,14 @@ Server based chat application. Each user connects to a server that keeps control
 	Sortere etter brukernavn eller status
 	
 
-##Foreslåtte features
+## Foreslåtte features
 	Sende meldinger til bruker som er logget av (Kan føre til Gruppechat)
 	Kryptering av meldinger
 	Kallenavn
 	Gif-implementasjon & Emjois
 	Når man sender respons til noen burde de bli farget i listen, for å indikere at du har sendt en respons.
 	
-##SMessage Protocol (SMP)
+## SMessage Protocol (SMP)
 Hver kommando starter med TYPE [0,1]
 
 Der TYPE 0 er en kommando som skal tolkes, mens TYPE 1 er en melding.
@@ -96,7 +96,7 @@ Syntax for USERSTATUSUPDATE:
 	USERSTATUSUPDATE
 	0||+||-
 
-#Plan
+# Plan
 Uke 6
 - GUI
 	
